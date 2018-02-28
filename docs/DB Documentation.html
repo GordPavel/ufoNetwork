@@ -22,7 +22,7 @@ body {
 
 <body>
 <div class='svg-container'>
-<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'   width='525' height='575' viewBox='0 0 525 575' >
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'   width='690' height='725' viewBox='0 0 690 725' >
   <script type='text/ecmascript'>
   <![CDATA[
   function hghl(el) { for ( var i in el ){ var elem = document.getElementById(el[i]); if ( elem != null ) elem.setAttribute('class','highlight');  }  }
@@ -220,9 +220,9 @@ body {
 </defs>
 
 <!-- == Desktop == -->
-<rect x='1' y='1' width='523' height='573' rx='7' ry='7' style='fill:url(#layoutBgB); stroke:#777777; stroke-width:0.5;' />
-<rect x='1' y='1' width='523' height='573' rx='7' ry='7' style='fill:url(#layoutBgA); stroke:#777777; stroke-width:0.5;' />
-<rect x='1' y='1' width='523' height='573' rx='7' ry='7' style='fill:url(#layoutBgTr);' />
+<rect x='1' y='1' width='688' height='723' rx='7' ry='7' style='fill:url(#layoutBgB); stroke:#777777; stroke-width:0.5;' />
+<rect x='1' y='1' width='688' height='723' rx='7' ry='7' style='fill:url(#layoutBgA); stroke:#777777; stroke-width:0.5;' />
+<rect x='1' y='1' width='688' height='723' rx='7' ry='7' style='fill:url(#layoutBgTr);' />
 
 <!-- == Legend == -->
 <g transform='translate(10,10)'>
@@ -234,197 +234,195 @@ body {
 
 <g transform='translate(0,110)'>
 <!-- == Fk 'group_fk_group_person' == -->
-<path id='group_fk_group_person'  onmouseover="hghl(['group_fk_group_person','ufonetwork.group.owner_of_group','ufonetwork.person.login'])" onmouseout="uhghl(['group_fk_group_person','ufonetwork.group.owner_of_group','ufonetwork.person.login'])" transform='translate(7,0)' class='scene' d='M 345 60 L 300,60' >
+<path id='group_fk_group_person'  onmouseover="hghl(['group_fk_group_person','ufonetwork.group.owner_of_group','ufonetwork.person.login'])" onmouseout="uhghl(['group_fk_group_person','ufonetwork.group.owner_of_group','ufonetwork.person.login'])" transform='translate(7,0)' class='scene' d='M 510 60 L 315,60' >
 	<title>Fk fk_group_person
 group ref person ( owner_of_group -&gt; login )</title>
 </path>
-<path transform='translate(7,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 345 60 L 300,60' ></path>
-<text x='272' y='55' transform='rotate(0 272,55)' title='Fk fk_group_person
+<path transform='translate(7,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 510 60 L 315,60' ></path>
+<text x='437' y='55' transform='rotate(0 437,55)' title='Fk fk_group_person
 group ref person ( owner_of_group -&gt; login )' class='relName' style='fill:#5f789f'>owner_of_group</text>
-<!-- == Fk 'message_fk_message_group' == -->
-<path id='message_fk_message_group'  onmouseover="hghl(['message_fk_message_group','ufonetwork.message.to_group','ufonetwork.group.name'])" onmouseout="uhghl(['message_fk_message_group','ufonetwork.message.to_group','ufonetwork.group.name'])" transform='translate(7,0)' class='scene' d='M 285 270 L 285,247 Q 285,240 292,240 L 367,240 Q 375,240 375,232 L 375,135' >
-	<title>Fk fk_message_group
-message ref group ( to_group -&gt; name )</title>
-</path>
-<path transform='translate(7,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 285 270 L 285,247 Q 285,240 292,240 L 367,240 Q 375,240 375,232 L 375,135' ></path>
-<text x='287' y='265' transform='rotate(270 287,265)' title='Fk fk_message_group
-message ref group ( to_group -&gt; name )' class='relName' style='fill:#5f789f'>to_group</text>
-<!-- == Fk 'message_fk_message_person' == -->
-<path id='message_fk_message_person'  onmouseover="hghl(['message_fk_message_person','ufonetwork.message.writer','ufonetwork.person.login'])" onmouseout="uhghl(['message_fk_message_person','ufonetwork.message.writer','ufonetwork.person.login'])" transform='translate(7,0)' class='scene' d='M 180 270 L 180,225' >
-	<title>Fk fk_message_person
-message ref person ( writer -&gt; login )</title>
-</path>
-<path transform='translate(7,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 180 270 L 180,225' ></path>
-<text x='182' y='265' transform='rotate(270 182,265)' title='Fk fk_message_person
-message ref person ( writer -&gt; login )' class='relName' style='fill:#5f789f'>writer</text>
-<!-- == Fk 'person_planet' == -->
-<path id='person_planet'  onmouseover="hghl(['person_planet','ufonetwork.person.planet','ufonetwork.planet.name'])" onmouseout="uhghl(['person_planet','ufonetwork.person.planet','ufonetwork.planet.name'])" transform='translate(7,0)' class='scene' d='M 150 195 L 127,195 Q 120,195 120,202 L 120,292 Q 120,300 112,300 L 105,300' >
-	<title>Fk planet
-person ref planet ( planet -&gt; name )</title>
-</path>
-<path transform='translate(7,0)' marker-start='url(#foot0p)' marker-end='url(#arrow1)'    d='M 150 195 L 127,195 Q 120,195 120,202 L 120,292 Q 120,300 112,300 L 105,300' ></path>
-<text x='126' y='190' transform='rotate(0 126,190)' title='Fk planet
-person ref planet ( planet -&gt; name )' class='relName' style='fill:#5f789f'>planet</text>
-<!-- == Fk 'person_fk_person_race' == -->
-<path id='person_fk_person_race'  onmouseover="hghl(['person_fk_person_race','ufonetwork.person.race','ufonetwork.race.name'])" onmouseout="uhghl(['person_fk_person_race','ufonetwork.person.race','ufonetwork.race.name'])" transform='translate(7,0)' class='scene' d='M 150 180 L 105,180' >
-	<title>Fk fk_person_race
-person ref race ( race -&gt; name )</title>
-</path>
-<path transform='translate(7,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 150 180 L 105,180' ></path>
-<text x='136' y='175' transform='rotate(0 136,175)' title='Fk fk_person_race
-person ref race ( race -&gt; name )' class='relName' style='fill:#5f789f'>race</text>
 <!-- == Fk 'person_group_fk_person_group' == -->
-<path id='person_group_fk_person_group'  onmouseover="hghl(['person_group_fk_person_group','ufonetwork.person_group.name_of_group','ufonetwork.group.name'])" onmouseout="uhghl(['person_group_fk_person_group','ufonetwork.person_group.name_of_group','ufonetwork.group.name'])" transform='translate(7,0)' class='scene' d='M 390 270 L 390,135' >
+<path id='person_group_fk_person_group'  onmouseover="hghl(['person_group_fk_person_group','ufonetwork.person_group.name_of_group','ufonetwork.group.name'])" onmouseout="uhghl(['person_group_fk_person_group','ufonetwork.person_group.name_of_group','ufonetwork.group.name'])" transform='translate(7,0)' class='scene' d='M 450 240 L 450,112 Q 450,105 457,105 L 510,105' >
 	<title>Fk fk_person_group
 person_group ref group ( name_of_group -&gt; name )</title>
 </path>
-<path transform='translate(7,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 390 270 L 390,135' ></path>
-<text x='392' y='265' transform='rotate(270 392,265)' title='Fk fk_person_group
+<path transform='translate(7,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 450 240 L 450,112 Q 450,105 457,105 L 510,105' ></path>
+<text x='452' y='235' transform='rotate(270 452,235)' title='Fk fk_person_group
 person_group ref group ( name_of_group -&gt; name )' class='relName' style='fill:#5f789f'>name_of_group</text>
 <!-- == Fk 'person_group_fk_person_group_person' == -->
-<path id='person_group_fk_person_group_person'  onmouseover="hghl(['person_group_fk_person_group_person','ufonetwork.person_group.peson','ufonetwork.person.login'])" onmouseout="uhghl(['person_group_fk_person_group_person','ufonetwork.person_group.peson','ufonetwork.person.login'])" transform='translate(7,0)' class='scene' d='M 345 285 L 322,285 Q 315,285 315,277 L 315,217 Q 315,210 307,210 L 300,210' >
+<path id='person_group_fk_person_group_person'  onmouseover="hghl(['person_group_fk_person_group_person','ufonetwork.person_group.peson','ufonetwork.person.login'])" onmouseout="uhghl(['person_group_fk_person_group_person','ufonetwork.person_group.peson','ufonetwork.person.login'])" transform='translate(7,0)' class='scene' d='M 360 240 L 360,202 Q 360,195 352,195 L 315,195' >
 	<title>Fk fk_person_group_person
 person_group ref person ( peson -&gt; login )</title>
 </path>
-<path transform='translate(7,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 345 285 L 322,285 Q 315,285 315,277 L 315,217 Q 315,210 307,210 L 300,210' ></path>
-<text x='324' y='280' transform='rotate(0 324,280)' title='Fk fk_person_group_person
+<path transform='translate(7,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 360 240 L 360,202 Q 360,195 352,195 L 315,195' ></path>
+<text x='362' y='235' transform='rotate(270 362,235)' title='Fk fk_person_group_person
 person_group ref person ( peson -&gt; login )' class='relName' style='fill:#5f789f'>peson</text>
+<!-- == Fk 'person_planet' == -->
+<path id='person_planet'  onmouseover="hghl(['person_planet','ufonetwork.person.planet','ufonetwork.planet.name'])" onmouseout="uhghl(['person_planet','ufonetwork.person.planet','ufonetwork.planet.name'])" transform='translate(7,0)' class='scene' d='M 165 150 L 105,150' >
+	<title>Fk planet
+person ref planet ( planet -&gt; name )</title>
+</path>
+<path transform='translate(7,0)' marker-start='url(#foot0p)' marker-end='url(#arrow1)'    d='M 165 150 L 105,150' ></path>
+<text x='141' y='145' transform='rotate(0 141,145)' title='Fk planet
+person ref planet ( planet -&gt; name )' class='relName' style='fill:#5f789f'>planet</text>
+<!-- == Fk 'person_fk_person_race' == -->
+<path id='person_fk_person_race'  onmouseover="hghl(['person_fk_person_race','ufonetwork.person.race','ufonetwork.race.name'])" onmouseout="uhghl(['person_fk_person_race','ufonetwork.person.race','ufonetwork.race.name'])" transform='translate(7,0)' class='scene' d='M 165 60 L 105,60' >
+	<title>Fk fk_person_race
+person ref race ( race -&gt; name )</title>
+</path>
+<path transform='translate(7,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 165 60 L 105,60' ></path>
+<text x='151' y='55' transform='rotate(0 151,55)' title='Fk fk_person_race
+person ref race ( race -&gt; name )' class='relName' style='fill:#5f789f'>race</text>
+<!-- == Fk 'message_fk_message_group' == -->
+<path id='message_fk_message_group'  onmouseover="hghl(['message_fk_message_group','ufonetwork.message.to_group','ufonetwork.group.name'])" onmouseout="uhghl(['message_fk_message_group','ufonetwork.message.to_group','ufonetwork.group.name'])" transform='translate(7,0)' class='scene' d='M 450 420 L 450,352 Q 450,345 457,345 L 532,345 Q 540,345 540,337 L 540,135' >
+	<title>Fk fk_message_group
+message ref group ( to_group -&gt; name )</title>
+</path>
+<path transform='translate(7,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 450 420 L 450,352 Q 450,345 457,345 L 532,345 Q 540,345 540,337 L 540,135' ></path>
+<text x='452' y='415' transform='rotate(270 452,415)' title='Fk fk_message_group
+message ref group ( to_group -&gt; name )' class='relName' style='fill:#5f789f'>to_group</text>
+<!-- == Fk 'message_fk_message_person' == -->
+<path id='message_fk_message_person'  onmouseover="hghl(['message_fk_message_person','ufonetwork.message.writer','ufonetwork.person.login'])" onmouseout="uhghl(['message_fk_message_person','ufonetwork.message.writer','ufonetwork.person.login'])" transform='translate(7,0)' class='scene' d='M 315 435 L 307,435 Q 300,435 300,427 L 300,210' >
+	<title>Fk fk_message_person
+message ref person ( writer -&gt; login )</title>
+</path>
+<path transform='translate(7,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 315 435 L 307,435 Q 300,435 300,427 L 300,210' ></path>
+<text x='293' y='430' transform='rotate(0 293,430)' title='Fk fk_message_person
+message ref person ( writer -&gt; login )' class='relName' style='fill:#5f789f'>writer</text>
 <!-- == Table 'group' == -->
-<rect class='entity' x='360' y='38' width='120' height='90' rx='7' ry='7' style='stroke:none'/>
-<path d='M 360 64 L 360 45 Q 360 38 367 38 L 473 38 Q 480 38 480 45 L 480 64 L360 64 ' style='fill:url(#tbg_bfd4f5);stroke:1;stroke-opacity:0.1;' />
-<rect class='entity' x='360' y='38' width='120' height='90' rx='7' ry='7' style='fill:none;stroke:#5f656e'/>
-<line class='delim' x1='360' y1='64' x2='480' y2='64' style='stroke:#5f656e'/>
-<line class='delim' x1='375' y1='64' x2='375' y2='128' style='stroke:#5f656e'/>
-<line class='delim' x1='469' y1='64' x2='469' y2='128' style='stroke:#5f656e'/>
-<a xlink:href='#group'><text x='403' y='56'>group</text><title>Table ufonetwork.group
+<rect class='entity' x='525' y='38' width='120' height='90' rx='7' ry='7' style='stroke:none'/>
+<path d='M 525 64 L 525 45 Q 525 38 532 38 L 638 38 Q 645 38 645 45 L 645 64 L525 64 ' style='fill:url(#tbg_bfd4f5);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='525' y='38' width='120' height='90' rx='7' ry='7' style='fill:none;stroke:#5f656e'/>
+<line class='delim' x1='525' y1='64' x2='645' y2='64' style='stroke:#5f656e'/>
+<line class='delim' x1='540' y1='64' x2='540' y2='128' style='stroke:#5f656e'/>
+<line class='delim' x1='634' y1='64' x2='634' y2='128' style='stroke:#5f656e'/>
+<a xlink:href='#group'><text x='568' y='56'>group</text><title>Table ufonetwork.group
 list of groups</title></a>
-  <use id='nn' x='362' y='72' xlink:href='#nn'/><a xlink:href='#group.name'><use id='pk' x='362' y='71' xlink:href='#pk'/><title>Pk pk_group_name ( name ) </title></a>
-<a xlink:href='#group.name'><text id='ufonetwork.group.name' x='378' y='81' onmouseover="hghl(['message_fk_message_group','ufonetwork.message.to_group','person_group_fk_person_group','ufonetwork.person_group.name_of_group'])" onmouseout="uhghl(['message_fk_message_group','ufonetwork.message.to_group','person_group_fk_person_group','ufonetwork.person_group.name_of_group'])">name</text><title>name
+  <use id='nn' x='527' y='72' xlink:href='#nn'/><a xlink:href='#group.name'><use id='pk' x='527' y='71' xlink:href='#pk'/><title>Pk pk_group_name ( name ) </title></a>
+<a xlink:href='#group.name'><text id='ufonetwork.group.name' x='543' y='81' onmouseover="hghl(['message_fk_message_group','ufonetwork.message.to_group','person_group_fk_person_group','ufonetwork.person_group.name_of_group'])" onmouseout="uhghl(['message_fk_message_group','ufonetwork.message.to_group','person_group_fk_person_group','ufonetwork.person_group.name_of_group'])">name</text><title>name
 * text</title></a>
-<a xlink:href='#group.name'><use id='ref' x='469' y='71' xlink:href='#ref'/><title>Referred by message ( to_group -&gt; name ) 
+<a xlink:href='#group.name'><use id='ref' x='634' y='71' xlink:href='#ref'/><title>Referred by message ( to_group -&gt; name ) 
 Referred by person_group ( name_of_group -&gt; name ) </title></a>
-  <use id='nn' x='362' y='87' xlink:href='#nn'/><a xlink:href='#group.owner_of_group'><use id='idx' x='362' y='86' xlink:href='#idx'/><title>idx_group_owner_of_group ( owner_of_group ) </title></a>
-<a xlink:href='#group.owner_of_group'><text id='ufonetwork.group.owner_of_group' x='378' y='96' onmouseover="hghl(['group_fk_group_person','ufonetwork.person.login'])" onmouseout="uhghl(['group_fk_group_person','ufonetwork.person.login'])">owner_of_group</text><title>owner_of_group
+  <use id='nn' x='527' y='87' xlink:href='#nn'/><a xlink:href='#group.owner_of_group'><use id='idx' x='527' y='86' xlink:href='#idx'/><title>idx_group_owner_of_group ( owner_of_group ) </title></a>
+<a xlink:href='#group.owner_of_group'><text id='ufonetwork.group.owner_of_group' x='543' y='96' onmouseover="hghl(['group_fk_group_person','ufonetwork.person.login'])" onmouseout="uhghl(['group_fk_group_person','ufonetwork.person.login'])">owner_of_group</text><title>owner_of_group
 * text</title></a>
-<a xlink:href='#group.owner_of_group'><use id='fk' x='469' y='86' xlink:href='#fk'/><title>References person ( owner_of_group -&gt; login ) </title></a>
-  <a xlink:href='#group.media'><text id='ufonetwork.group.media' x='378' y='111'>media</text><title>media
+<a xlink:href='#group.owner_of_group'><use id='fk' x='634' y='86' xlink:href='#fk'/><title>References person ( owner_of_group -&gt; login ) </title></a>
+  <a xlink:href='#group.media'><text id='ufonetwork.group.media' x='543' y='111'>media</text><title>media
 bytea</title></a>
-<text x='477' y='108' text-anchor='end' class='colType'>~</text>
-<!-- == Table 'message' == -->
-<rect class='entity' x='165' y='278' width='135' height='135' rx='7' ry='7' style='stroke:none'/>
-<path d='M 165 304 L 165 285 Q 165 278 172 278 L 293 278 Q 300 278 300 285 L 300 304 L165 304 ' style='fill:url(#tbg_bfd4f5);stroke:1;stroke-opacity:0.1;' />
-<rect class='entity' x='165' y='278' width='135' height='135' rx='7' ry='7' style='fill:none;stroke:#5f656e'/>
-<line class='delim' x1='165' y1='304' x2='300' y2='304' style='stroke:#5f656e'/>
-<line class='delim' x1='180' y1='304' x2='180' y2='413' style='stroke:#5f656e'/>
-<line class='delim' x1='289' y1='304' x2='289' y2='413' style='stroke:#5f656e'/>
-<a xlink:href='#message'><text x='209' y='296'>message</text><title>Table ufonetwork.message</title></a>
-  <use id='nn' x='167' y='312' xlink:href='#nn'/><a xlink:href='#message.id'><use id='pk' x='167' y='311' xlink:href='#pk'/><title>Pk pk_message_id ( id ) </title></a>
-<a xlink:href='#message.id'><text id='ufonetwork.message.id' x='183' y='321'>id</text><title>id
-* serial</title></a>
-<text x='297' y='318' text-anchor='end' class='colType'>#</text>  <use id='nn' x='167' y='327' xlink:href='#nn'/><a xlink:href='#message.writer'><use id='idx' x='167' y='326' xlink:href='#idx'/><title>idx_message_writer ( writer ) </title></a>
-<a xlink:href='#message.writer'><text id='ufonetwork.message.writer' x='183' y='336' onmouseover="hghl(['message_fk_message_person','ufonetwork.person.login'])" onmouseout="uhghl(['message_fk_message_person','ufonetwork.person.login'])">writer</text><title>writer
+<text x='642' y='108' text-anchor='end' class='colType'>~</text>
+<!-- == Table 'person_group' == -->
+<rect class='entity' x='345' y='248' width='120' height='75' rx='7' ry='7' style='stroke:none'/>
+<path d='M 345 274 L 345 255 Q 345 248 352 248 L 458 248 Q 465 248 465 255 L 465 274 L345 274 ' style='fill:url(#tbg_bfd4f5);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='345' y='248' width='120' height='75' rx='7' ry='7' style='fill:none;stroke:#5f656e'/>
+<line class='delim' x1='345' y1='274' x2='465' y2='274' style='stroke:#5f656e'/>
+<line class='delim' x1='360' y1='274' x2='360' y2='323' style='stroke:#5f656e'/>
+<line class='delim' x1='454' y1='274' x2='454' y2='323' style='stroke:#5f656e'/>
+<a xlink:href='#person_group'><text x='369' y='266'>person_group</text><title>Table ufonetwork.person_group
+connecting table of for persons and groups</title></a>
+  <use id='nn' x='347' y='282' xlink:href='#nn'/><a xlink:href='#person_group.peson'><use id='idx' x='347' y='281' xlink:href='#idx'/><title>idx_person_group_peson ( peson ) </title></a>
+<a xlink:href='#person_group.peson'><text id='ufonetwork.person_group.peson' x='363' y='291' onmouseover="hghl(['person_group_fk_person_group_person','ufonetwork.person.login'])" onmouseout="uhghl(['person_group_fk_person_group_person','ufonetwork.person.login'])">peson</text><title>peson
 * text</title></a>
-<a xlink:href='#message.writer'><use id='fk' x='289' y='326' xlink:href='#fk'/><title>References person ( writer -&gt; login ) </title></a>
-  <use id='nn' x='167' y='342' xlink:href='#nn'/><a xlink:href='#message.to_group'><use id='idx' x='167' y='341' xlink:href='#idx'/><title>idx_message_to_group ( to_group ) </title></a>
-<a xlink:href='#message.to_group'><text id='ufonetwork.message.to_group' x='183' y='351' onmouseover="hghl(['message_fk_message_group','ufonetwork.group.name'])" onmouseout="uhghl(['message_fk_message_group','ufonetwork.group.name'])">to_group</text><title>to_group
+<a xlink:href='#person_group.peson'><use id='fk' x='454' y='281' xlink:href='#fk'/><title>References person ( peson -&gt; login ) </title></a>
+  <use id='nn' x='347' y='297' xlink:href='#nn'/><a xlink:href='#person_group.name_of_group'><use id='idx' x='347' y='296' xlink:href='#idx'/><title>idx_person_group_name_of_group ( name_of_group ) </title></a>
+<a xlink:href='#person_group.name_of_group'><text id='ufonetwork.person_group.name_of_group' x='363' y='306' onmouseover="hghl(['person_group_fk_person_group','ufonetwork.group.name'])" onmouseout="uhghl(['person_group_fk_person_group','ufonetwork.group.name'])">name_of_group</text><title>name_of_group
 * text</title></a>
-<a xlink:href='#message.to_group'><use id='fk' x='289' y='341' xlink:href='#fk'/><title>References group ( to_group -&gt; name ) </title></a>
-  <use id='nn' x='167' y='357' xlink:href='#nn'/><a xlink:href='#message.date_of_departure'><text id='ufonetwork.message.date_of_departure' x='183' y='366'>date_of_departure</text><title>date_of_departure
-* date default CURRENT_DATE</title></a>
-<text x='297' y='363' text-anchor='end' class='colType'>d</text>  <use id='nn' x='167' y='372' xlink:href='#nn'/><a xlink:href='#message.text'><text id='ufonetwork.message.text' x='183' y='381'>text</text><title>text
-* text</title></a>
-<text x='297' y='378' text-anchor='end' class='colType'>t</text>  <a xlink:href='#message.media'><text id='ufonetwork.message.media' x='183' y='396'>media</text><title>media
-bytea</title></a>
-<text x='297' y='393' text-anchor='end' class='colType'>~</text>
+<a xlink:href='#person_group.name_of_group'><use id='fk' x='454' y='296' xlink:href='#fk'/><title>References group ( name_of_group -&gt; name ) </title></a>
+
 <!-- == Table 'person' == -->
-<rect class='entity' x='165' y='38' width='135' height='180' rx='7' ry='7' style='stroke:none'/>
-<path d='M 165 64 L 165 45 Q 165 38 172 38 L 293 38 Q 300 38 300 45 L 300 64 L165 64 ' style='fill:url(#tbg_bfd4f5);stroke:1;stroke-opacity:0.1;' />
-<rect class='entity' x='165' y='38' width='135' height='180' rx='7' ry='7' style='fill:none;stroke:#5f656e'/>
-<line class='delim' x1='165' y1='64' x2='300' y2='64' style='stroke:#5f656e'/>
-<line class='delim' x1='180' y1='64' x2='180' y2='218' style='stroke:#5f656e'/>
-<line class='delim' x1='289' y1='64' x2='289' y2='218' style='stroke:#5f656e'/>
-<a xlink:href='#person'><text x='213' y='56'>person</text><title>Table ufonetwork.person</title></a>
-  <use id='nn' x='167' y='72' xlink:href='#nn'/><a xlink:href='#person.login'><use id='pk' x='167' y='71' xlink:href='#pk'/><title>Pk pk_person_login ( login ) </title></a>
-<a xlink:href='#person.login'><text id='ufonetwork.person.login' x='183' y='81' onmouseover="hghl(['group_fk_group_person','ufonetwork.group.owner_of_group','message_fk_message_person','ufonetwork.message.writer','person_group_fk_person_group_person','ufonetwork.person_group.peson'])" onmouseout="uhghl(['group_fk_group_person','ufonetwork.group.owner_of_group','message_fk_message_person','ufonetwork.message.writer','person_group_fk_person_group_person','ufonetwork.person_group.peson'])">login</text><title>login
+<rect class='entity' x='180' y='38' width='135' height='165' rx='7' ry='7' style='stroke:none'/>
+<path d='M 180 64 L 180 45 Q 180 38 187 38 L 308 38 Q 315 38 315 45 L 315 64 L180 64 ' style='fill:url(#tbg_bfd4f5);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='180' y='38' width='135' height='165' rx='7' ry='7' style='fill:none;stroke:#5f656e'/>
+<line class='delim' x1='180' y1='64' x2='315' y2='64' style='stroke:#5f656e'/>
+<line class='delim' x1='195' y1='64' x2='195' y2='203' style='stroke:#5f656e'/>
+<line class='delim' x1='304' y1='64' x2='304' y2='203' style='stroke:#5f656e'/>
+<a xlink:href='#person'><text x='228' y='56'>person</text><title>Table ufonetwork.person</title></a>
+  <use id='nn' x='182' y='72' xlink:href='#nn'/><a xlink:href='#person.login'><use id='pk' x='182' y='71' xlink:href='#pk'/><title>Pk pk_person_login ( login ) </title></a>
+<a xlink:href='#person.login'><text id='ufonetwork.person.login' x='198' y='81' onmouseover="hghl(['group_fk_group_person','ufonetwork.group.owner_of_group','message_fk_message_person','ufonetwork.message.writer','person_group_fk_person_group_person','ufonetwork.person_group.peson'])" onmouseout="uhghl(['group_fk_group_person','ufonetwork.group.owner_of_group','message_fk_message_person','ufonetwork.message.writer','person_group_fk_person_group_person','ufonetwork.person_group.peson'])">login</text><title>login
 * text
 unique login of each person</title></a>
-<a xlink:href='#person.login'><use id='ref' x='289' y='71' xlink:href='#ref'/><title>Referred by group ( owner_of_group -&gt; login ) 
+<a xlink:href='#person.login'><use id='ref' x='304' y='71' xlink:href='#ref'/><title>Referred by group ( owner_of_group -&gt; login ) 
 Referred by message ( writer -&gt; login ) 
 Referred by person_group ( peson -&gt; login ) </title></a>
-  <use id='nn' x='167' y='87' xlink:href='#nn'/><a xlink:href='#person.pass'><text id='ufonetwork.person.pass' x='183' y='96'>pass</text><title>pass
+  <use id='nn' x='182' y='87' xlink:href='#nn'/><a xlink:href='#person.pass'><text id='ufonetwork.person.pass' x='198' y='96'>pass</text><title>pass
 * text
 encoded password</title></a>
-<text x='297' y='93' text-anchor='end' class='colType'>t</text>  <use id='nn' x='167' y='102' xlink:href='#nn'/><a xlink:href='#person.date_of_registration'><text id='ufonetwork.person.date_of_registration' x='183' y='111'>date_of_registration</text><title>date_of_registration
+<text x='312' y='93' text-anchor='end' class='colType'>t</text>  <use id='nn' x='182' y='102' xlink:href='#nn'/><a xlink:href='#person.date_of_registration'><text id='ufonetwork.person.date_of_registration' x='198' y='111'>date_of_registration</text><title>date_of_registration
 * date default CURRENT_DATE</title></a>
-<text x='297' y='108' text-anchor='end' class='colType'>d</text>  <a xlink:href='#person.sex'><text id='ufonetwork.person.sex' x='183' y='126'>sex</text><title>sex
+<text x='312' y='108' text-anchor='end' class='colType'>d</text>  <a xlink:href='#person.sex'><text id='ufonetwork.person.sex' x='198' y='126'>sex</text><title>sex
 text
 any symbols combination ( we guess there are more then only 2 sexes in galaxy )</title></a>
-<text x='297' y='123' text-anchor='end' class='colType'>t</text>  <a xlink:href='#person.age'><text id='ufonetwork.person.age' x='183' y='141'>age</text><title>age
+<text x='312' y='123' text-anchor='end' class='colType'>t</text>  <a xlink:href='#person.age'><text id='ufonetwork.person.age' x='198' y='141'>age</text><title>age
 integer</title></a>
-<text x='297' y='138' text-anchor='end' class='colType'>#</text>  <use id='nn' x='167' y='147' xlink:href='#nn'/><a xlink:href='#person.race'><use id='idx' x='167' y='146' xlink:href='#idx'/><title>idx_person_race ( race ) </title></a>
-<a xlink:href='#person.race'><text id='ufonetwork.person.race' x='183' y='156' onmouseover="hghl(['person_fk_person_race','ufonetwork.race.name'])" onmouseout="uhghl(['person_fk_person_race','ufonetwork.race.name'])">race</text><title>race
+<text x='312' y='138' text-anchor='end' class='colType'>#</text>  <use id='nn' x='182' y='147' xlink:href='#nn'/><a xlink:href='#person.race'><use id='idx' x='182' y='146' xlink:href='#idx'/><title>idx_person_race ( race ) </title></a>
+<a xlink:href='#person.race'><text id='ufonetwork.person.race' x='198' y='156' onmouseover="hghl(['person_fk_person_race','ufonetwork.race.name'])" onmouseout="uhghl(['person_fk_person_race','ufonetwork.race.name'])">race</text><title>race
 * text</title></a>
-<a xlink:href='#person.race'><use id='fk' x='289' y='146' xlink:href='#fk'/><title>References race ( race -&gt; name ) </title></a>
-  <a xlink:href='#person.planet'><use id='idx' x='167' y='161' xlink:href='#idx'/><title>idx_person_planet ( planet ) </title></a>
-<a xlink:href='#person.planet'><text id='ufonetwork.person.planet' x='183' y='171' onmouseover="hghl(['person_planet','ufonetwork.planet.name'])" onmouseout="uhghl(['person_planet','ufonetwork.planet.name'])">planet</text><title>planet
+<a xlink:href='#person.race'><use id='fk' x='304' y='146' xlink:href='#fk'/><title>References race ( race -&gt; name ) </title></a>
+  <a xlink:href='#person.planet'><use id='idx' x='182' y='161' xlink:href='#idx'/><title>idx_person_planet ( planet ) </title></a>
+<a xlink:href='#person.planet'><text id='ufonetwork.person.planet' x='198' y='171' onmouseover="hghl(['person_planet','ufonetwork.planet.name'])" onmouseout="uhghl(['person_planet','ufonetwork.planet.name'])">planet</text><title>planet
 text</title></a>
-<a xlink:href='#person.planet'><use id='fk' x='289' y='161' xlink:href='#fk'/><title>References planet ( planet -&gt; name ) </title></a>
-  <a xlink:href='#person.group_of_person'><text id='ufonetwork.person.group_of_person' x='183' y='186'>group_of_person</text><title>group_of_person
-text</title></a>
-<text x='297' y='183' text-anchor='end' class='colType'>t</text>  <a xlink:href='#person.media'><text id='ufonetwork.person.media' x='183' y='201'>media</text><title>media
+<a xlink:href='#person.planet'><use id='fk' x='304' y='161' xlink:href='#fk'/><title>References planet ( planet -&gt; name ) </title></a>
+  <a xlink:href='#person.media'><text id='ufonetwork.person.media' x='198' y='186'>media</text><title>media
 bytea</title></a>
-<text x='297' y='198' text-anchor='end' class='colType'>~</text>
-<!-- == Table 'person_group' == -->
-<rect class='entity' x='360' y='278' width='120' height='75' rx='7' ry='7' style='stroke:none'/>
-<path d='M 360 304 L 360 285 Q 360 278 367 278 L 473 278 Q 480 278 480 285 L 480 304 L360 304 ' style='fill:url(#tbg_bfd4f5);stroke:1;stroke-opacity:0.1;' />
-<rect class='entity' x='360' y='278' width='120' height='75' rx='7' ry='7' style='fill:none;stroke:#5f656e'/>
-<line class='delim' x1='360' y1='304' x2='480' y2='304' style='stroke:#5f656e'/>
-<line class='delim' x1='375' y1='304' x2='375' y2='353' style='stroke:#5f656e'/>
-<line class='delim' x1='469' y1='304' x2='469' y2='353' style='stroke:#5f656e'/>
-<a xlink:href='#person_group'><text x='384' y='296'>person_group</text><title>Table ufonetwork.person_group
-connecting table of for persons and groups</title></a>
-  <use id='nn' x='362' y='312' xlink:href='#nn'/><a xlink:href='#person_group.peson'><use id='idx' x='362' y='311' xlink:href='#idx'/><title>idx_person_group_peson ( peson ) </title></a>
-<a xlink:href='#person_group.peson'><text id='ufonetwork.person_group.peson' x='378' y='321' onmouseover="hghl(['person_group_fk_person_group_person','ufonetwork.person.login'])" onmouseout="uhghl(['person_group_fk_person_group_person','ufonetwork.person.login'])">peson</text><title>peson
+<text x='312' y='183' text-anchor='end' class='colType'>~</text>
+<!-- == Table 'message' == -->
+<rect class='entity' x='330' y='428' width='135' height='135' rx='7' ry='7' style='stroke:none'/>
+<path d='M 330 454 L 330 435 Q 330 428 337 428 L 458 428 Q 465 428 465 435 L 465 454 L330 454 ' style='fill:url(#tbg_bfd4f5);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='330' y='428' width='135' height='135' rx='7' ry='7' style='fill:none;stroke:#5f656e'/>
+<line class='delim' x1='330' y1='454' x2='465' y2='454' style='stroke:#5f656e'/>
+<line class='delim' x1='345' y1='454' x2='345' y2='563' style='stroke:#5f656e'/>
+<line class='delim' x1='454' y1='454' x2='454' y2='563' style='stroke:#5f656e'/>
+<a xlink:href='#message'><text x='374' y='446'>message</text><title>Table ufonetwork.message</title></a>
+  <use id='nn' x='332' y='462' xlink:href='#nn'/><a xlink:href='#message.id'><use id='pk' x='332' y='461' xlink:href='#pk'/><title>Pk pk_message_id ( id ) </title></a>
+<a xlink:href='#message.id'><text id='ufonetwork.message.id' x='348' y='471'>id</text><title>id
+* serial</title></a>
+<text x='462' y='468' text-anchor='end' class='colType'>#</text>  <use id='nn' x='332' y='477' xlink:href='#nn'/><a xlink:href='#message.writer'><use id='idx' x='332' y='476' xlink:href='#idx'/><title>idx_message_writer ( writer ) </title></a>
+<a xlink:href='#message.writer'><text id='ufonetwork.message.writer' x='348' y='486' onmouseover="hghl(['message_fk_message_person','ufonetwork.person.login'])" onmouseout="uhghl(['message_fk_message_person','ufonetwork.person.login'])">writer</text><title>writer
 * text</title></a>
-<a xlink:href='#person_group.peson'><use id='fk' x='469' y='311' xlink:href='#fk'/><title>References person ( peson -&gt; login ) </title></a>
-  <use id='nn' x='362' y='327' xlink:href='#nn'/><a xlink:href='#person_group.name_of_group'><use id='idx' x='362' y='326' xlink:href='#idx'/><title>idx_person_group_name_of_group ( name_of_group ) </title></a>
-<a xlink:href='#person_group.name_of_group'><text id='ufonetwork.person_group.name_of_group' x='378' y='336' onmouseover="hghl(['person_group_fk_person_group','ufonetwork.group.name'])" onmouseout="uhghl(['person_group_fk_person_group','ufonetwork.group.name'])">name_of_group</text><title>name_of_group
+<a xlink:href='#message.writer'><use id='fk' x='454' y='476' xlink:href='#fk'/><title>References person ( writer -&gt; login ) </title></a>
+  <use id='nn' x='332' y='492' xlink:href='#nn'/><a xlink:href='#message.to_group'><use id='idx' x='332' y='491' xlink:href='#idx'/><title>idx_message_to_group ( to_group ) </title></a>
+<a xlink:href='#message.to_group'><text id='ufonetwork.message.to_group' x='348' y='501' onmouseover="hghl(['message_fk_message_group','ufonetwork.group.name'])" onmouseout="uhghl(['message_fk_message_group','ufonetwork.group.name'])">to_group</text><title>to_group
 * text</title></a>
-<a xlink:href='#person_group.name_of_group'><use id='fk' x='469' y='326' xlink:href='#fk'/><title>References group ( name_of_group -&gt; name ) </title></a>
+<a xlink:href='#message.to_group'><use id='fk' x='454' y='491' xlink:href='#fk'/><title>References group ( to_group -&gt; name ) </title></a>
+  <use id='nn' x='332' y='507' xlink:href='#nn'/><a xlink:href='#message.date_of_departure'><text id='ufonetwork.message.date_of_departure' x='348' y='516'>date_of_departure</text><title>date_of_departure
+* date default CURRENT_DATE</title></a>
+<text x='462' y='513' text-anchor='end' class='colType'>d</text>  <use id='nn' x='332' y='522' xlink:href='#nn'/><a xlink:href='#message.text'><text id='ufonetwork.message.text' x='348' y='531'>text</text><title>text
+* text</title></a>
+<text x='462' y='528' text-anchor='end' class='colType'>t</text>  <a xlink:href='#message.media'><text id='ufonetwork.message.media' x='348' y='546'>media</text><title>media
+bytea</title></a>
+<text x='462' y='543' text-anchor='end' class='colType'>~</text>
+<!-- == Table 'race' == -->
+<rect class='entity' x='45' y='38' width='60' height='60' rx='7' ry='7' style='stroke:none'/>
+<path d='M 45 64 L 45 45 Q 45 38 52 38 L 98 38 Q 105 38 105 45 L 105 64 L45 64 ' style='fill:url(#tbg_bfd4f5);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='45' y='38' width='60' height='60' rx='7' ry='7' style='fill:none;stroke:#5f656e'/>
+<line class='delim' x1='45' y1='64' x2='105' y2='64' style='stroke:#5f656e'/>
+<line class='delim' x1='60' y1='64' x2='60' y2='98' style='stroke:#5f656e'/>
+<line class='delim' x1='94' y1='64' x2='94' y2='98' style='stroke:#5f656e'/>
+<a xlink:href='#race'><text x='61' y='56'>race</text><title>Table ufonetwork.race</title></a>
+  <use id='nn' x='47' y='72' xlink:href='#nn'/><a xlink:href='#race.name'><use id='pk' x='47' y='71' xlink:href='#pk'/><title>Pk pk_race_name ( name ) </title></a>
+<a xlink:href='#race.name'><text id='ufonetwork.race.name' x='63' y='81' onmouseover="hghl(['person_fk_person_race','ufonetwork.person.race'])" onmouseout="uhghl(['person_fk_person_race','ufonetwork.person.race'])">name</text><title>name
+* text</title></a>
+<a xlink:href='#race.name'><use id='ref' x='94' y='71' xlink:href='#ref'/><title>Referred by person ( race -&gt; name ) </title></a>
 
 <!-- == Table 'planet' == -->
-<rect class='entity' x='45' y='278' width='60' height='75' rx='7' ry='7' style='stroke:none'/>
-<path d='M 45 304 L 45 285 Q 45 278 52 278 L 98 278 Q 105 278 105 285 L 105 304 L45 304 ' style='fill:url(#tbg_bfd4f5);stroke:1;stroke-opacity:0.1;' />
-<rect class='entity' x='45' y='278' width='60' height='75' rx='7' ry='7' style='fill:none;stroke:#5f656e'/>
-<line class='delim' x1='45' y1='304' x2='105' y2='304' style='stroke:#5f656e'/>
-<line class='delim' x1='60' y1='304' x2='60' y2='353' style='stroke:#5f656e'/>
-<line class='delim' x1='94' y1='304' x2='94' y2='353' style='stroke:#5f656e'/>
-<a xlink:href='#planet'><text x='56' y='296'>planet</text><title>Table ufonetwork.planet</title></a>
-  <use id='nn' x='47' y='312' xlink:href='#nn'/><a xlink:href='#planet.name'><use id='pk' x='47' y='311' xlink:href='#pk'/><title>Pk pk_planet_name ( name ) </title></a>
-<a xlink:href='#planet.name'><text id='ufonetwork.planet.name' x='63' y='321' onmouseover="hghl(['person_planet','ufonetwork.person.planet'])" onmouseout="uhghl(['person_planet','ufonetwork.person.planet'])">name</text><title>name
+<rect class='entity' x='45' y='128' width='60' height='75' rx='7' ry='7' style='stroke:none'/>
+<path d='M 45 154 L 45 135 Q 45 128 52 128 L 98 128 Q 105 128 105 135 L 105 154 L45 154 ' style='fill:url(#tbg_bfd4f5);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='45' y='128' width='60' height='75' rx='7' ry='7' style='fill:none;stroke:#5f656e'/>
+<line class='delim' x1='45' y1='154' x2='105' y2='154' style='stroke:#5f656e'/>
+<line class='delim' x1='60' y1='154' x2='60' y2='203' style='stroke:#5f656e'/>
+<line class='delim' x1='94' y1='154' x2='94' y2='203' style='stroke:#5f656e'/>
+<a xlink:href='#planet'><text x='56' y='146'>planet</text><title>Table ufonetwork.planet</title></a>
+  <use id='nn' x='47' y='162' xlink:href='#nn'/><a xlink:href='#planet.name'><use id='pk' x='47' y='161' xlink:href='#pk'/><title>Pk pk_planet_name ( name ) </title></a>
+<a xlink:href='#planet.name'><text id='ufonetwork.planet.name' x='63' y='171' onmouseover="hghl(['person_planet','ufonetwork.person.planet'])" onmouseout="uhghl(['person_planet','ufonetwork.person.planet'])">name</text><title>name
 * text</title></a>
-<a xlink:href='#planet.name'><use id='ref' x='94' y='311' xlink:href='#ref'/><title>Referred by person ( planet -&gt; name ) </title></a>
-  <a xlink:href='#planet.age'><text id='ufonetwork.planet.age' x='63' y='336'>age</text><title>age
+<a xlink:href='#planet.name'><use id='ref' x='94' y='161' xlink:href='#ref'/><title>Referred by person ( planet -&gt; name ) </title></a>
+  <a xlink:href='#planet.age'><text id='ufonetwork.planet.age' x='63' y='186'>age</text><title>age
 integer</title></a>
-<text x='102' y='333' text-anchor='end' class='colType'>#</text>
-<!-- == Table 'race' == -->
-<rect class='entity' x='45' y='158' width='60' height='60' rx='7' ry='7' style='stroke:none'/>
-<path d='M 45 184 L 45 165 Q 45 158 52 158 L 98 158 Q 105 158 105 165 L 105 184 L45 184 ' style='fill:url(#tbg_bfd4f5);stroke:1;stroke-opacity:0.1;' />
-<rect class='entity' x='45' y='158' width='60' height='60' rx='7' ry='7' style='fill:none;stroke:#5f656e'/>
-<line class='delim' x1='45' y1='184' x2='105' y2='184' style='stroke:#5f656e'/>
-<line class='delim' x1='60' y1='184' x2='60' y2='218' style='stroke:#5f656e'/>
-<line class='delim' x1='94' y1='184' x2='94' y2='218' style='stroke:#5f656e'/>
-<a xlink:href='#race'><text x='61' y='176'>race</text><title>Table ufonetwork.race</title></a>
-  <use id='nn' x='47' y='192' xlink:href='#nn'/><a xlink:href='#race.name'><use id='pk' x='47' y='191' xlink:href='#pk'/><title>Pk pk_race_name ( name ) </title></a>
-<a xlink:href='#race.name'><text id='ufonetwork.race.name' x='63' y='201' onmouseover="hghl(['person_fk_person_race','ufonetwork.person.race'])" onmouseout="uhghl(['person_fk_person_race','ufonetwork.person.race'])">name</text><title>name
-* text</title></a>
-<a xlink:href='#race.name'><use id='ref' x='94' y='191' xlink:href='#ref'/><title>Referred by person ( race -&gt; name ) </title></a>
-
+<text x='102' y='183' text-anchor='end' class='colType'>#</text>
 </g></svg></div>
 
 
 <br/><br/>
-<div class='card'><div class='card-block'><a name='group' onclick='window.scrollTo(160, 45);return false;' style='cursor:pointer;'><h4 class='card-title'>Table group</h4></a>
+<div class='card'><div class='card-block'><a name='group' onclick='window.scrollTo(325, 45);return false;' style='cursor:pointer;'><h4 class='card-title'>Table group</h4></a>
 <p class="text-muted">list of groups</p>
 <table class='table-sm table-bordered'>
 <thead>
@@ -467,7 +465,7 @@ integer</title></a>
 </table></div></div>
 
 <br/><br/>
-<div class='card'><div class='card-block'><a name='message' onclick='window.scrollTo(60, 285);return false;' style='cursor:pointer;'><h4 class='card-title'>Table message</h4></a>
+<div class='card'><div class='card-block'><a name='message' onclick='window.scrollTo(130, 435);return false;' style='cursor:pointer;'><h4 class='card-title'>Table message</h4></a>
 <table class='table-sm table-bordered'>
 <thead>
 <tr><th>Indexes</th><th>Field Name</th><th>Data Type</th><th>Description</th></tr></thead>
@@ -585,12 +583,6 @@ integer</title></a>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><a name='person.group_of_person'>group&#95;of&#95;person</a></td>
-		<td> text   </td>
-		<td>  </td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
 		<td><a name='person.media'>media</a></td>
 		<td> bytea   </td>
 		<td>  </td>
@@ -623,7 +615,7 @@ integer</title></a>
 </table></div></div>
 
 <br/><br/>
-<div class='card'><div class='card-block'><a name='person_group' onclick='window.scrollTo(160, 285);return false;' style='cursor:pointer;'><h4 class='card-title'>Table person_group</h4></a>
+<div class='card'><div class='card-block'><a name='person_group' onclick='window.scrollTo(145, 255);return false;' style='cursor:pointer;'><h4 class='card-title'>Table person_group</h4></a>
 <p class="text-muted">connecting table of for persons and groups</p>
 <table class='table-sm table-bordered'>
 <thead>
@@ -665,7 +657,7 @@ integer</title></a>
 </table></div></div>
 
 <br/><br/>
-<div class='card'><div class='card-block'><a name='planet' onclick='window.scrollTo(60, 285);return false;' style='cursor:pointer;'><h4 class='card-title'>Table planet</h4></a>
+<div class='card'><div class='card-block'><a name='planet' onclick='window.scrollTo(60, 135);return false;' style='cursor:pointer;'><h4 class='card-title'>Table planet</h4></a>
 <table class='table-sm table-bordered'>
 <thead>
 <tr><th>Indexes</th><th>Field Name</th><th>Data Type</th><th>Description</th></tr></thead>
@@ -691,7 +683,7 @@ integer</title></a>
 </table></div></div>
 
 <br/><br/>
-<div class='card'><div class='card-block'><a name='race' onclick='window.scrollTo(60, 165);return false;' style='cursor:pointer;'><h4 class='card-title'>Table race</h4></a>
+<div class='card'><div class='card-block'><a name='race' onclick='window.scrollTo(60, 45);return false;' style='cursor:pointer;'><h4 class='card-title'>Table race</h4></a>
 <table class='table-sm table-bordered'>
 <thead>
 <tr><th>Indexes</th><th>Field Name</th><th>Data Type</th><th>Description</th></tr></thead>
