@@ -21,6 +21,9 @@ idea/*
 *.tar.gz
 *.rar
 
+#Mac file
+.DS_Store
+
 # DBSchema file
 *.bak
 
