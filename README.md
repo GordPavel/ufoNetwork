@@ -13,7 +13,7 @@ The user who created the group can exclude from it any other user and delete any
 When creating a group, the user must specify the name of the group and select the category of the group from the existing list. The group has a unique identifier (ID), stores a link to the user who created it, and can store a user-uploaded png file that can be used as an avatar of the group. P
 The user who created the group can change its name, category, avatar.
 
-[Here](https://qc63nr.axshare.com/#g=1&p=home) you can see the first version of prototype.
+[Here](https://qc63nr.axshare.com/#g=1) you can see the first version of prototype.
 
 We choose [Apache Tomcat](http://tomcat.apache.org) as application server, because ti's free and easy to setup and use.
 
