@@ -1,58 +1,109 @@
+CREATE SCHEMA ufonetwork;
+
+CREATE SEQUENCE ufonetwork.group_category_id_seq START WITH 1;
+
+CREATE SEQUENCE ufonetwork.group_id_seq START WITH 1;
+
 CREATE SEQUENCE ufonetwork.message_id_seq START WITH 1;
 
-CREATE TABLE ufonetwork.planet ( 
+CREATE SEQUENCE ufonetwork.person_id_seq START WITH 1;
+
+CREATE SEQUENCE ufonetwork.planet_id_seq START WITH 1;
+
+CREATE SEQUENCE ufonetwork.race_id_seq START WITH 1;
+
+CREATE TABLE ufonetwork.category ( 
+	id                   serial  NOT NULL,
 	name                 text  NOT NULL,
-	age                  integer  ,
-	CONSTRAINT pk_planet_name PRIMARY KEY ( name )
+	CONSTRAINT pk_group_category_id PRIMARY KEY ( id )
  );
+
+COMMENT ON TABLE ufonetwork.category IS 'list of categories of all groups. Data filled by DB admin';
+
+COMMENT ON COLUMN ufonetwork.category.name IS 'Unique name of category (ignoring case)';
+
+CREATE TABLE ufonetwork.planet ( 
+	id                   serial  NOT NULL,
+	name                 text  NOT NULL,
+	CONSTRAINT planet_id_primary PRIMARY KEY ( id ),
+	CONSTRAINT planet_unique_name UNIQUE ( name ) 
+ );
+
+COMMENT ON TABLE ufonetwork.planet IS 'list of planets. Users can''t manipulate with values in table, only read';
+
+COMMENT ON COLUMN ufonetwork.planet.name IS 'Unique name of planet ( ignoring case)';
 
 CREATE TABLE ufonetwork.race ( 
+	id                   serial  NOT NULL,
 	name                 text  NOT NULL,
-	CONSTRAINT pk_race_name PRIMARY KEY ( name )
+	CONSTRAINT pk_race_id PRIMARY KEY ( id ),
+	CONSTRAINT race_unique_name UNIQUE ( name ) 
  );
 
+COMMENT ON TABLE ufonetwork.race IS 'List of different races. Each person could enter his race or choose from list';
+
+COMMENT ON COLUMN ufonetwork.race.name IS 'Unique name of race ( ignoring case ).';
+
 CREATE TABLE ufonetwork.person ( 
+	id                   serial  NOT NULL,
 	login                text  NOT NULL,
 	pass                 text  NOT NULL,
 	date_of_registration date DEFAULT CURRENT_DATE NOT NULL,
 	sex                  text  ,
 	age                  integer  ,
-	race                 text  NOT NULL,
-	planet               text  ,
-	group_of_person      text  ,
 	media                bytea  ,
-	CONSTRAINT pk_person_login PRIMARY KEY ( login )
+	race                 integer  NOT NULL,
+	planet               integer  ,
+	CONSTRAINT pk_person_id PRIMARY KEY ( id ),
+	CONSTRAINT unique_person_login UNIQUE ( login ) ,
+	CONSTRAINT fk_person_planet FOREIGN KEY ( planet ) REFERENCES ufonetwork.planet( id ) ON DELETE SET NULL ON UPDATE CASCADE,
+	CONSTRAINT fk_person_race FOREIGN KEY ( race ) REFERENCES ufonetwork.race( id )  ON UPDATE CASCADE
  );
 
 CREATE INDEX idx_person_planet ON ufonetwork.person ( planet );
 
 CREATE INDEX idx_person_race ON ufonetwork.person ( race );
 
+COMMENT ON TABLE ufonetwork.person IS 'List of all users of system';
+
 COMMENT ON COLUMN ufonetwork.person.login IS 'unique login of each person';
 
-COMMENT ON COLUMN ufonetwork.person.pass IS 'encoded password';
+COMMENT ON COLUMN ufonetwork.person.pass IS 'Encrypted in SHA-256 password';
 
 COMMENT ON COLUMN ufonetwork.person.sex IS 'any symbols combination ( we guess there are more then only 2 sexes in galaxy )';
 
+COMMENT ON COLUMN ufonetwork.person.media IS 'Optional png pic of user';
+
 CREATE TABLE ufonetwork."group" ( 
+	id                   serial  NOT NULL,
 	name                 text  NOT NULL,
-	owner_of_group       text  NOT NULL,
 	media                bytea  ,
-	CONSTRAINT pk_group_name PRIMARY KEY ( name )
+	owner_group          integer  NOT NULL,
+	category             integer  ,
+	CONSTRAINT pk_group_id PRIMARY KEY ( id ),
+	CONSTRAINT unique_planet_name UNIQUE ( name ) ,
+	CONSTRAINT fk_group_group_category FOREIGN KEY ( category ) REFERENCES ufonetwork.category( id ) ON DELETE SET NULL ON UPDATE CASCADE,
+	CONSTRAINT fk_group_person FOREIGN KEY ( owner_group ) REFERENCES ufonetwork.person( id ) ON DELETE CASCADE ON UPDATE CASCADE
  );
 
-CREATE INDEX idx_group_owner_of_group ON ufonetwork."group" ( owner_of_group );
+CREATE INDEX idx_group_category ON ufonetwork."group" ( category );
+
+CREATE INDEX idx_group_owner_group ON ufonetwork."group" ( owner_group );
 
 COMMENT ON TABLE ufonetwork."group" IS 'list of groups';
 
+COMMENT ON COLUMN ufonetwork."group".owner_group IS 'person who made this group';
+
 CREATE TABLE ufonetwork.message ( 
 	id                   serial  NOT NULL,
-	writer               text  NOT NULL,
-	to_group             text  NOT NULL,
-	date_of_departure    date DEFAULT CURRENT_DATE NOT NULL,
+	date_of_submition    date DEFAULT CURRENT_DATE NOT NULL,
 	text                 text  NOT NULL,
 	media                bytea  ,
-	CONSTRAINT pk_message_id PRIMARY KEY ( id )
+	writer               integer  ,
+	to_group             integer  NOT NULL,
+	CONSTRAINT pk_message_id PRIMARY KEY ( id ),
+	CONSTRAINT fk_message_group FOREIGN KEY ( to_group ) REFERENCES ufonetwork."group"( id ) ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT fk_message_person FOREIGN KEY ( writer ) REFERENCES ufonetwork.person( id )  ON UPDATE CASCADE
  );
 
 CREATE INDEX idx_message_to_group ON ufonetwork.message ( to_group );
@@ -60,27 +111,19 @@ CREATE INDEX idx_message_to_group ON ufonetwork.message ( to_group );
 CREATE INDEX idx_message_writer ON ufonetwork.message ( writer );
 
 CREATE TABLE ufonetwork.person_group ( 
-	peson                text  NOT NULL,
-	name_of_group        text  NOT NULL
+	person               integer  NOT NULL,
+	"group"              integer  NOT NULL,
+	CONSTRAINT _0 PRIMARY KEY ( person, "group" ),
+	CONSTRAINT fk_person_group_group FOREIGN KEY ( "group" ) REFERENCES ufonetwork."group"( id ) ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT fk_person_group_person FOREIGN KEY ( person ) REFERENCES ufonetwork.person( id )  ON UPDATE CASCADE
  );
 
-CREATE INDEX idx_person_group_name_of_group ON ufonetwork.person_group ( name_of_group );
+CREATE INDEX idx_person_group_group ON ufonetwork.person_group ( "group" );
 
-CREATE INDEX idx_person_group_peson ON ufonetwork.person_group ( peson );
+CREATE INDEX idx_person_group_person ON ufonetwork.person_group ( person );
 
-COMMENT ON TABLE ufonetwork.person_group IS 'connecting table of for persons and groups';
-
-ALTER TABLE ufonetwork."group" ADD CONSTRAINT fk_group_person FOREIGN KEY ( owner_of_group ) REFERENCES ufonetwork.person( login ) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE ufonetwork.message ADD CONSTRAINT fk_message_group FOREIGN KEY ( to_group ) REFERENCES ufonetwork."group"( name ) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE ufonetwork.message ADD CONSTRAINT fk_message_person FOREIGN KEY ( writer ) REFERENCES ufonetwork.person( login ) ON DELETE SET NULL ON UPDATE CASCADE;
-
-ALTER TABLE ufonetwork.person ADD CONSTRAINT planet FOREIGN KEY ( planet ) REFERENCES ufonetwork.planet( name ) ON DELETE SET NULL ON UPDATE CASCADE;
-
-ALTER TABLE ufonetwork.person ADD CONSTRAINT fk_person_race FOREIGN KEY ( race ) REFERENCES ufonetwork.race( name ) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE ufonetwork.person_group ADD CONSTRAINT fk_person_group FOREIGN KEY ( name_of_group ) REFERENCES ufonetwork."group"( name ) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE ufonetwork.person_group ADD CONSTRAINT fk_person_group_person FOREIGN KEY ( peson ) REFERENCES ufonetwork.person( login ) ON DELETE CASCADE ON UPDATE CASCADE;
+CREATE OR REPLACE FUNCTION ufonetwork.add_user(text, text, text, integer, integer, integer)
+ RETURNS void
+ LANGUAGE sql
+AS $function$ insert into person( login , pass , sex , age, race , planet ) values( $1, $2 , $3 , $4 , $5 , $6 ); $function$
 
