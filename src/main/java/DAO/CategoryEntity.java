@@ -12,7 +12,6 @@ import java.util.List;
 @Table( name = "category", schema = "ufonetwork", catalog = "ufonetwork" )
 @Getter
 @Setter
-@ToString
 @EqualsAndHashCode
 public class CategoryEntity{
 
@@ -28,4 +27,9 @@ public class CategoryEntity{
     @OneToMany( cascade = CascadeType.DETACH,
                 fetch = FetchType.EAGER,
                 mappedBy = "category" ) List<GroupEntity> groups;
+
+    @Override
+    public String toString(){
+        return "(CategoryEntity: id="+id+"; name="+name+")";
+    }
 }

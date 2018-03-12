@@ -12,7 +12,6 @@ import java.sql.Date;
 @Table( name = "message", schema = "ufonetwork", catalog = "ufonetwork" )
 @Getter
 @Setter
-@ToString
 @EqualsAndHashCode
 public class MessageEntity{
     @Id
@@ -39,4 +38,9 @@ public class MessageEntity{
     @Basic
     @Column( name = "media" )
     private byte[] media;
+
+    @Override
+    public String toString(){
+        return "(MessageEntity: id="+id+"; writer="+writer+ "; toGroup="+toGroup+ "; text="+text+")";
+    }
 }

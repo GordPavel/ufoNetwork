@@ -12,7 +12,6 @@ import java.util.List;
 @Table( name = "planet", schema = "ufonetwork", catalog = "ufonetwork" )
 @Getter
 @Setter
-@ToString
 @EqualsAndHashCode
 public class PlanetEntity{
     @Id
@@ -26,5 +25,8 @@ public class PlanetEntity{
     @OneToMany( cascade = CascadeType.DETACH,
                 fetch = FetchType.EAGER,
                 mappedBy = "planet" ) private List<PersonEntity> persons;
-
+    @Override
+    public String toString(){
+        return "(PlanetEntity: id="+id+"; name="+name+")";
+    }
 }

@@ -12,7 +12,6 @@ import java.util.List;
 @Table( name = "group", schema = "ufonetwork", catalog = "ufonetwork" )
 @Getter
 @Setter
-@ToString
 @EqualsAndHashCode
 public class GroupEntity{
     @Id
@@ -39,4 +38,8 @@ public class GroupEntity{
     @OneToMany( cascade = CascadeType.DETACH,
                 fetch = FetchType.EAGER,
                 mappedBy = "toGroup" ) private List<MessageEntity> messages;
+    @Override
+    public String toString(){
+        return "(GroupEntity: id="+id+"; name="+name+ "; owner="+owner+")";
+    }
 }

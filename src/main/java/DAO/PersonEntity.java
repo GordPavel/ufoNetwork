@@ -13,7 +13,6 @@ import java.util.List;
 @Table( name = "person", schema = "ufonetwork", catalog = "ufonetwork" )
 @Getter
 @Setter
-@ToString
 @EqualsAndHashCode
 public class PersonEntity{
     @Id
@@ -60,4 +59,10 @@ public class PersonEntity{
     @OneToMany( cascade = CascadeType.DETACH,
                 fetch = FetchType.EAGER,
                 mappedBy = "writer" ) private List<MessageEntity> messages;
+
+    @Override
+    public String toString(){
+        return "(PersonEntity: id="+id+"; login="+login+ "; sex="+sex+"; age="+age
+                +"; planet="+planet+"; race="+race+"; registration="+dateOfRegistration+")";
+    }
 }
