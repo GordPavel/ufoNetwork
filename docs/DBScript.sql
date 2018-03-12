@@ -1,28 +1,8 @@
-CREATE ROLE nina WITH LOGIN
+CREATE ROLE nina
+  LOGIN
   ENCRYPTED PASSWORD 'nina1234';
-GRANT SELECT ON ALL TABLES IN SCHEMA ufonetwork TO nina;
-GRANT INSERT, UPDATE, DELETE ON TABLE ufonetwork.group, message, person, person_group, planet, race TO nina;
-GRANT USAGE ON ALL SEQUENCES IN SCHEMA ufonetwork TO nina;
 
 CREATE SCHEMA ufonetwork;
-
-CREATE SEQUENCE ufonetwork.group_category_id_seq
-  START WITH 1;
-
-CREATE SEQUENCE ufonetwork.group_id_seq
-  START WITH 1;
-
-CREATE SEQUENCE ufonetwork.message_id_seq
-  START WITH 1;
-
-CREATE SEQUENCE ufonetwork.person_id_seq
-  START WITH 1;
-
-CREATE SEQUENCE ufonetwork.planet_id_seq
-  START WITH 1;
-
-CREATE SEQUENCE ufonetwork.race_id_seq
-  START WITH 1;
 
 CREATE TABLE ufonetwork.category (
   id   SERIAL NOT NULL,
@@ -88,7 +68,7 @@ COMMENT ON COLUMN ufonetwork.person.sex IS 'any symbols combination ( we guess t
 
 COMMENT ON COLUMN ufonetwork.person.media IS 'Optional png pic of user';
 
-CREATE TABLE ufonetwork."group" (
+CREATE TABLE ufonetwork.group (
   id          SERIAL  NOT NULL,
   name        TEXT    NOT NULL,
   media       BYTEA,
@@ -101,14 +81,14 @@ CREATE TABLE ufonetwork."group" (
 );
 
 CREATE INDEX idx_group_category
-  ON ufonetwork."group" (category);
+  ON ufonetwork.group (category);
 
 CREATE INDEX idx_group_owner_group
-  ON ufonetwork."group" (owner_group);
+  ON ufonetwork.group (owner_group);
 
-COMMENT ON TABLE ufonetwork."group" IS 'list of groups';
+COMMENT ON TABLE ufonetwork.group IS 'list of groups';
 
-COMMENT ON COLUMN ufonetwork."group".owner_group IS 'person who made this group';
+COMMENT ON COLUMN ufonetwork.group.owner_group IS 'person who made this group';
 
 CREATE TABLE ufonetwork.message (
   id                SERIAL                    NOT NULL,
@@ -118,7 +98,7 @@ CREATE TABLE ufonetwork.message (
   writer            INTEGER,
   to_group          INTEGER                   NOT NULL,
   CONSTRAINT pk_message_id PRIMARY KEY (id),
-  CONSTRAINT fk_message_group FOREIGN KEY (to_group) REFERENCES ufonetwork."group" (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT fk_message_group FOREIGN KEY (to_group) REFERENCES ufonetwork.group (id) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT fk_message_person FOREIGN KEY (writer) REFERENCES ufonetwork.person (id) ON UPDATE CASCADE
 );
 
@@ -132,7 +112,7 @@ CREATE TABLE ufonetwork.person_group (
   person  INTEGER NOT NULL,
   "group" INTEGER NOT NULL,
   CONSTRAINT _0 PRIMARY KEY (person, "group"),
-  CONSTRAINT fk_person_group_group FOREIGN KEY ("group") REFERENCES ufonetwork."group" (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT fk_person_group_group FOREIGN KEY ("group") REFERENCES ufonetwork.group (id) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT fk_person_group_person FOREIGN KEY (person) REFERENCES ufonetwork.person (id) ON UPDATE CASCADE
 );
 
@@ -142,3 +122,13 @@ CREATE INDEX idx_person_group_group
 CREATE INDEX idx_person_group_person
   ON ufonetwork.person_group (person);
 
+INSERT INTO ufonetwork.category (id, name) VALUES (4, 'Природа');
+INSERT INTO ufonetwork.category (id, name) VALUES (5, 'Погода');
+INSERT INTO ufonetwork.category (id, name) VALUES (6, 'Путешествия');
+
+INSERT INTO ufonetwork.race (name, id) VALUES ('Marsianin', 2);
+INSERT INTO ufonetwork.race (name, id) VALUES ('Human', 3);
+
+GRANT SELECT ON ALL TABLES IN SCHEMA ufonetwork TO nina;
+GRANT USAGE ON ALL SEQUENCES IN SCHEMA ufonetwork TO nina;
+GRANT INSERT, UPDATE, DELETE ON TABLE ufonetwork.group, ufonetwork.message, ufonetwork.person, ufonetwork.person_group, ufonetwork.planet, ufonetwork.race TO nina;
