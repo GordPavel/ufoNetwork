@@ -31,7 +31,7 @@ Mouse click on "Show all groups" reveal full list of groups on user`s page.
 6) Group
 On group page any user can see: group picture, owner name (and link), list of participants, posted messages with name of writer and date.
 Authorized user additional can see and use: field to write message, button to post message, button to delete message on his posted messages.
-Group owner can additional can see and use: settings button, button to exclude selected user, button to delete any posted message.
+Group owner can additional can see and use: settings button, button to exclude selected user, button to delete message on any posted message.
 7) Profile settings
 Contain editable text fields with login, name, age and button "edit". Fields filled with current information. Modification of this information and click on "edit" button replace current information with new one.
 Contain button "Change password", that opens pop-up window, that asks for old password, new one and confirmation of new password.
