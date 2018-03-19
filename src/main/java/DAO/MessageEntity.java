@@ -13,9 +13,11 @@ import java.sql.Date;
 @Getter
 @Setter
 @EqualsAndHashCode
+@ToString( exclude = { "media" } )
 public class MessageEntity{
     @Id
-    @GeneratedValue( strategy = GenerationType.SEQUENCE )
+    @SequenceGenerator( name = "message_id", sequenceName = "message_id_seq" )
+    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "message_id" )
     @Column( name = "id" )
     private Integer id;
 
@@ -33,14 +35,9 @@ public class MessageEntity{
 
     @Basic
     @Column( name = "date_of_submition", nullable = false )
-    private Date   dateOfSubmition;
+    private Date dateOfSubmition;
 
     @Basic
     @Column( name = "media" )
     private byte[] media;
-
-    @Override
-    public String toString(){
-        return "(MessageEntity: id="+id+"; writer="+writer+ "; toGroup="+toGroup+ "; text="+text+")";
-    }
 }

@@ -1,9 +1,6 @@
 package DAO;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -13,24 +10,31 @@ import java.util.List;
 @Getter
 @Setter
 @EqualsAndHashCode
+@ToString( exclude = { "media" , "users" , "messages" } )
+@RequiredArgsConstructor
+@NoArgsConstructor( access = AccessLevel.PROTECTED )
 public class GroupEntity{
     @Id
-    @GeneratedValue( strategy = GenerationType.SEQUENCE )
+//    @SequenceGenerator( name = "group_id", sequenceName = "group_id_seq" )
+    @GeneratedValue( strategy = GenerationType.IDENTITY )
     @Column( name = "id" )
     private Integer id;
     @Basic
     @Column( name = "name", unique = true, nullable = false )
+    @NonNull
     private String  name;
     @Basic
     @Column( name = "media" )
     private byte[]  media;
 
-    @ManyToOne( cascade = CascadeType.DETACH, fetch = FetchType.EAGER, optional = false )
+    @ManyToOne( fetch = FetchType.EAGER, optional = false )
     @JoinColumn( name = "category", nullable = false )
+    @NonNull
     private CategoryEntity category;
 
     @ManyToOne( cascade = CascadeType.DETACH, fetch = FetchType.EAGER, optional = false )
     @JoinColumn( name = "owner_group" )
+    @NonNull
     private PersonEntity owner;
 
     @ManyToMany( mappedBy = "groups" ) private List<PersonEntity> users;
@@ -38,8 +42,4 @@ public class GroupEntity{
     @OneToMany( cascade = CascadeType.DETACH,
                 fetch = FetchType.EAGER,
                 mappedBy = "toGroup" ) private List<MessageEntity> messages;
-    @Override
-    public String toString(){
-        return "(GroupEntity: id="+id+"; name="+name+ "; owner="+owner+")";
-    }
 }

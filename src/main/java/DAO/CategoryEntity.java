@@ -13,10 +13,12 @@ import java.util.List;
 @Getter
 @Setter
 @EqualsAndHashCode
+@ToString( exclude = "groups" )
 public class CategoryEntity{
 
     @Id
-    @GeneratedValue( strategy = GenerationType.SEQUENCE )
+    @SequenceGenerator( name = "category_id", sequenceName = "category_id_seq" )
+    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "category_id" )
     @Column( name = "id" )
     private Integer id;
 
@@ -24,12 +26,5 @@ public class CategoryEntity{
     @Column( name = "name", unique = true, insertable = false, updatable = false, nullable = false )
     private String name;
 
-    @OneToMany( cascade = CascadeType.DETACH,
-                fetch = FetchType.EAGER,
-                mappedBy = "category" ) List<GroupEntity> groups;
-
-    @Override
-    public String toString(){
-        return "(CategoryEntity: id="+id+"; name="+name+")";
-    }
+    @OneToMany( fetch = FetchType.EAGER, mappedBy = "category" ) List<GroupEntity> groups;
 }

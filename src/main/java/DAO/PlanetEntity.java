@@ -13,9 +13,11 @@ import java.util.List;
 @Getter
 @Setter
 @EqualsAndHashCode
+@ToString( exclude = "persons" )
 public class PlanetEntity{
     @Id
-    @GeneratedValue( strategy = GenerationType.SEQUENCE )
+    @SequenceGenerator( name = "planet_id", sequenceName = "planet_id_seq" )
+    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "planet_id" )
     @Column( name = "id" )
     private Integer id;
     @Basic
@@ -25,8 +27,4 @@ public class PlanetEntity{
     @OneToMany( cascade = CascadeType.DETACH,
                 fetch = FetchType.EAGER,
                 mappedBy = "planet" ) private List<PersonEntity> persons;
-    @Override
-    public String toString(){
-        return "(PlanetEntity: id="+id+"; name="+name+")";
-    }
 }

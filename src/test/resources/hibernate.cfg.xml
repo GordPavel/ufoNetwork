@@ -4,10 +4,15 @@
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
+        <property name="connection.username">postgres</property>
+        <property name="connection.password">pMJik</property>
         <property name="connection.url">jdbc:postgresql://localhost:5557/ufonetwork</property>
         <property name="connection.driver_class">org.postgresql.Driver</property>
-        <property name="connection.username">nina</property>
-        <property name="connection.password">nina1234</property>
+        <!-- DB schema will be updated if needed -->
+        <property name="hbm2ddl.auto">update</property>
+        <property name="hibernate.show_sql">true</property>
+
+
         <mapping class="DAO.CategoryEntity"/>
         <mapping class="DAO.GroupEntity"/>
         <mapping class="DAO.MessageEntity"/>
@@ -15,7 +20,5 @@
         <mapping class="DAO.PlanetEntity"/>
         <mapping class="DAO.RaceEntity"/>
 
-        <!-- DB schema will be updated if needed -->
-        <!-- <property name="hbm2ddl.auto">update</property> -->
     </session-factory>
 </hibernate-configuration>
