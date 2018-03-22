@@ -1,4 +1,4 @@
-package DAO;
+package com.netcracker.DAO;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -12,19 +12,17 @@ import java.util.List;
 @Table( name = "race", schema = "ufonetwork", catalog = "ufonetwork" )
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode( of = "id" )
 @ToString( exclude = "persons" )
 public class RaceEntity{
     @Id
     @SequenceGenerator( name = "race_id", sequenceName = "race_id_seq" )
     @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "race_id" )
     @Column( name = "id" )
-    private Integer id;
-
+    private                                 Long               id;
     @Basic
     @Column( name = "name", unique = true, updatable = false, nullable = false )
-    private String name;
-
+    private                                 String             name;
     @OneToMany( cascade = CascadeType.DETACH,
                 fetch = FetchType.EAGER,
                 mappedBy = "race" ) private List<PersonEntity> persons;
