@@ -3,19 +3,25 @@
         "-//Hibernate/Hibernate Configuration DTD//EN"
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
+    <!--<session-factory>-->
+    <!--<property name="connection.url">jdbc:postgresql://www.gordeev.site:5557/ufonetwork</property>-->
+    <!--<property name="connection.driver_class">org.postgresql.Driver</property>-->
+    <!--<property name="connection.username">nina</property>-->
+    <!--<property name="connection.password">nina1234</property>-->
+
+    <!--&lt;!&ndash; DB schema will be updated if needed &ndash;&gt;-->
+    <!--&lt;!&ndash; <property name="hbm2ddl.auto">update</property> &ndash;&gt;-->
+    <!--</session-factory>-->
     <session-factory>
-        <property name="connection.url">jdbc:postgresql://www.gordeev.site:5557/ufonetwork</property>
-        <property name="connection.driver_class">org.postgresql.Driver</property>
-        <property name="connection.username">nina</property>
-        <property name="connection.password">nina1234</property>
+        <property name="connection.datasource">java:comp/env/jdbc/ufonetwork</property>
+        <property name="show_sql">false</property>
+        <property name="dialect">org.hibernate.dialect.PostgreSQL9Dialect</property>
+
         <mapping class="DAO.CategoryEntity"/>
         <mapping class="DAO.GroupEntity"/>
         <mapping class="DAO.MessageEntity"/>
         <mapping class="DAO.PersonEntity"/>
         <mapping class="DAO.PlanetEntity"/>
         <mapping class="DAO.RaceEntity"/>
-
-        <!-- DB schema will be updated if needed -->
-        <!-- <property name="hbm2ddl.auto">update</property> -->
     </session-factory>
 </hibernate-configuration>

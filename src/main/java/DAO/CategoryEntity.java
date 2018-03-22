@@ -12,19 +12,16 @@ import java.util.List;
 @Table( name = "category", schema = "ufonetwork", catalog = "ufonetwork" )
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode( of = "id" )
 @ToString( exclude = "groups" )
 public class CategoryEntity{
-
     @Id
     @SequenceGenerator( name = "category_id", sequenceName = "category_id_seq" )
     @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "category_id" )
     @Column( name = "id" )
-    private Integer id;
-
+    private                                                      Long              id;
     @Basic
     @Column( name = "name", unique = true, insertable = false, updatable = false, nullable = false )
-    private String name;
-
+    private                                                      String            name;
     @OneToMany( fetch = FetchType.EAGER, mappedBy = "category" ) List<GroupEntity> groups;
 }
