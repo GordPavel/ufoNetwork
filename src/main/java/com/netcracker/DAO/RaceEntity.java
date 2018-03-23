@@ -1,4 +1,4 @@
-package DAO;
+package com.netcracker.DAO;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
