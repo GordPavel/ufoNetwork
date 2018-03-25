@@ -29,10 +29,10 @@ public interface GroupService {
 
     /**
      * search for Groups with specific members
-     * @param personEntity - member to search
-     * @return - list of all groups which have personEntity as member
+     * @param id - id of group
+     * @return - list of all users in group
      */
-    List<GroupEntity> getByMember(PersonEntity personEntity);
+    List<PersonEntity> getMembers(Long id);
 
     /**
      * search for Groups with specific members

@@ -24,24 +24,24 @@ public interface PersonService {
     /**
      * Search for person by parameters
      * @param name - *+name+* of Person
-     * @param raceEntity - Person`s *+race+*
+     * @param raceID - Person`s race`s id
      * @param ageFrom - Person`s age >= age
      * @param ageTo - Persin`s age =< age
      * @param sex - Person`s *+sex+*
      * @return - list of persons suitable for search parameters
      */
     List<PersonEntity> getBySearchParams(String name,
-                                         RaceEntity raceEntity,
+                                         Integer raceID,
                                          Integer ageFrom,
                                          Integer ageTo,
                                          String sex);
 
     /**
-     * search for members of Group
-     * @param groupEntity - Group, where Persons consistis
+     * search for Group where is member with specific id
+     * @param Id - id of user
      * @return - list of Persons-members of group
      */
-    List<PersonEntity> getByGroup (GroupEntity groupEntity);
+    List<GroupEntity> getGroups (long Id);
 
     /**
      * get Person by ID
