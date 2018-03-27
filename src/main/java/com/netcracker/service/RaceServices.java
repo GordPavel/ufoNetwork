@@ -17,7 +17,7 @@ public interface RaceServices {
      * delete Race from db
      * @param id - id of Race to delete
      */
-    void delete(long id);
+    void delete(Long id);
 
     /**
      * Searh for Race with same name

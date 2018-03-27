@@ -18,7 +18,7 @@ public interface MessageService {
      * delete message by ID
      * @param id - id of message to delete
      */
-    void delete (long id);
+    void delete (Long id);
 
     /**
      * search for messages by group

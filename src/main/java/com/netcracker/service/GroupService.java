@@ -17,7 +17,7 @@ public interface GroupService {
      * delete Group by ID
      * @param id - ID of group to delete
      */
-    void delete(long id);
+    void delete(Long id);
 
     /**
      * search for Groups with specific owner name
@@ -46,7 +46,7 @@ public interface GroupService {
      * @param id - ID of group
      * @return - group with this ID
      */
-    GroupEntity getById(long id);
+    GroupEntity getById(Long id);
 
     /**
      * get all groups

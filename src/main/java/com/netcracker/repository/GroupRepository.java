@@ -16,7 +16,9 @@ public interface GroupRepository extends JpaRepository<GroupEntity, Long>{
     /**
      * query to select from db by name+owner name
      */
-    @Query("select ge from GroupEntity ge where ge.name like ?1 and ge.owner like ?2")
+    @Query("select ge from GroupEntity ge where " +
+            "((:name is null) or (?1 is not null and ge.name like ?1)) and " +
+            "((:ownerName is null) or (?2 is not null and ge.owner like ?2))")
     List<GroupRepository> getBySearchParams(@Param("name")String name,
                                             @Param("ownerName")String ownerName);
 

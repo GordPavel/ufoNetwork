@@ -17,14 +17,14 @@ public interface CategoryService {
      * delete Category from db by it`s ID
      * @param id - ID of Category
      */
-    void delete(long id);
+    void delete(Long id);
 
     /**
      * get Category by it`s ID
      * @param id - ID of Category
      * @return - Category with this ID
      */
-    CategoryEntity getById(long id);
+    CategoryEntity getById(Long id);
 
     /**
      * get list of all Categories

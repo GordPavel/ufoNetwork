@@ -19,7 +19,7 @@ public interface PersonService {
      * delete person froom db by it ID
      * @param Id - ID of person, that must be deleted
      */
-    void delete (long Id);
+    void delete (Long Id);
 
     /**
      * Search for person by parameters
@@ -31,7 +31,7 @@ public interface PersonService {
      * @return - list of persons suitable for search parameters
      */
     List<PersonEntity> getBySearchParams(String name,
-                                         Integer raceID,
+                                         Long raceID,
                                          Integer ageFrom,
                                          Integer ageTo,
                                          String sex);
@@ -41,7 +41,7 @@ public interface PersonService {
      * @param Id - id of user
      * @return - list of Persons-members of group
      */
-    List<GroupEntity> getGroups (long Id);
+    List<GroupEntity> getGroups (Long Id);
 
     /**
      * get Person by ID

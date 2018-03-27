@@ -15,5 +15,5 @@ public interface PlanetService {
      * delete Planet from db by ID
      * @param id - ID of Planet to delete
      */
-    void delete(long id);
+    void delete(Long id);
 }
