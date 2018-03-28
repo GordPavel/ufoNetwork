@@ -9,18 +9,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 @Controller
+@RequestMapping( "/groups" ) 
 public class GroupSearchResultController {
 
     //Here we store from where we came frome
     private String prevPage;
 
-    @RequestMapping(value="/GroupSearchPage", method = RequestMethod.GET)
-    public List<GroupEntity> searchParams(@RequestParam(value="name", defaultValue="") String name,
+    @Autowired 
+    GroupService groupService;
+    
+    @RequestMapping(value="/search", method = RequestMethod.GET)
+    public String searchParams(@RequestParam(value="name", defaultValue="") String name,
                                           @RequestParam(value="ownerName", defaultValue="") String ownerName,
-                                          @RequestParam(value="prev",defaultValue = "") String pageName) {
+                                          @RequestParam(value="prev",defaultValue = "") String pageName , 
+                               Model model ) {
 
         prevPage=pageName;
+        model.addAttribute( "groups" , groupService.getBySearchParams( name, owner ) );
         //TODO: params must be used to make request to db and show it in page
-        return null;
+        return "groupPage";
     }
 }
