@@ -1,25 +1,34 @@
 package com.netcracker.controllers;
 
+import com.netcracker.DAO.GroupEntity;
 import com.netcracker.DAO.RaceEntity;
+import com.netcracker.service.GroupService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
+@RequestMapping(value="/groups")
 public class GroupSettingsPageController {
 
-    @RequestMapping(value="/GroupSettingPage", method = RequestMethod.GET)
-    public boolean openPage(@RequestParam(value="id", defaultValue="") Long id){
+    @Autowired
+    GroupService groupService;
+    @RequestMapping(value="/settings", method = RequestMethod.GET)
+    public String openPage(@RequestParam(value="id", defaultValue="") Long id,
+                           Model model){
 
-        //TODO: params must be used to open settings page
-        return false;
+        model.addAttribute("group",groupService.getById(id));
+        return "groupSettingsPage";
     }
 
-    @RequestMapping(value="/GroupSettingPage", method = RequestMethod.POST)
-    public boolean updatePerson(@RequestParam(value="name", defaultValue="") String name){
+    @RequestMapping(value="/settings", params = "toEdit")
+    public String updateGroup(@RequestParam(value="toEdit", defaultValue="") GroupEntity toEdit,
+                               Model model){
 
-        //TODO: params must be used to update user`s PersonEntity. Return true, if succes?
-        return false;
+        model.addAttribute("group",groupService.editGroup(toEdit));
+        return "groupSettingsPage";
     }
 }

@@ -57,5 +57,15 @@ public interface PersonService {
      */
     PersonEntity editPerson(PersonEntity personEntity);
 
+    /**
+     * add person to group
+     * @param groupId - where must be added
+     */
+    void joinGroup(Long groupId);
 
+    /**
+     * exclude person from group
+     * @param groupId - from where must be excluded
+     */
+    void leaveGroup(Long groupId);
 }
