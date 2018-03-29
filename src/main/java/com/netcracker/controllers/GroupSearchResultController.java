@@ -17,7 +17,7 @@ public class GroupSearchResultController {
     
     @RequestMapping(value="/result", method = RequestMethod.GET)
     public String searchParams(@RequestParam(value="name", defaultValue="") String name,
-                                          @RequestParam(value="ownerName", defaultValue="") String ownerName,
+                               @RequestParam(value="ownerName", defaultValue="") String ownerName,
                                Model model ) {
 
         model.addAttribute( "groups" , groupService.getBySearchParams( name, ownerName ) );

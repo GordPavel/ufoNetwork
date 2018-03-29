@@ -15,10 +15,10 @@ public class PersonSearchPageController {
 
     @RequestMapping(value="/search", method = RequestMethod.GET)
     public String searchParams(@RequestParam(value="name", defaultValue="") String name,
-                                           @RequestParam(value="raceId", defaultValue="") Long raceID,
-                                           @RequestParam(value="ageFrom", defaultValue="") Integer ageFrom,
-                                           @RequestParam(value="ageTo", defaultValue="") Integer ageTo,
-                                           @RequestParam(value="sex", defaultValue="") String sex,
+                               @RequestParam(value="raceId", defaultValue="") Long raceID,
+                               @RequestParam(value="ageFrom", defaultValue="") Integer ageFrom,
+                               @RequestParam(value="ageTo", defaultValue="") Integer ageTo,
+                               @RequestParam(value="sex", defaultValue="") String sex,
                                Model model){
 
         model.addAttribute("name",name);

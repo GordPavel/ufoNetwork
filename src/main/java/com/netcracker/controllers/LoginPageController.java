@@ -5,11 +5,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("/index")
 public class LoginPageController {
 
     @RequestMapping(method= RequestMethod.GET)
-    public String login(){
+    public String open(){
         return "loginPage";
+    }
+    @RequestMapping(method= RequestMethod.POST)
+    public String login(){
+        return "personPage";
     }
 }

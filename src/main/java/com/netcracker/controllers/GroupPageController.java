@@ -7,6 +7,7 @@ import com.netcracker.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,18 +25,23 @@ public class GroupPageController {
     @Autowired
     GroupService groupService;
 
-    @RequestMapping(value="/page", method = RequestMethod.GET)
-    public String openPage(@RequestParam(value="id", defaultValue="") Long id, Model model) {
+    @RequestMapping(value="/page/{id}", method = RequestMethod.GET)
+    public String openPage(@PathVariable(value="id") Long id, Model model) {
 
         model.addAttribute("group",groupService.getById(id));
 
         return "groupPage";
     }
 
-    @RequestMapping(value="/page", params = {"message","id"})
-    public String postMessage(@RequestParam(value="message") MessageEntity messageEntity,
-                               @RequestParam(value="id", defaultValue="") Long id,
+    @RequestMapping(value="/page/{id}", params = "message")
+    public String postMessage(@RequestParam(value="message") String messageText,
+                               @PathVariable(value="id") Long id,
                                Model model) {
+        MessageEntity messageEntity = new MessageEntity();
+
+        messageEntity.setToGroup(groupService.getById(id));
+        messageEntity.setText(messageText);
+
         messageService.addMessage(messageEntity);
 
         model.addAttribute("group",groupService.getById(id));
@@ -43,9 +49,9 @@ public class GroupPageController {
         return "groupPage";
     }
 
-    @RequestMapping(value="/page", params = {"messageId","id"})
+    @RequestMapping(value="/page/{id}", params = "messageId")
     public String deleteMessage(@RequestParam(value="messageId", defaultValue="") Long messageId,
-                                @RequestParam(value="id", defaultValue="") Long id,
+                                @PathVariable(value="id") Long id,
                                 Model model) {
 
         messageService.delete(messageId);
@@ -54,23 +60,23 @@ public class GroupPageController {
         return "groupPage";
     }
 
-    @RequestMapping(value="/page", params = {"joinId","id"})
-    public String joinGroup(@RequestParam(value="joinId", defaultValue="") Long joinId,
-                             @RequestParam(value="id", defaultValue="") Long id,
+    @RequestMapping(value="/page/{id}", params = "join")
+    public String joinGroup(@RequestParam(value="join", defaultValue="") Long join,
+                             @PathVariable(value="id") Long id,
                              Model model) {
 
-        personService.joinGroup(joinId);
+        personService.joinGroup(id);
         model.addAttribute("group",groupService.getById(id));
 
         return "groupPage";
     }
 
-    @RequestMapping(value="/page", params = {"leaveId","id"})
-    public String leaveGroup(@RequestParam(value="leaveId", defaultValue="") Long leaveId,
-                              @RequestParam(value="id", defaultValue="") Long id,
+    @RequestMapping(value="/page/{id}", params = "leave")
+    public String leaveGroup(@RequestParam(value="leave", defaultValue="") Long leaveId,
+                              @PathVariable(value="id") Long id,
                               Model model) {
 
-        personService.joinGroup(leaveId);
+        personService.leaveGroup(id);
         model.addAttribute("group",groupService.getById(id));
 
         return "groupPage";

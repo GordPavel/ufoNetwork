@@ -28,6 +28,10 @@ public class PersonEntity{
     @NonNull
     private                                                           String              pass;
     @Basic
+    @Column( name = "name", nullable = false )
+    @NonNull
+    private                                                           String              name;
+    @Basic
     @Column( name = "date_of_registration", insertable = false, updatable = false )
     private                                                           ZonedDateTime
                                                                                           dateOfRegistration;
