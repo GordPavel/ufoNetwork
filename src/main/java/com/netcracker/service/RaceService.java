@@ -4,7 +4,7 @@ import com.netcracker.DAO.RaceEntity;
 
 import java.util.List;
 
-public interface RaceServices {
+public interface RaceService {
 
     /**
      * Add new Race to db

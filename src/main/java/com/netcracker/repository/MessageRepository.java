@@ -17,5 +17,5 @@ public interface MessageRepository extends JpaRepository<MessageEntity,Long> {
      * get all messages in group
      */
     @Query("select ge from MessageEntity ge where ge.toGroup=:group")
-    List<GroupRepository> getMessagesByGroup(@Param("group")GroupEntity groupEntity);
+    List<MessageEntity> getMessagesByGroup(@Param("group")GroupEntity groupEntity);
 }

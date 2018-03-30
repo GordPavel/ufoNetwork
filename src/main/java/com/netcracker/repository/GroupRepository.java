@@ -19,7 +19,7 @@ public interface GroupRepository extends JpaRepository<GroupEntity, Long>{
     @Query("select ge from GroupEntity ge where " +
             "((:name is null) or (?1 is not null and ge.name like ?1)) and " +
             "((:ownerName is null) or (?2 is not null and ge.owner like ?2))")
-    List<GroupRepository> getBySearchParams(@Param("name")String name,
+    List<GroupEntity> getBySearchParams(@Param("name")String name,
                                             @Param("ownerName")String ownerName);
 
     /**
@@ -32,7 +32,7 @@ public interface GroupRepository extends JpaRepository<GroupEntity, Long>{
      * query to select groups, where this person=owner
      */
     @Query("select ge from GroupEntity ge where ge.owner_group=:owner")
-    List<GroupRepository> getByOwner(@Param("owner")PersonEntity owner);
+    List<GroupEntity> getByOwner(@Param("owner")PersonEntity owner);
 }
 
 
