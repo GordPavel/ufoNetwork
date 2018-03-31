@@ -38,7 +38,7 @@ public class LoginPageController {
 
         model.addAttribute("person",personEntity);
 
-        response.addCookie(new Cookie("userID", personEntity.getId()));
+        response.addCookie(new Cookie("userID", personEntity.getId().toString()));
 
         return "personPage";
     }
