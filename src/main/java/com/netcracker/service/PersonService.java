@@ -60,12 +60,22 @@ public interface PersonService {
     /**
      * add person to group
      * @param groupId - where must be added
+     * @param userId - user`s ID
      */
-    void joinGroup(Long groupId);
+    void joinGroup(Long groupId, Long userId);
 
     /**
      * exclude person from group
      * @param groupId - from where must be excluded
+     * @param userId - user`s ID
      */
-    void leaveGroup(Long groupId);
+    void leaveGroup(Long groupId, Long userId);
+
+    /**
+     * login person
+     * @param login - person`s login
+     * @param password - person`s password
+     * @return - logined person
+     */
+    PersonEntity loginPerson(String login, String password);
 }

@@ -7,10 +7,7 @@ import com.netcracker.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/groups")
@@ -34,13 +31,15 @@ public class GroupPageController {
     }
 
     @RequestMapping(value="/page/{id}", params = "message")
-    public String postMessage(@RequestParam(value="message") String messageText,
-                               @PathVariable(value="id") Long id,
-                               Model model) {
+    public String postMessage(@CookieValue(value="userID", defaultValue="") Long writer,
+                              @RequestParam(value="message") String messageText,
+                              @PathVariable(value="id") Long id,
+                              Model model) {
         MessageEntity messageEntity = new MessageEntity();
 
         messageEntity.setToGroup(groupService.getById(id));
         messageEntity.setText(messageText);
+        messageEntity.setWriter(personService.getById(writer));
 
         messageService.addMessage(messageEntity);
 
@@ -60,23 +59,23 @@ public class GroupPageController {
         return "groupPage";
     }
 
-    @RequestMapping(value="/page/{id}", params = "join")
-    public String joinGroup(@RequestParam(value="join", defaultValue="") Long join,
+    @RequestMapping(value="/page/{id}")
+    public String joinGroup(@CookieValue(value="userID", defaultValue="") Long join,
                              @PathVariable(value="id") Long id,
                              Model model) {
 
-        personService.joinGroup(id);
+        personService.joinGroup(id, join);
         model.addAttribute("group",groupService.getById(id));
 
         return "groupPage";
     }
 
-    @RequestMapping(value="/page/{id}", params = "leave")
-    public String leaveGroup(@RequestParam(value="leave", defaultValue="") Long leaveId,
+    @RequestMapping(value="/page/{id}")
+    public String leaveGroup(@CookieValue(value="userID", defaultValue="") Long leaveId,
                               @PathVariable(value="id") Long id,
                               Model model) {
 
-        personService.leaveGroup(id);
+        personService.leaveGroup(id, leaveId);
         model.addAttribute("group",groupService.getById(id));
 
         return "groupPage";

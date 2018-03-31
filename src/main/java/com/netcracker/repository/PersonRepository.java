@@ -27,4 +27,8 @@ public interface PersonRepository extends JpaRepository<PersonEntity, Long> {
                                          @Param("ageFrom") Integer ageFrom,
                                          @Param("ageTo") Integer ageTo,
                                          @Param("sex") String sex);
+
+    @Query("select pe from PersonEntity pe where pe.login=:login AND pe.pass=:password ")
+    PersonEntity login (@Param("login")     String login,
+                        @Param("password")  String password);
 }
