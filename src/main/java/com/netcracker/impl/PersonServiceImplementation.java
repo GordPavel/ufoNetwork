@@ -2,6 +2,7 @@ package com.netcracker.impl;
 
 import com.netcracker.DAO.GroupEntity;
 import com.netcracker.DAO.PersonEntity;
+import com.netcracker.repository.GroupRepository;
 import com.netcracker.repository.PersonRepository;
 import com.netcracker.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,50 +16,78 @@ public class PersonServiceImplementation implements PersonService {
     @Autowired
     private PersonRepository personRepository;
 
-    @Override
-    public PersonEntity addPerson(PersonEntity personEntity){
+    @Autowired
+    private GroupRepository groupRepository;
 
-        PersonEntity person = personRepository.saveAndFlush(personEntity);
+    @Override
+    public PersonEntity addPerson( PersonEntity personEntity ){
+
+        PersonEntity person = personRepository.saveAndFlush( personEntity );
         return person;
     }
 
     @Override
-    public void delete(Long id){
+    public void delete( Long id ){
 
-        personRepository.deleteById(id);
+        personRepository.deleteById( id );
     }
 
     @Override
-    public List<PersonEntity> getBySearchParams(String name, Long raceID, Integer ageFrom,
-                                                Integer ageTo, String sex){
+    public List<PersonEntity> getBySearchParams( String name, Long raceID, Integer ageFrom,
+                                                 Integer ageTo, String sex ){
 
-        return personRepository.getBySearchParams(name, raceID, ageFrom, ageTo, sex);
+        return personRepository.getBySearchParams( name, raceID, ageFrom, ageTo, sex );
     }
 
     @Override
-    public List<GroupEntity> getGroups(Long id){
+    public List<GroupEntity> getGroups( Long id ){
 
-        return personRepository.getGroups(id);
+        return personRepository.getGroups( id );
     }
 
     @Override
-    public PersonEntity getById(Long id){
+    public PersonEntity getById( Long id ){
 
-        return personRepository.getOne(id);
+        return personRepository.getOne( id );
     }
 
     @Override
-    public PersonEntity editPerson(PersonEntity personEntity){
+    public PersonEntity editPerson( PersonEntity personEntity ){
 
-        return personRepository.saveAndFlush(personEntity);
+        return personRepository.saveAndFlush( personEntity );
     }
 
     @Override
-    public void joinGroup(Long id){
+    public void joinGroup( Long id, Long userId ){
+
+        PersonEntity user = personRepository.getOne( userId );
+        GroupEntity group = groupRepository.getOne( id );
+
+        user.getGroups().add( group );
+        group.getUsers().add( user );
+
+        personRepository.saveAndFlush( user );
+        groupRepository.saveAndFlush( group );
 
     }
     @Override
-    public void leaveGroup(Long id){
+    public void leaveGroup( Long id, Long userId ){
 
+        PersonEntity user = personRepository.getOne( userId );
+        GroupEntity group = groupRepository.getOne( id );
+
+        user.getGroups().remove( group );
+        group.getUsers().remove( user );
+
+        personRepository.saveAndFlush( user );
+        groupRepository.saveAndFlush( group );
+
+    }
+
+    @Override
+    public PersonEntity loginPerson( String login, String password ){
+
+        PersonEntity user = personRepository.login( login, password );
+        return user;
     }
 }

@@ -30,7 +30,7 @@ public class GroupCreatePageController {
     }
 
     @RequestMapping(value="/create", method = RequestMethod.POST)
-    public String ctrateGroup(@RequestParam(value="name", defaultValue="") String name,
+    public String createGroup(@RequestParam(value="name", defaultValue="") String name,
                                @CookieValue(value="userID", defaultValue="") Long ownerID,
                                Model model) {
 
@@ -40,4 +40,5 @@ public class GroupCreatePageController {
 
         return "groupPage";
     }
+
 }
