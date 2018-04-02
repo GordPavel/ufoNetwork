@@ -17,7 +17,7 @@ class WebMvcConfig extends WebMvcConfigurationSupport{
 
     private static final String CHARACTER_ENCODING = "UTF-8";
     private static final String MESSAGE_SOURCE     = "/WEB-INF/messages";
-    private static final String VIEWS              = "/WEB-INF/view/";
+    private static final String VIEWS              = "/WEB-INF/pages/";
     private static final String viewType           = ".jsp";
 
     private static final String RESOURCES_LOCATION = "/resources/";
