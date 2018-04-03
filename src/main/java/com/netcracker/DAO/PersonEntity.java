@@ -48,9 +48,6 @@ public class PersonEntity{
     @JoinColumn( name = "race", nullable = false )
     @NonNull
     private                                                           RaceEntity          race;
-    @ManyToOne( cascade = CascadeType.DETACH, fetch = FetchType.EAGER )
-    @JoinColumn( name = "planet" )
-    private                                                           PlanetEntity        planet;
     @ManyToMany( cascade = { CascadeType.DETACH } )
     @JoinTable( name = "person_group",
                 joinColumns = { @JoinColumn( name = "person" ) },

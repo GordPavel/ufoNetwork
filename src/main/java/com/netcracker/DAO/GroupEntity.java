@@ -25,9 +25,6 @@ public class GroupEntity{
     @Basic
     @Column( name = "media" )
     private                                    byte[]              media;
-    @ManyToOne( fetch = FetchType.EAGER, optional = true )
-    @JoinColumn( name = "category", nullable = true )
-    private                                    CategoryEntity      category;
     @ManyToOne( cascade = CascadeType.DETACH, fetch = FetchType.EAGER )
     @JoinColumn( name = "owner_group" )
     @NonNull
