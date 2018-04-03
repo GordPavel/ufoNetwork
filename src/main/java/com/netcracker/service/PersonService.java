@@ -2,80 +2,99 @@ package com.netcracker.service;
 
 import com.netcracker.DAO.GroupEntity;
 import com.netcracker.DAO.PersonEntity;
-import com.netcracker.DAO.RaceEntity;
 
 import java.util.List;
 
-public interface PersonService {
+public interface PersonService{
 
     /**
-     * add Person to db
-     * @param personEntity - Person to add
-     * @return - added Person
+     add Person to db
+
+     @param personEntity - Person to add
+
+     @return - added Person
      */
-    PersonEntity addPerson (PersonEntity personEntity);
+    PersonEntity addPerson( PersonEntity personEntity );
 
     /**
-     * delete person froom db by it ID
-     * @param Id - ID of person, that must be deleted
+     delete person froom db by it ID
+
+     @param Id - ID of person, that must be deleted
      */
-    void delete (Long Id);
+    void delete( Long Id );
 
     /**
-     * Search for person by parameters
-     * @param name - *+name+* of Person
-     * @param raceID - Person`s race`s id
-     * @param ageFrom - Person`s age >= age
-     * @param ageTo - Persin`s age =< age
-     * @param sex - Person`s *+sex+*
-     * @return - list of persons suitable for search parameters
+     Search for person by parameters
+
+     @param name    - *+name+* of Person
+     @param raceID  - Person`s race`s id
+     @param ageFrom - Person`s age >= age
+     @param ageTo   - Persin`s age =< age
+     @param sex     - Person`s *+sex+*
+
+     @return - list of persons suitable for search parameters
      */
-    List<PersonEntity> getBySearchParams(String name,
-                                         Long raceID,
-                                         Integer ageFrom,
-                                         Integer ageTo,
-                                         String sex);
+    List<PersonEntity> getBySearchParams( String name , Long raceID , Integer ageFrom ,
+                                          Integer ageTo , String sex );
 
     /**
-     * search for Group where is member with specific id
-     * @param Id - id of user
-     * @return - list of Persons-members of group
+     search for Group where is member with specific id
+
+     @param Id - id of user
+
+     @return - list of Persons-members of group
      */
-    List<GroupEntity> getGroups (Long Id);
+    List<GroupEntity> getGroups( Long Id );
 
     /**
-     * get Person by ID
-     * @param id - Person`s ID
-     * @return Person with same ID
+     get Person by ID
+
+     @param id - Person`s ID
+
+     @return Person with same ID
      */
-    PersonEntity getById(Long id);
+    PersonEntity getById( Long id );
 
     /**
-     * edit Person in db
-     * @param personEntity - Person to edit
-     * @return - edited Person
+     edit Person in db
+
+     @param personEntity - Person to edit
+
+     @return - edited Person
      */
-    PersonEntity editPerson(PersonEntity personEntity);
+    PersonEntity editPerson( PersonEntity personEntity );
 
     /**
-     * add person to group
-     * @param groupId - where must be added
-     * @param userId - user`s ID
+     add person to group
+
+     @param groupId - where must be added
+     @param userId  - user`s ID
      */
-    void joinGroup(Long groupId, Long userId);
+    void joinGroup( Long groupId , Long userId );
 
     /**
-     * exclude person from group
-     * @param groupId - from where must be excluded
-     * @param userId - user`s ID
+     exclude person from group
+
+     @param groupId - from where must be excluded
+     @param userId  - user`s ID
      */
-    void leaveGroup(Long groupId, Long userId);
+    void leaveGroup( Long groupId , Long userId );
 
     /**
-     * login person
-     * @param login - person`s login
-     * @param password - person`s password
-     * @return - logined person
+     login person
+
+     @param login    - person`s login
+     @param password - person`s password
+
+     @return - logined person
      */
-    PersonEntity loginPerson(String login, String password);
+    PersonEntity loginPerson( String login , String password );
+
+    /**
+     Find one user by login
+
+     @param login login of user
+     @return person entity from DB
+     */
+    PersonEntity getByLogin( String login );
 }

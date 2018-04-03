@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="ufoNetwork:war">
-    <output-path>$PROJECT_DIR$/target</output-path>
-    <root id="archive" name="ufoNewtwork-0.0.1-SNAPSHOT.war">
-      <element id="artifact" artifact-name="ufoNetwork:war exploded" />
-    </root>
-  </artifact>
-</component>

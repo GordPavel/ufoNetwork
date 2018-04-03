@@ -7,10 +7,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="ufoNetwork" />
+        <module name="ufoNewtwork" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="ufoNetwork" target="1.8" />
+      <module name="ufoNewtwork" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

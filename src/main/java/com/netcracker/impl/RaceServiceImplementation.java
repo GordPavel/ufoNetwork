@@ -11,26 +11,24 @@ import java.util.List;
 @Service
 public class RaceServiceImplementation implements RaceService{
 
-    @Autowired
-    private RaceRepository raceRepository;
+    @Autowired private RaceRepository raceRepository;
 
     @Override
-    public RaceEntity addRace(RaceEntity raceEntity){
+    public RaceEntity addRace( RaceEntity raceEntity ){
 
-        RaceEntity race = raceRepository.saveAndFlush(raceEntity);
-        return race;
+        return raceRepository.saveAndFlush( raceEntity );
     }
 
     @Override
-    public void delete(Long id){
+    public void delete( Long id ){
 
-        raceRepository.deleteById(id);
+        raceRepository.deleteById( id );
     }
 
     @Override
-    public RaceEntity getByName(String name){
+    public RaceEntity getByName( String name ){
 
-        return raceRepository.getByName(name);
+        return raceRepository.getByName( name );
     }
 
     @Override
@@ -40,8 +38,8 @@ public class RaceServiceImplementation implements RaceService{
     }
 
     @Override
-    public RaceEntity editRace(RaceEntity raceEntity){
+    public RaceEntity editRace( RaceEntity raceEntity ){
 
-        return raceRepository.saveAndFlush(raceEntity);
+        return raceRepository.saveAndFlush( raceEntity );
     }
 }

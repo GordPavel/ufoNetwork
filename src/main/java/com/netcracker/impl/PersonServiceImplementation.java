@@ -11,19 +11,16 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class PersonServiceImplementation implements PersonService {
+public class PersonServiceImplementation implements PersonService{
 
-    @Autowired
-    private PersonRepository personRepository;
+    @Autowired private PersonRepository personRepository;
 
-    @Autowired
-    private GroupRepository groupRepository;
+    @Autowired private GroupRepository groupRepository;
 
     @Override
     public PersonEntity addPerson( PersonEntity personEntity ){
 
-        PersonEntity person = personRepository.saveAndFlush( personEntity );
-        return person;
+        return personRepository.saveAndFlush( personEntity );
     }
 
     @Override
@@ -33,10 +30,10 @@ public class PersonServiceImplementation implements PersonService {
     }
 
     @Override
-    public List<PersonEntity> getBySearchParams( String name, Long raceID, Integer ageFrom,
-                                                 Integer ageTo, String sex ){
+    public List<PersonEntity> getBySearchParams( String name , Long raceID , Integer ageFrom ,
+                                                 Integer ageTo , String sex ){
 
-        return personRepository.getBySearchParams( name, raceID, ageFrom, ageTo, sex );
+        return personRepository.getBySearchParams( name , raceID , ageFrom , ageTo , sex );
     }
 
     @Override
@@ -58,10 +55,10 @@ public class PersonServiceImplementation implements PersonService {
     }
 
     @Override
-    public void joinGroup( Long id, Long userId ){
+    public void joinGroup( Long id , Long userId ){
 
-        PersonEntity user = personRepository.getOne( userId );
-        GroupEntity group = groupRepository.getOne( id );
+        PersonEntity user  = personRepository.getOne( userId );
+        GroupEntity  group = groupRepository.getOne( id );
 
         user.getGroups().add( group );
         group.getUsers().add( user );
@@ -70,11 +67,12 @@ public class PersonServiceImplementation implements PersonService {
         groupRepository.saveAndFlush( group );
 
     }
-    @Override
-    public void leaveGroup( Long id, Long userId ){
 
-        PersonEntity user = personRepository.getOne( userId );
-        GroupEntity group = groupRepository.getOne( id );
+    @Override
+    public void leaveGroup( Long id , Long userId ){
+
+        PersonEntity user  = personRepository.getOne( userId );
+        GroupEntity  group = groupRepository.getOne( id );
 
         user.getGroups().remove( group );
         group.getUsers().remove( user );
@@ -85,9 +83,12 @@ public class PersonServiceImplementation implements PersonService {
     }
 
     @Override
-    public PersonEntity loginPerson( String login, String password ){
+    public PersonEntity loginPerson( String login , String password ){
+        return personRepository.login( login , password );
+    }
 
-        PersonEntity user = personRepository.login( login, password );
-        return user;
+    @Override
+    public PersonEntity getByLogin( String login ){
+        return personRepository.getByLogin( login );
     }
 }

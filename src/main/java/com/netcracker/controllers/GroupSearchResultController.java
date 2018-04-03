@@ -10,17 +10,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping( "/groups/search" )
-public class GroupSearchResultController {
+public class GroupSearchResultController{
 
-    @Autowired
-    GroupService groupService;
-    
-    @RequestMapping(value="/result", method = RequestMethod.GET)
-    public String searchParams(@RequestParam(value="name", defaultValue="") String name,
-                               @RequestParam(value="ownerName", defaultValue="") String ownerName,
-                               Model model ) {
+    @Autowired GroupService groupService;
 
-        model.addAttribute( "groups" , groupService.getBySearchParams( name, ownerName ) );
+    @RequestMapping( value = "/result", method = RequestMethod.GET )
+    public String searchParams(
+            @RequestParam( value = "name", defaultValue = "" )
+                    String name ,
+            @RequestParam( value = "ownerName", defaultValue = "" )
+                    String ownerName , Model model ){
+
+        model.addAttribute( "groups" , groupService.getBySearchParams( name , ownerName ) );
 
         return "groupSearchResultPage";
     }

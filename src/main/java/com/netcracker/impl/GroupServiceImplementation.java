@@ -10,41 +10,38 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class GroupServiceImplementation implements GroupService {
+public class GroupServiceImplementation implements GroupService{
 
-    @Autowired
-    private GroupRepository groupRepository;
+    @Autowired private GroupRepository groupRepository;
 
     @Override
-    public GroupEntity addGroup(GroupEntity groupEntity){
+    public GroupEntity addGroup( GroupEntity groupEntity ){
 
-        GroupEntity group = groupRepository.saveAndFlush(groupEntity);
-        return group;
+        return groupRepository.saveAndFlush( groupEntity );
     }
 
     @Override
-    public void delete(Long id){
+    public void delete( Long id ){
 
-        groupRepository.deleteById(id);
+        groupRepository.deleteById( id );
     }
 
     @Override
-    public List<GroupEntity> getBySearchParams(String name, String ownerName){
+    public List<GroupEntity> getBySearchParams( String name , String ownerName ){
 
-        List<GroupEntity> listOfGroups = groupRepository.getBySearchParams(name,ownerName);
-        return listOfGroups;
+        return groupRepository.getBySearchParams( name , ownerName );
     }
 
     @Override
-    public List<PersonEntity> getMembers(Long id) {
+    public List<PersonEntity> getMembers( Long id ){
 
-        return groupRepository.getMembers(id);
+        return groupRepository.getMembers( id );
     }
 
     @Override
-    public GroupEntity getById(Long id){
+    public GroupEntity getById( Long id ){
 
-        return groupRepository.getOne(id);
+        return groupRepository.getOne( id );
     }
 
     @Override
@@ -54,14 +51,14 @@ public class GroupServiceImplementation implements GroupService {
     }
 
     @Override
-    public GroupEntity editGroup (GroupEntity groupEntity){
+    public GroupEntity editGroup( GroupEntity groupEntity ){
 
-        return groupRepository.saveAndFlush(groupEntity);
+        return groupRepository.saveAndFlush( groupEntity );
     }
 
     @Override
-    public List<GroupEntity> getByOwner(PersonEntity personEntity){
+    public List<GroupEntity> getByOwner( PersonEntity personEntity ){
 
-        return groupRepository.getByOwner(personEntity);
+        return groupRepository.getByOwner( personEntity );
     }
 }

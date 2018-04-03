@@ -10,28 +10,26 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class MessageServiceImplementation implements MessageService {
+public class MessageServiceImplementation implements MessageService{
 
-    @Autowired
-    private MessageRepository messageRepository;
+    @Autowired private MessageRepository messageRepository;
 
     @Override
-    public MessageEntity addMessage(MessageEntity messageEntity){
+    public MessageEntity addMessage( MessageEntity messageEntity ){
 
-        MessageEntity message = messageRepository.saveAndFlush(messageEntity);
-        return message;
+        return messageRepository.saveAndFlush( messageEntity );
     }
 
     @Override
-    public void delete(Long id){
+    public void delete( Long id ){
 
-        messageRepository.deleteById(id);
+        messageRepository.deleteById( id );
     }
 
     @Override
-    public List<MessageEntity> getMessagesByGroup(GroupEntity groupEntity){
+    public List<MessageEntity> getMessagesByGroup( GroupEntity groupEntity ){
 
-        return messageRepository.getMessagesByGroup(groupEntity);
+        return messageRepository.getMessagesByGroup( groupEntity );
     }
 
 }

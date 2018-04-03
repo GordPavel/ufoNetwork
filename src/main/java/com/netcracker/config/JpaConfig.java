@@ -25,9 +25,9 @@ import java.util.Properties;
 @EnableJpaRepositories( basePackageClasses = Application.class )
 class JpaConfig{
 
+    @Value( "${jndi.name}" )           String jndiName;
     @Value( "${db.dialect}" ) private  String dialect;
     @Value( "${db.show_sql}" ) private String showSql;
-    @Value( "${jndi.name}" )           String jndiName;
 
     @Bean
     public DataSource dataSource() throws NamingException{
