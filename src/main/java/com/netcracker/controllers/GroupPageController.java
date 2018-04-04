@@ -1,5 +1,6 @@
 package com.netcracker.controllers;
 
+import com.netcracker.DAO.GroupEntity;
 import com.netcracker.DAO.MessageEntity;
 import com.netcracker.service.GroupService;
 import com.netcracker.service.MessageService;
@@ -19,7 +20,7 @@ public class GroupPageController{
 
     @Autowired GroupService groupService;
 
-    @RequestMapping( value = "/page/{id}", method = RequestMethod.GET )
+    @RequestMapping( value = "/{id}", method = RequestMethod.GET )
     public String openPage(
             @PathVariable( value = "id" )
                     Long id , Model model ){
@@ -30,7 +31,7 @@ public class GroupPageController{
     }
 
     //    todo : Если я правильно понимаю, здесь должен быть post
-    @PostMapping( value = "/page/{id}", params = "message" )
+    @PostMapping( value = "/{id}", params = "message" )
     public String postMessage(
             @CookieValue( value = "userID", defaultValue = "" )
                     Long writer ,
@@ -52,7 +53,7 @@ public class GroupPageController{
     }
 
     //    todo : Если я правильно понимаю, здесь должен быть delete
-    @DeleteMapping( value = "/page/{id}", params = "messageId" )
+    @DeleteMapping( value = "/{id}", params = "messageId" )
     public String deleteMessage(
             @RequestParam( value = "messageId", defaultValue = "" )
                     Long messageId ,
@@ -66,7 +67,7 @@ public class GroupPageController{
     }
 
     //    todo : Если я правильно понимаю, здесь должен быть post
-    @PostMapping( value = "/page/{id}" )
+    @PostMapping( value = "/{id}/join" )
     public String joinGroup(
             @CookieValue( value = "userID", defaultValue = "" )
                     Long join ,
@@ -80,7 +81,7 @@ public class GroupPageController{
     }
 
     //    todo : Если я правильно понимаю, здесь должен быть post
-    @PostMapping( value = "/page/{id}" )
+    @PostMapping( value = "/{id}/leave" )
     public String leaveGroup(
             @CookieValue( value = "userID", defaultValue = "" )
                     Long leaveId ,
@@ -92,4 +93,57 @@ public class GroupPageController{
 
         return "groupPage";
     }
+
+    //Group creation
+
+    @GetMapping( value = "/create" )
+    public String openGroupCreatePage(
+            @RequestParam( value = "name", defaultValue = "" )
+                    String name , Model model ){
+
+        model.addAttribute( "name" , name );
+
+        return "groupCreatePage";
+    }
+
+    @PostMapping( value = "/create" )
+    public String createGroup(
+            @RequestParam( value = "name", defaultValue = "" )
+                    String name ,
+            @CookieValue( value = "userID", defaultValue = "" )
+                    Long ownerID , Model model ){
+
+//        todo : Валидация данных
+
+        GroupEntity groupEntity = new GroupEntity( name , personService.getById( ownerID ) );
+        groupService.addGroup( groupEntity );
+        model.addAttribute( "group" , groupEntity );
+
+        return "groupPage";
+    }
+
+    //Group settings
+
+    @RequestMapping( value = "/{id}/settings", method = RequestMethod.GET )
+    public String openSettings(
+            @PathVariable( value = "id" )
+                    Long id , Model model ){
+
+        model.addAttribute( "group" , groupService.getById( id ) );
+        return "groupSettingsPage";
+    }
+
+    @RequestMapping( value = "/{id}/settings", params = "newName" )
+    public String updateGroup(
+            @RequestParam( value = "newName", defaultValue = "" )
+                    String newName ,
+            @PathVariable( value = "id" )
+                    Long id , Model model ){
+
+        GroupEntity toEdit = groupService.getById( id );
+        toEdit.setName( newName );
+        model.addAttribute( "group" , groupService.editGroup( toEdit ) );
+        return "groupSettingsPage";
+    }
+
 }
