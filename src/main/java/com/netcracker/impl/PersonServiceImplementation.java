@@ -29,11 +29,15 @@ public class PersonServiceImplementation implements PersonService{
         personRepository.deleteById( id );
     }
 
+//    todo в таких запросах почитайте лучше о spring data specifications
     @Override
     public List<PersonEntity> getBySearchParams( String name , Long raceID , Integer ageFrom ,
                                                  Integer ageTo , String sex ){
-
-        return personRepository.getBySearchParams( name , raceID , ageFrom , ageTo , sex );
+        return personRepository.findAll( ( root , criteriaQuery , criteriaBuilder ) -> criteriaBuilder
+                .and( criteriaBuilder.like( root.get( "name" ) , name ) ,
+                      criteriaBuilder.equal( root.get( "race" ).get( "id" ) , raceID ) ,
+                      criteriaBuilder.between( root.get( "age" ) , ageFrom , ageTo ) ,
+                      criteriaBuilder.like( root.get( "sex" ) , sex ) ) );
     }
 
     @Override
@@ -70,7 +74,6 @@ public class PersonServiceImplementation implements PersonService{
 
     @Override
     public void leaveGroup( Long id , Long userId ){
-
         PersonEntity user  = personRepository.getOne( userId );
         GroupEntity  group = groupRepository.getOne( id );
 

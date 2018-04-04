@@ -25,7 +25,9 @@ public class GroupEntity{
     @Basic
     @Column( name = "media" )
     private                                    byte[]              media;
-    @ManyToOne( cascade = CascadeType.DETACH, fetch = FetchType.EAGER )
+//    todo Осторожнее с полями, у которых FetchType.LAZY, потому что они загружаются лениво, то
+// есть только после первого обращения к ним
+    @ManyToOne( cascade = CascadeType.DETACH, fetch = FetchType.LAZY )
     @JoinColumn( name = "owner_group" )
     @NonNull
     private                                    PersonEntity        owner;
