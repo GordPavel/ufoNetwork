@@ -20,7 +20,7 @@ public class GroupPageController{
 
     @Autowired GroupService groupService;
 
-    @RequestMapping( value = "/{id}", method = RequestMethod.GET )
+    @GetMapping( value = "/{id}")
     public String openPage(
             @PathVariable( value = "id" )
                     Long id , Model model ){
@@ -30,7 +30,6 @@ public class GroupPageController{
         return "groupPage";
     }
 
-    //    todo : Если я правильно понимаю, здесь должен быть post
     @PostMapping( value = "/{id}", params = "message" )
     public String postMessage(
             @CookieValue( value = "userID", defaultValue = "" )
@@ -52,7 +51,6 @@ public class GroupPageController{
         return "groupPage";
     }
 
-    //    todo : Если я правильно понимаю, здесь должен быть delete
     @DeleteMapping( value = "/{id}", params = "messageId" )
     public String deleteMessage(
             @RequestParam( value = "messageId", defaultValue = "" )
@@ -66,7 +64,6 @@ public class GroupPageController{
         return "groupPage";
     }
 
-    //    todo : Если я правильно понимаю, здесь должен быть post
     @PostMapping( value = "/{id}/join" )
     public String joinGroup(
             @CookieValue( value = "userID", defaultValue = "" )
@@ -80,7 +77,6 @@ public class GroupPageController{
         return "groupPage";
     }
 
-    //    todo : Если я правильно понимаю, здесь должен быть post
     @PostMapping( value = "/{id}/leave" )
     public String leaveGroup(
             @CookieValue( value = "userID", defaultValue = "" )
@@ -124,7 +120,7 @@ public class GroupPageController{
 
     //Group settings
 
-    @RequestMapping( value = "/{id}/settings", method = RequestMethod.GET )
+    @GetMapping( value = "/{id}/settings")
     public String openSettings(
             @PathVariable( value = "id" )
                     Long id , Model model ){
@@ -133,7 +129,7 @@ public class GroupPageController{
         return "groupSettingsPage";
     }
 
-    @RequestMapping( value = "/{id}/settings", params = "newName" )
+    @PostMapping( value = "/{id}/settings", params = "newName" )
     public String updateGroup(
             @RequestParam( value = "newName", defaultValue = "" )
                     String newName ,

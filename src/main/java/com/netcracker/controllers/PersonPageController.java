@@ -26,7 +26,7 @@ public class PersonPageController{
         return "personPage";
     }
 
-    @RequestMapping( value = "/{id}/settings", method = RequestMethod.GET )
+    @GetMapping( value = "/{id}/settings" )
     public String openPage(
             @PathVariable( value = "id" )
                     Long id , Model model ){
@@ -35,13 +35,13 @@ public class PersonPageController{
         return "presonSettingsPage";
     }
 
-    @RequestMapping( value = "/{id}/settings/pass", method = RequestMethod.GET )
+    @GetMapping( value = "/{id}/settings/pass" )
     public String openPassPage(){
 
         return "presonSettingsPassPage";
     }
 
-    @RequestMapping( value = "/{id}/settings", method = RequestMethod.POST )
+    @PostMapping( value = "/{id}/settings" )
     public String updatePerson(
             @RequestParam( value = "login", defaultValue = "" )
                     String login ,
@@ -73,7 +73,7 @@ public class PersonPageController{
         return "presonSettingsPage";
     }
 
-    @RequestMapping( value = "/{id}/settings/pass", method = RequestMethod.POST )
+    @PostMapping( value = "/{id}/settings/pass" )
     public String updatePersonPass(
             @RequestParam( value = "password", defaultValue = "" )
                     String password ,

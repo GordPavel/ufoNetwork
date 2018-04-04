@@ -29,7 +29,7 @@ public class GroupSearchPageController{
         return "groupSearchPage";
     }
 
-    @RequestMapping( value = "/search/result", method = RequestMethod.GET )
+    @GetMapping( value = "/search/result" )
     public String searchResult(
             @RequestParam( value = "name", defaultValue = "" )
                     String name ,

@@ -6,9 +6,7 @@ import com.netcracker.service.RaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -24,17 +22,24 @@ public class LoginPageController{
     @Autowired
     RaceService raceService;
 
-    @RequestMapping( method = RequestMethod.GET )
+    @GetMapping( )
     public String open(
             @RequestParam( value = "login", defaultValue = "" )
-                    String login , Model model , HttpServletResponse response ){
+                    String login , Model model ){
 
         model.addAttribute( "login" , login );
+        return "loginPage";
+    }
+
+    @GetMapping(value = "/logout")
+    public String logout(
+          HttpServletResponse response ){
+
         response.addCookie( new Cookie( "userID" , null ) );
         return "loginPage";
     }
 
-    @RequestMapping( method = RequestMethod.POST )
+    @PostMapping( )
     public String login(
             @RequestParam( value = "login", defaultValue = "" )
                     String login ,
@@ -58,7 +63,30 @@ public class LoginPageController{
         }
     }
 
-    @RequestMapping( value = "/registration", method = RequestMethod.POST )
+    @GetMapping( value = "/registration")
+    public String openRegistration(
+            @RequestParam( value = "login", defaultValue = "" )
+                    String login ,
+            @RequestParam( value = "name", defaultValue = "" )
+                    String name ,
+            @RequestParam( value = "race", defaultValue = "" )
+                    String race ,
+            @RequestParam( value = "age" )
+                    Integer age ,
+            @RequestParam( value = "sex", defaultValue = "" )
+                    String sex , Model model ){
+
+        model.addAttribute( "login" , login );
+        model.addAttribute( "name" , name );
+        model.addAttribute( "race" , race );
+        model.addAttribute( "age" , age );
+        model.addAttribute( "sex" , sex );
+
+        return ( "registrationPage" );
+
+    }
+
+    @PostMapping( value = "/registration")
     public String addPerson(
             @RequestParam( value = "login", defaultValue = "" )
                     String login ,
@@ -80,29 +108,6 @@ public class LoginPageController{
         model.addAttribute( "person" , personService.addPerson( personEntity ) );
 
         return ( "personPage" );
-
-    }
-
-    @RequestMapping( value = "/registration", method = RequestMethod.GET )
-    public String openRegistration(
-            @RequestParam( value = "login", defaultValue = "" )
-                    String login ,
-            @RequestParam( value = "name", defaultValue = "" )
-                    String name ,
-            @RequestParam( value = "race", defaultValue = "" )
-                    String race ,
-            @RequestParam( value = "age" )
-                    Integer age ,
-            @RequestParam( value = "sex", defaultValue = "" )
-                    String sex , Model model ){
-
-        model.addAttribute( "login" , login );
-        model.addAttribute( "name" , name );
-        model.addAttribute( "race" , race );
-        model.addAttribute( "age" , age );
-        model.addAttribute( "sex" , sex );
-
-        return ( "registrationPage" );
 
     }
 }
