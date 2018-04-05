@@ -18,6 +18,13 @@ public class PersonPageController{
     @Autowired
     RaceService raceService;
 
+    /**
+     * open user`s page
+     * @param id - user`s id, path variable
+     * @param model - model to store param
+     * @return - user`s page
+     * //TODO проверка, зашёл ли пользователь к себе на страницу
+     */
     @GetMapping( value = "/{id}" )
     public String personPage(
             @PathVariable( value = "id" )
@@ -26,6 +33,12 @@ public class PersonPageController{
         return "personPage";
     }
 
+    /**
+     * open settings page
+     * @param id - user ID, path variable
+     * @param model - model to store params
+     * @return settings page
+     */
     @GetMapping( value = "/{id}/settings" )
     public String openPage(
             @PathVariable( value = "id" )
@@ -35,12 +48,26 @@ public class PersonPageController{
         return "presonSettingsPage";
     }
 
+    /**
+     * page to change password
+     * @return change password page
+     */
     @GetMapping( value = "/{id}/settings/pass" )
     public String openPassPage(){
 
         return "presonSettingsPassPage";
     }
 
+    /**
+     * update user`s params
+     * @param login - new login
+     * @param name - new name
+     * @param race - new race
+     * @param age - new age
+     * @param id - user`s ID, path variable
+     * @param model - model to store params
+     * @return setting`s page
+     */
     @PostMapping( value = "/{id}/settings" )
     public String updatePerson(
             @RequestParam( value = "login", defaultValue = "" )
@@ -73,6 +100,14 @@ public class PersonPageController{
         return "presonSettingsPage";
     }
 
+    /**
+     * Updating password
+     * @param password - old password
+     * @param newPassword - new password
+     * @param id - user`s id, path variable
+     * @param model
+     * @return
+     */
     @PostMapping( value = "/{id}/settings/pass" )
     public String updatePersonPass(
             @RequestParam( value = "password", defaultValue = "" )

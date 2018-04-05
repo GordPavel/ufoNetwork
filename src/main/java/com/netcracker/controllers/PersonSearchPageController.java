@@ -16,6 +16,16 @@ public class PersonSearchPageController{
     @Autowired
     PersonService personService;
 
+    /**
+     * Open user`s search page with pre-filled fields
+     * @param name - user`s name
+     * @param raceID - user`s race
+     * @param ageFrom - minimum user`s age
+     * @param ageTo - maximum user`s age
+     * @param sex - user`s sex
+     * @param model - model to store params
+     * @return search page
+     */
     @GetMapping( value = "/search" )
     public String searchParams(
             @RequestParam( value = "name", defaultValue = "" )
@@ -37,6 +47,16 @@ public class PersonSearchPageController{
         return "personSearchPage";
     }
 
+    /**
+     * Open user`s search result page
+     * @param name - user`s name
+     * @param raceID - user`s race
+     * @param ageFrom - minimum user`s age
+     * @param ageTo - maximum user`s age
+     * @param sex - user`s sex
+     * @param model - model to store params
+     * @return search result page
+     */
     @GetMapping( value = "/search/result" )
     public String searchResult(
             @RequestParam( value = "name", defaultValue = "" )

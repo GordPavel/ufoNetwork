@@ -12,7 +12,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.time.Duration;
 
-
+/**
+ * Controller for login, registration page
+ */
 @Controller
 @RequestMapping( "/" )
 public class LoginPageController{
@@ -22,6 +24,12 @@ public class LoginPageController{
     @Autowired
     RaceService raceService;
 
+    /**
+     * Open login page
+     * @param login - user`s login to pre-filling page
+     * @param model - model to store params
+     * @return login page
+     */
     @GetMapping( )
     public String open(
             @RequestParam( value = "login", defaultValue = "" )
@@ -31,6 +39,11 @@ public class LoginPageController{
         return "loginPage";
     }
 
+    /**
+     * Logining out, cleaning cookie
+     * @param response - clear cookie
+     * @return login page
+     */
     @GetMapping(value = "/logout")
     public String logout(
           HttpServletResponse response ){
@@ -39,6 +52,14 @@ public class LoginPageController{
         return "loginPage";
     }
 
+    /**
+     * Login.
+     * @param login - user`s login
+     * @param password - user`s password
+     * @param model - model to store params
+     * @param response - add cookie
+     * @return logined users page
+     */
     @PostMapping( )
     public String login(
             @RequestParam( value = "login", defaultValue = "" )
@@ -63,6 +84,16 @@ public class LoginPageController{
         }
     }
 
+    /**
+     * open registration page with pre-filled fields
+     * @param login - user`s login
+     * @param name - user`s name
+     * @param race - user`s race
+     * @param age - user`s age
+     * @param sex - user`s sex
+     * @param model - model to store params
+     * @return registration page
+     */
     @GetMapping( value = "/registration")
     public String openRegistration(
             @RequestParam( value = "login", defaultValue = "" )
@@ -86,6 +117,16 @@ public class LoginPageController{
 
     }
 
+    /**
+     * register new user
+     * @param login - user`s login
+     * @param name - user`s name
+     * @param race - user`s race
+     * @param age - user`s age
+     * @param sex - user`s sex
+     * @param model - model to store params
+     * @return registred user`s page
+     */
     @PostMapping( value = "/registration")
     public String addPerson(
             @RequestParam( value = "login", defaultValue = "" )
