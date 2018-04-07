@@ -4,10 +4,7 @@ import com.netcracker.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping( "/groups" )
@@ -28,8 +25,14 @@ public class GroupSearchPageController{
             @RequestParam( value = "name", defaultValue = "" )
                     String name ,
             @RequestParam( value = "ownerName", defaultValue = "" )
-                    String ownerName , Model model ){
+                    String ownerName ,
+            @CookieValue( name = "userID", defaultValue = "")
+                    Long userId,
+            Model model ){
 
+        if (userId == null){
+            return "redirect:/";
+        }
         model.addAttribute( "name" , name );
         model.addAttribute( "ownerName" , ownerName );
 
@@ -48,8 +51,14 @@ public class GroupSearchPageController{
             @RequestParam( value = "name", defaultValue = "" )
                     String name ,
             @RequestParam( value = "ownerName", defaultValue = "" )
-                    String ownerName , Model model ){
+                    String ownerName ,
+            @CookieValue( name = "userID", defaultValue = "")
+                    Long userId,
+            Model model ){
 
+        if (userId == null){
+            return "redirect:/";
+        }
         model.addAttribute( "groups" , groupService.getBySearchParams( name , ownerName ) );
 
         return "groupSearchResultPage";

@@ -4,10 +4,7 @@ import com.netcracker.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping( value = "/persons" )
@@ -37,7 +34,14 @@ public class PersonSearchPageController{
             @RequestParam( value = "ageTo", defaultValue = "" )
                     Integer ageTo ,
             @RequestParam( value = "sex", defaultValue = "" )
-                    String sex , Model model ){
+                    String sex ,
+            @CookieValue( name = "userID", defaultValue = "")
+                    Long userId,
+            Model model ){
+
+        if (userId == null){
+            return "redirect:/";
+        }
 
         model.addAttribute( "name" , name );
         model.addAttribute( "raceId" , raceID );
@@ -68,7 +72,14 @@ public class PersonSearchPageController{
             @RequestParam( value = "ageTo", defaultValue = "" )
                     Integer ageTo ,
             @RequestParam( value = "sex", defaultValue = "" )
-                    String sex , Model model ){
+                    String sex ,
+            @CookieValue( name = "userID", defaultValue = "")
+                    Long userId,
+            Model model ){
+
+        if (userId == null){
+            return "redirect:/";
+        }
         model.addAttribute( "persons" ,
                 personService.getBySearchParams( name ,
                         raceID ,

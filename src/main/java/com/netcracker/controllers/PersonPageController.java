@@ -23,13 +23,20 @@ public class PersonPageController{
      * @param id - user`s id, path variable
      * @param model - model to store param
      * @return - user`s page
-     * //TODO проверка, зашёл ли пользователь к себе на страницу
      */
     @GetMapping( value = "/{id}" )
     public String personPage(
             @PathVariable( value = "id" )
-                    Long id , Model model ){
+                    Long id ,
+            @CookieValue( name = "userID", defaultValue = "")
+                    Long userId,
+            Model model ){
+        if (userId == null){
+            return "redirect:/";
+        }
         model.addAttribute( "person" , personService.getById( id ) );
+        model.addAttribute("userID", userId);
+
         return "personPage";
     }
 
@@ -42,8 +49,14 @@ public class PersonPageController{
     @GetMapping( value = "/{id}/settings" )
     public String openPage(
             @PathVariable( value = "id" )
-                    Long id , Model model ){
+                    Long id ,
+            @CookieValue( name = "userID", defaultValue = "")
+                    Long userId,
+            Model model ){
 
+        if ((userId == null)||(id!=userId)){
+            return "redirect:/";
+        }
         model.addAttribute( "person" , personService.getById( id ) );
         return "presonSettingsPage";
     }
@@ -53,8 +66,14 @@ public class PersonPageController{
      * @return change password page
      */
     @GetMapping( value = "/{id}/settings/pass" )
-    public String openPassPage(){
-
+    public String openPassPage(
+            @PathVariable( value = "id" )
+                    Long id ,
+            @CookieValue( name = "userID", defaultValue = "")
+                    Long userId){
+        if ((userId == null)||(id!=userId)){
+            return "redirect:/";
+        }
         return "presonSettingsPassPage";
     }
 
@@ -79,7 +98,14 @@ public class PersonPageController{
             @RequestParam( value = "age" )
                     Integer age ,
             @PathVariable( value = "id" )
-                    Long id , Model model ){
+                    Long id ,
+            @CookieValue( name = "userID", defaultValue = "")
+                    Long userId,
+            Model model ){
+
+        if ((userId == null)||(id!=userId)){
+            return "redirect:/";
+        }
 
         PersonEntity toEdit = personService.getById( id );
 
@@ -115,7 +141,14 @@ public class PersonPageController{
             @RequestParam( value = "newPassword", defaultValue = "" )
                     String newPassword ,
             @PathVariable( value = "id" )
-                    Long id , Model model ){
+                    Long id ,
+            @CookieValue( name = "userID", defaultValue = "")
+                    Long userId,
+            Model model ){
+
+        if ((userId == null)||(id!=userId)){
+            return "redirect:/";
+        }
 
         PersonEntity toEdit = personService.getById( id );
 

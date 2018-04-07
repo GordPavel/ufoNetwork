@@ -33,7 +33,15 @@ public class GroupPageController{
     @GetMapping( value = "/{id}")
     public String openPage(
             @PathVariable( value = "id" )
-                    Long id , Model model ){
+                    Long id,
+            @CookieValue(name = "userID", defaultValue = "")
+                    Long userId,
+            Model model ){
+
+        if (userId == null){
+            return "redirect:/";
+        }
+
 
         model.addAttribute( "group" , groupService.getById( id ) );
 
@@ -50,12 +58,17 @@ public class GroupPageController{
      */
     @PostMapping( value = "/{id}", params = "message" )
     public String postMessage(
-            @CookieValue( value = "userID", defaultValue = "" )
+            @CookieValue( name = "userID", defaultValue = "" )
                     Long writer ,
             @RequestParam( value = "message" )
                     String messageText ,
             @PathVariable( value = "id" )
                     Long id , Model model ){
+
+        if (writer == null){
+            return "redirect:/";
+        }
+
         MessageEntity messageEntity = new MessageEntity();
 
         messageEntity.setToGroup( groupService.getById( id ) );
@@ -81,7 +94,14 @@ public class GroupPageController{
             @RequestParam( value = "messageId", defaultValue = "" )
                     Long messageId ,
             @PathVariable( value = "id" )
-                    Long id , Model model ){
+                    Long id ,
+            @CookieValue(name = "userID")
+                    Long userId,
+            Model model ){
+
+        if (userId == null){
+            return "redirect:/";
+        }
 
         messageService.delete( messageId );
         model.addAttribute( "group" , groupService.getById( id ) );
@@ -98,10 +118,14 @@ public class GroupPageController{
      */
     @PostMapping( value = "/{id}/join" )
     public String joinGroup(
-            @CookieValue( value = "userID", defaultValue = "" )
+            @CookieValue( name = "userID", defaultValue = "" )
                     Long join ,
             @PathVariable( value = "id" )
                     Long id , Model model ){
+
+        if (join == null){
+            return "redirect:/";
+        }
 
         personService.joinGroup( id , join );
         model.addAttribute( "group" , groupService.getById( id ) );
@@ -118,10 +142,14 @@ public class GroupPageController{
      */
     @PostMapping( value = "/{id}/leave" )
     public String leaveGroup(
-            @CookieValue( value = "userID", defaultValue = "" )
+            @CookieValue( name = "userID", defaultValue = "" )
                     Long leave ,
             @PathVariable( value = "id" )
                     Long id , Model model ){
+
+        if (leave == null){
+            return "redirect:/";
+        }
 
         personService.leaveGroup( id , leave );
         model.addAttribute( "group" , groupService.getById( id ) );
@@ -140,7 +168,14 @@ public class GroupPageController{
     @GetMapping( value = "/create" )
     public String openGroupCreatePage(
             @RequestParam( value = "name", defaultValue = "" )
-                    String name , Model model ){
+                    String name ,
+            @CookieValue( name = "userID", defaultValue = "")
+                    Long userId,
+            Model model ){
+
+        if (userId == null){
+            return "redirect:/";
+        }
 
         model.addAttribute( "name" , name );
 
@@ -158,10 +193,14 @@ public class GroupPageController{
     public String createGroup(
             @RequestParam( value = "name", defaultValue = "" )
                     String name ,
-            @CookieValue( value = "userID", defaultValue = "" )
+            @CookieValue( name = "userID", defaultValue = "" )
                     Long ownerID , Model model ){
 
 //        todo : Валидация данных
+
+        if (ownerID == null){
+            return "redirect:/";
+        }
 
         GroupEntity groupEntity = new GroupEntity( name , personService.getById( ownerID ) );
         groupService.addGroup( groupEntity );
@@ -181,8 +220,13 @@ public class GroupPageController{
     @GetMapping( value = "/{id}/settings")
     public String openSettings(
             @PathVariable( value = "id" )
-                    Long id , Model model ){
-        //TODO проверка, имеет ли пользователь право вообще сюда зайти
+                    Long id,
+            @CookieValue( name = "userID")
+                    Long userId,
+            Model model ){
+        if ((userId == null)||(groupService.getById(id).getOwner().getId()!=userId)){
+            return "redirect:/";
+        }
         model.addAttribute( "group" , groupService.getById( id ) );
         return "groupSettingsPage";
     }
@@ -199,7 +243,14 @@ public class GroupPageController{
             @RequestParam( value = "newName", defaultValue = "" )
                     String newName ,
             @PathVariable( value = "id" )
-                    Long id , Model model ){
+                    Long id ,
+            @CookieValue( name = "userID", defaultValue = "")
+                    Long userId,
+            Model model ){
+
+        if ((userId == null)||(groupService.getById(id).getOwner().getId()!=userId)){
+            return "redirect:/";
+        }
 
         GroupEntity toEdit = groupService.getById( id );
         toEdit.setName( newName );

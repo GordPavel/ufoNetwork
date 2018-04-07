@@ -80,6 +80,7 @@ public class LoginPageController{
             return "personPage";
         }else{
 //            todo : Настроить отображение ошибки входа
+            model.addAttribute("login",login);
             return "redirect:/";
         }
     }
@@ -140,13 +141,14 @@ public class LoginPageController{
             @RequestParam( value = "age" )
                     Integer age ,
             @RequestParam( value = "sex", defaultValue = "" )
-                    String sex , Model model ){
+                    String sex , Model model, HttpServletResponse response ){
 
         PersonEntity personEntity =
                 new PersonEntity( login , password , name , raceService.getByName( race ) );
         personEntity.setAge( age );
         personEntity.setSex( sex );
         model.addAttribute( "person" , personService.addPerson( personEntity ) );
+        response.addCookie( new Cookie( "userID" , null ) );
 
         return ( "personPage" );
 
