@@ -32,4 +32,10 @@ public class MessageServiceImplementation implements MessageService{
         return messageRepository.getMessagesByGroup( groupEntity );
     }
 
+    @Override
+    public MessageEntity getMessageById(Long id){
+
+        return messageRepository.getOne(id);
+    }
+
 }

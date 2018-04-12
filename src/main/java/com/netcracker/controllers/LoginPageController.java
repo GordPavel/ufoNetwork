@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.time.Duration;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Controller for login, registration page
@@ -79,7 +81,8 @@ public class LoginPageController{
 
             return "personPage";
         }else{
-//            todo : Настроить отображение ошибки входа
+            //TODO: error mesage implementation
+            model.addAttribute("error_message","Login or password incorrect");
             model.addAttribute("login",login);
             return "redirect:/";
         }
@@ -142,6 +145,33 @@ public class LoginPageController{
                     Integer age ,
             @RequestParam( value = "sex", defaultValue = "" )
                     String sex , Model model, HttpServletResponse response ){
+
+        Pattern p = Pattern.compile("[\\d\\s-_]+");
+        Matcher loginMatcher = p.matcher(login);
+        Matcher nameMatcher = p.matcher(name);
+        Matcher raceMatcher = p.matcher(race);
+        Matcher sexMatcher = p.matcher(sex);
+
+        if (!p.matcher(login).matches()){
+            //TODO: error mesage implementation
+            model.addAttribute("error_message","unacceptable login");
+            return "registrationPage";
+        }
+        if (!p.matcher(name).matches()){
+            //TODO: error mesage implementation
+            model.addAttribute("error_message","unacceptable name");
+            return "registrationPage";
+        }
+        if (!p.matcher(race).matches()){
+            //TODO: error mesage implementation
+            model.addAttribute("error_message","unacceptable race");
+            return "registrationPage";
+        }
+        if (!p.matcher(sex).matches()){
+            //TODO: error mesage implementation
+            model.addAttribute("error_message","unacceptable sex");
+            return "registrationPage";
+        }
 
         PersonEntity personEntity =
                 new PersonEntity( login , password , name , raceService.getByName( race ) );

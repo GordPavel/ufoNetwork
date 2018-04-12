@@ -32,6 +32,15 @@ public interface RaceService{
     RaceEntity getByName( String name );
 
     /**
+     Searh for Race with same id
+
+     @param id - id
+
+     @return
+     */
+    RaceEntity getById( Long id );
+
+    /**
      List of all Races
 
      @return - all Races in db

@@ -10,6 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 /**
  * Controller for groups. Group page, group create, group settings
@@ -75,7 +78,12 @@ public class GroupPageController{
         messageEntity.setText( messageText );
         messageEntity.setWriter( personService.getById( writer ) );
 
-        messageService.addMessage( messageEntity );
+        if (groupService.getById(id).getUsers().contains(writer)) {
+            messageService.addMessage(messageEntity);
+        } else {
+            //TODO: error mesage implementation
+            model.addAttribute("error_message","user can`t write here");
+        }
 
         model.addAttribute( "group" , groupService.getById( id ) );
 
@@ -103,7 +111,12 @@ public class GroupPageController{
             return "redirect:/";
         }
 
-        messageService.delete( messageId );
+        if (messageService.getMessageById(messageId).getWriter().equals(userId)||
+                messageService.getMessageById(messageId).getToGroup().getOwner().equals(userId)) {
+            //TODO: error mesage implementation
+            model.addAttribute("error_message","user can`t delete this");
+            messageService.delete(messageId);
+        }
         model.addAttribute( "group" , groupService.getById( id ) );
 
         return "groupPage";
@@ -127,7 +140,12 @@ public class GroupPageController{
             return "redirect:/";
         }
 
-        personService.joinGroup( id , join );
+        if (!personService.getById(join).getGroups().contains(groupService.getById(id))) {
+            personService.joinGroup(id, join);
+        } else {
+            //TODO: error mesage implementation
+            model.addAttribute("error_message","user already in group");
+        }
         model.addAttribute( "group" , groupService.getById( id ) );
 
         return "groupPage";
@@ -151,7 +169,12 @@ public class GroupPageController{
             return "redirect:/";
         }
 
-        personService.leaveGroup( id , leave );
+        if (personService.getById(leave).getGroups().contains(groupService.getById(id))) {
+            personService.leaveGroup(id, leave);
+        } else {
+            //TODO: error mesage implementation
+            model.addAttribute("error_message","user not in group");
+        }
         model.addAttribute( "group" , groupService.getById( id ) );
 
         return "groupPage";
@@ -202,9 +225,17 @@ public class GroupPageController{
             return "redirect:/";
         }
 
-        GroupEntity groupEntity = new GroupEntity( name , personService.getById( ownerID ) );
-        groupService.addGroup( groupEntity );
-        model.addAttribute( "group" , groupEntity );
+        Pattern p = Pattern.compile("[\\d\\s-_]+");
+        Matcher m = p.matcher(name);
+        if (m.matches()) {
+            GroupEntity groupEntity = new GroupEntity( name , personService.getById( ownerID ) );
+            groupService.addGroup( groupEntity );
+            model.addAttribute( "group" , groupEntity );
+        } else{
+            //TODO: error mesage implementation
+            model.addAttribute("error_message","unacceptable name");
+            return "groupCreatePage";
+        }
 
         return "groupPage";
     }

@@ -1,10 +1,14 @@
 package com.netcracker.controllers;
 
 import com.netcracker.service.PersonService;
+import com.netcracker.service.RaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping( value = "/persons" )
@@ -12,6 +16,9 @@ public class PersonSearchPageController{
 
     @Autowired
     PersonService personService;
+
+    @Autowired
+    RaceService raceService;
 
     /**
      * Open user`s search page with pre-filled fields
@@ -76,6 +83,31 @@ public class PersonSearchPageController{
             @CookieValue( name = "userID", defaultValue = "")
                     Long userId,
             Model model ){
+
+        Pattern p = Pattern.compile("[\\d\\s-_\\*\\?]+");
+        Matcher nameMatcher = p.matcher(name);
+        Matcher sexMatcher = p.matcher(sex);
+
+        if (!p.matcher(name).matches()){
+            //TODO: error mesage implementation
+            model.addAttribute("error_message","unacceptable name");
+            return "personSearchPage";
+        }
+        if (!p.matcher(sex).matches()){
+            //TODO: error mesage implementation
+            model.addAttribute("error_message","unacceptable sex");
+            return "personSearchPage";
+        }
+        if (ageFrom>ageTo){
+            //TODO: error mesage implementation
+            model.addAttribute("error_message","incorrect age parameters");
+            return "personSearchPage";
+        }
+        if (raceService.getById(raceID)==null){
+            //TODO: error mesage implementation
+            model.addAttribute("error_message","incorrect race");
+            return "personSearchPage";
+        }
 
         if (userId == null){
             return "redirect:/";

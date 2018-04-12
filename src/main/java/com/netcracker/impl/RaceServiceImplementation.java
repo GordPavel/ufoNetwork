@@ -42,4 +42,9 @@ public class RaceServiceImplementation implements RaceService{
 
         return raceRepository.saveAndFlush( raceEntity );
     }
+
+    @Override
+    public RaceEntity getById(Long id){
+        return raceRepository.getOne(id);
+    }
 }

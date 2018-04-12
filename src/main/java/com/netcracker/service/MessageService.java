@@ -31,4 +31,13 @@ public interface MessageService{
      @return - list of all mesages, posted oin group
      */
     List<MessageEntity> getMessagesByGroup( GroupEntity groupEntity );
+
+    /**
+     search for messages by id
+
+     @param id - id to search
+
+     @return - message with this id
+     */
+    MessageEntity getMessageById( Long id );
 }
