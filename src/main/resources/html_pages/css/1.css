@@ -1,0 +1,528 @@
+#wrap{
+display: none;
+opacity: 0.8;
+position: fixed;
+left: 0;
+right: 0;
+top: 0;
+bottom: 0;
+padding: 16px;
+background-color: rgba(1, 1, 1, 0.725);
+z-index: 100;
+overflow: auto;
+}
+ 
+#window{
+width: 400px;
+height: 600px;
+margin: 50px auto;
+display: none;
+background: #fff;
+z-index: 200;
+position: fixed;
+left: 0;
+right: 0;
+top: 0;
+bottom: 0;
+padding: 16px;
+}
+
+*, *::after, *::before {
+-webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+-o-box-sizing: border-box;
+-ms-box-sizing: border-box;
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+}
+#mainmenu {
+position: relative;
+background:linear-gradient(180deg, rgba(0, 255, 204, 1) 0%, rgba(0, 255, 204, 1) 0%, rgba(0, 0, 204, 1) 0%, rgba(228, 228, 228, 1) 39%, rgba(45, 45, 208, 1) 97%, rgba(51, 153, 255, 1) 100%, rgba(228, 228, 228, 1) 100%, rgba(228, 228, 228, 1) 100%);
+height:40px;
+padding: 0;
+float: left;
+width: 100%;
+z-index: 10
+}
+#mainmenu ul {
+clear: left;
+position: relative;
+right: 50%;
+height: 40px;
+float: right;
+text-align: center;
+font-family:'Bookman Old Style Курсив', 'Bookman Old Style';
+font-weight:300;
+font-size:20px;
+list-style: none;
+padding: 0;
+margin: 0
+}
+
+/** Основные пункты **/
+
+#mainmenu > ul > li {
+position: relative;
+left: 50%;
+float: left;
+height: 40px;
+padding: 0;
+margin: 0
+}
+#mainmenu > ul > li > a {
+border-left: 1px solid #666;
+display: block;
+color: black;
+text-decoration: none;
+padding: 0 20px;
+line-height: 40px;
+}
+#mainmenu > ul > li:first-child > a {
+border: none
+}
+#mainmenu > ul > li:hover > a, #mainmenu > ul > li.hover > a, #mainmenu > ul > li.active > a {
+color: #fff
+}
+#mainmenu > ul > li:hover, #mainmenu > ul > li.hover, #mainmenu > ul > li.active {
+background: #666
+}
+
+/* Выпадающие подпункты */
+
+#mainmenu ul li ul {
+position: absolute;
+left: 0;
+top: 40px;
+display: none;
+list-style: none;
+visibility: hidden;
+padding: 0;
+margin: 0;
+width: 200px
+}
+#mainmenu > ul > li ul li {
+background-color: #666;
+position: relative;
+left: 0;
+display: list-item;
+float: none;
+height: auto;
+margin: 0;
+text-align: left;
+}
+#mainmenu ul li ul li a {
+border-bottom: 1px solid #999;
+display: block;
+color: #fff;
+padding: 10px 15px;
+text-decoration: none;
+}
+#mainmenu ul li ul li.parent a {
+position: relative;
+}
+#mainmenu ul li ul > li.parent > a::before {
+border-top: 1px solid #fff;
+border-right: 1px solid #fff;
+content: "";
+display: block;
+position: absolute;
+right: 15px;
+top: 50%;
+transform: translateY(-50%) rotate(45deg);
+height: 6px;
+width: 6px;
+}
+#mainmenu ul li ul li:hover, #mainmenu ul li ul li.hover {
+background-color: #444
+}
+#mainmenu ul li:hover ul, #mainmenu ul li.hover ul {
+display: block
+}
+
+/* Выпадающие пункты второго уровня */
+
+#mainmenu ul li:hover > ul {
+opacity: 1;
+visibility: visible;
+margin: 0;
+}
+#mainmenu ul li ul li ul {
+top: 0;
+left: 200px;
+margin: 0 0 0 20px;
+width: 180px
+}
+
+#exit{
+position:relative;
+height:60px;
+left:700px;
+top:15px;
+}
+
+#img1{
+position:relative;
+left:480px;
+top:60px;		
+}
+
+#table1{
+position:relative;
+width:200px;
+left:880px;
+top:-160px;
+font-family:'Bookman Old Style Курсив', 'Bookman Old Style';
+font-weight:300;
+font-size:16px;	
+}
+
+#table2{
+position:relative;
+left:200px;
+top:-320px;
+width:200px;
+height:150px;
+background:#b5b5b5;
+box-shadow: 5px 5px;
+font-family:'Bookman Old Style Курсив', 'Bookman Old Style';
+font-style:italic;
+font-weight:300;
+font-size:16px;	
+}
+
+#rectangle {
+	
+width: 100%;
+height: 35px;
+background:-webkit-linear-gradient(270deg, rgba(188, 188, 188, 1) 0%, rgba(188, 188, 188, 1) 0%, rgba(193, 207, 197, 1) 77%, rgba(228, 228, 228, 1) 100%, rgba(228, 228, 228, 1) 100%);
+background:-moz-linear-gradient(180deg, rgba(188, 188, 188, 1) 0%, rgba(188, 188, 188, 1) 0%, rgba(193, 207, 197, 1) 77%, rgba(228, 228, 228, 1) 100%, rgba(228, 228, 228, 1) 100%);
+background:linear-gradient(180deg, rgba(188, 188, 188, 1) 0%, rgba(188, 188, 188, 1) 0%, rgba(193, 207, 197, 1) 77%, rgba(228, 228, 228, 1) 100%, rgba(228, 228, 228, 1) 100%);
+border:none;
+}
+
+.content {
+height: calc(100vh - 35px);
+font-family:'Bookman Old Style Курсив', 'Bookman Old Style';
+font-weight:300;
+
+}
+.footer {
+height: 35px;
+font-family:'Bookman Old Style Курсив', 'Bookman Old Style';
+font-style:bold;
+font-weight:300;
+font-size:14px;	
+}
+#t1{
+position:relative;
+left:35px;
+top:-27px;
+}
+#t2{
+position:relative;
+left:700px;
+top:-27px;
+}
+#t3{
+position:relative;
+left:705px;
+top:-27px;
+}
+#icon{
+position:relative;
+left:150px;
+top:5px;
+}
+
+#rectangle1{
+width: 100%;
+height: 40px;
+background:-webkit-linear-gradient(270deg, rgba(0, 255, 204, 1) 0%, rgba(0, 255, 204, 1) 0%, rgba(0, 0, 204, 1) 0%, rgba(228, 228, 228, 1) 39%, rgba(45, 45, 208, 1) 97%, rgba(51, 153, 255, 1) 100%, rgba(228, 228, 228, 1) 100%, rgba(228, 228, 228, 1) 100%);
+background:-moz-linear-gradient(180deg, rgba(0, 255, 204, 1) 0%, rgba(0, 255, 204, 1) 0%, rgba(0, 0, 204, 1) 0%, rgba(228, 228, 228, 1) 39%, rgba(45, 45, 208, 1) 97%, rgba(51, 153, 255, 1) 100%, rgba(228, 228, 228, 1) 100%, rgba(228, 228, 228, 1) 100%);
+background:linear-gradient(180deg, rgba(0, 255, 204, 1) 0%, rgba(0, 255, 204, 1) 0%, rgba(0, 0, 204, 1) 0%, rgba(228, 228, 228, 1) 39%, rgba(45, 45, 208, 1) 97%, rgba(51, 153, 255, 1) 100%, rgba(228, 228, 228, 1) 100%, rgba(228, 228, 228, 1) 100%);
+box-sizing:border-box;
+}
+#icon1{
+position:relative;
+left:-60px;
+top:5px;
+}
+ 
+#login{
+position:absolute;
+left:40%;
+top:20%;
+}
+ 
+#enter{
+position:relative;
+left:30%;
+font-family:'Bookman Old Style Курсив', 'Bookman Old Style';
+
+}
+
+#register{
+position:absolute;
+left:41.5%;
+top:80%;
+font-family:'Bookman Old Style Курсив', 'Bookman Old Style';
+}
+
+#login{
+font-family:'Bookman Old Style Курсив', 'Bookman Old Style';
+font-style:oblique;
+font-weight:300;
+font-size:18px;	
+}
+
+#window{
+font-family:'Bookman Old Style Курсив', 'Bookman Old Style';
+font-style:italic;
+font-weight:300;
+font-size:14px;	
+}
+
+#right{
+position:relative;
+left:80px;	
+}
+
+#users{
+position:absolute;
+left:25%;
+top:80%;
+}
+
+#l1{
+position:absolute;
+left:27.5%;
+top:15%;
+font-size:20px;
+font-style:italic,bold;
+}
+
+#l2{
+position:absolute;
+left:25%;
+top:72%;
+}
+
+#l3{
+position:absolute;
+left:25%;
+top:65%;
+}
+
+#l4{
+position:absolute;
+left:40%;
+top:65%;
+}
+
+#l5{
+position:absolute;
+left:40%;
+top:87%;   
+}
+
+#l6{
+position:absolute;
+left:60%;
+top:15%;
+font-style:italic;
+}
+
+#img1{
+position:absolute;
+left:24%;
+top:24%;
+}
+
+#img2{
+position:absolute;
+left:57%;
+top:14%;
+}
+
+#img3{
+position:absolute;
+left:38%;
+top:20%;
+}
+
+#table1{
+    position:absolute;
+    left:65%;
+    top:25%;
+}
+#table2{
+    position:absolute;
+    left:15%;
+    top:25%;
+}
+
+#textarea1{
+position:absolute;
+left:60%;
+top:24%;
+height:150px;
+width:300px;
+}
+
+#textarea2{
+position:absolute;
+left:60%;
+top:54%;
+width:300px;
+height:50px;
+}
+
+#delete{
+position:absolute;
+left:60%;
+top:67%;
+}
+
+#send{
+position:absolute;
+left:75%;
+top:67%;
+}
+
+/* Базовые стили слоя, затемнения и модального окна */
+.overlay {
+top: 0;
+right: 0;
+bottom: 0;
+left: 0;
+z-index: 10;
+display: none;
+/* фон затемнения */
+background-color: rgba(0, 0, 0, 0.65);
+position: fixed; /* фиксированное позиционирование */
+cursor: default; /* тип курсора */
+}
+ 
+/* активируем слой затемнения */
+.overlay:target {
+display: block;
+}
+ 
+/* стили модального окна */
+.popup {
+top: -100%;
+right: 0;
+left: 50%;
+font-size: 14px;
+z-index: 20;
+margin: 0;
+width: 85%;
+min-width: 320px;
+max-width: 600px;
+/* фиксированное позиционирование, окно стабильно при прокрутке */
+position: fixed;
+padding: 15px;
+border: 1px solid #383838;
+background: #fefefe;
+/* скругление углов */
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+-ms-border-radius: 4px;
+border-radius: 4px;
+font: 14px/18px 'Tahoma', Arial, sans-serif;
+/* внешняя тень */
+-webkit-box-shadow: 0 15px 20px rgba(0,0,0,.22),0 19px 60px rgba(0,0,0,.3);
+-moz-box-shadow: 0 15px 20px rgba(0,0,0,.22),0 19px 60px rgba(0,0,0,.3);
+-ms-box-shadow: 0 15px 20px rgba(0,0,0,.22),0 19px 60px rgba(0,0,0,.3);
+box-shadow: 0 15px 20px rgba(0,0,0,.22),0 19px 60px rgba(0,0,0,.3);
+-webkit-transform: translate(-50%, -500%);
+-ms-transform: translate(-50%, -500%);
+-o-transform: translate(-50%, -500%);
+transform: translate(-50%, -500%);
+-webkit-transition: -webkit-transform 0.6s ease-out;
+-moz-transition: -moz-transform 0.6s ease-out;
+-o-transition: -o-transform 0.6s ease-out;
+transition: transform 0.6s ease-out;
+}
+ 
+/* активируем модальный блок */
+.overlay:target+.popup {
+-webkit-transform: translate(-50%, 0);
+-ms-transform: translate(-50%, 0);
+-o-transform: translate(-50%, 0);
+transform: translate(-50%, 0);
+top: 20%;
+}
+ 
+/* формируем кнопку закрытия */
+.close {
+top: -10px;
+right: -10px;
+width: 20px;
+height: 20px;
+position: absolute;
+padding: 0;
+border: 2px solid #ccc;
+-webkit-border-radius: 15px;
+-moz-border-radius: 15px;
+-ms-border-radius: 15px;
+-o-border-radius: 15px;
+border-radius: 15px;
+background-color: rgba(61, 61, 61, 0.8);
+-webkit-box-shadow: 0px 0px 10px #000;
+-moz-box-shadow: 0px 0px 10px #000;
+box-shadow: 0px 0px 10px #000;
+text-align: center;
+text-decoration: none;
+font: 13px/20px 'Tahoma', Arial, sans-serif;
+font-weight: bold;
+-webkit-transition: all ease .8s;
+-moz-transition: all ease .8s;
+-ms-transition: all ease .8s;
+-o-transition: all ease .8s;
+transition: all ease .8s;
+}
+ 
+.close:before {
+color: rgba(255, 255, 255, 0.9);
+content: "X";
+text-shadow: 0 -1px rgba(0, 0, 0, 0.9);
+font-size: 12px;
+}
+ 
+.close:hover {
+background-color: rgba(252, 20, 0, 0.8);
+-webkit-transform: rotate(360deg);
+-moz-transform: rotate(360deg);
+-ms-transform: rotate(360deg);
+-o-transform: rotate(360deg);
+transform: rotate(360deg);
+}
+
+#win3{
+font-family:'Bookman Old Style Курсив', 'Bookman Old Style';
+font-style:italic;
+font-weight:300;
+font-size:16px;		
+}
+
+#win4{
+font-family:'Bookman Old Style Курсив', 'Bookman Old Style';
+font-style:italic;
+font-weight:300;
+font-size:16px;	
+}
+
+#name7{
+font-family:'Bookman Old Style Курсив', 'Bookman Old Style';
+font-style:italic;
+font-weight:300;
+font-size:20px;	
+width:250px;
+background:#b5b5b5;
+box-shadow: 5px 5px;
+position:absolute;
+left:15%;
+top:10%;
+}
