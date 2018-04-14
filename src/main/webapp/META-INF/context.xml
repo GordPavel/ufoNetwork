@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context path="/">
     <!-- Specify a JDBC datasource -->
-
     <Resource name="jdbc/mydatabase"
               auth="Container"
               type="javax.sql.DataSource"
               username="postgres"
-              password="tempus"
+              password="pMJik"
               driverClassName="org.postgresql.Driver"
-              url="jdbc:postgresql://localhost:5432/ufonetwork"
+              url="jdbc:postgresql://localhost:5557/ufonetwork"
               validationQuery="select 1"
               maxActive="10"
               maxIdle="4"/>

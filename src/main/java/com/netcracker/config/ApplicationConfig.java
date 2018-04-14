@@ -10,7 +10,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 @Configuration
 @PropertySource( "classpath:jpa.properties" )
 @ComponentScan( basePackageClasses = Application.class )
-class ApplicationConfig{
+public class ApplicationConfig{
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer(){

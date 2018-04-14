@@ -23,7 +23,7 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories( basePackageClasses = Application.class )
-class JpaConfig{
+public class JpaConfig{
 
     @Value( "${jndi.name}" )           String jndiName;
     @Value( "${db.dialect}" ) private  String dialect;
