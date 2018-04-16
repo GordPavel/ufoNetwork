@@ -5,6 +5,7 @@ import org.hibernate.cfg.Environment;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jndi.JndiTemplate;
@@ -21,6 +22,7 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
+@PropertySource( "classpath:jpa.properties" )
 @EnableTransactionManagement
 @EnableJpaRepositories( basePackageClasses = Application.class )
 public class JpaConfig{
@@ -62,3 +64,4 @@ public class JpaConfig{
         return new JpaTransactionManager( entityManagerFactory );
     }
 }
+

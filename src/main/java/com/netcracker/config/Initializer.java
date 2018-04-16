@@ -6,17 +6,15 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
 public class Initializer implements WebApplicationInitializer{
-    private static final String DISPATCHER_SERVLET_NAME = "dispatcher";
 
     @Override
-    public void onStartup( ServletContext servletContext ) throws ServletException{
+    public void onStartup( ServletContext servletContext ){
         AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
         // регистрируем конфигурацию созданую высше
-        ctx.register( ApplicationConfig.class );
+        ctx.register( WebMvcConfig.class );
         // добавляем в контекст слушателя с нашей конфигурацией
         servletContext.addListener( new ContextLoaderListener( ctx ) );
 
@@ -24,7 +22,7 @@ public class Initializer implements WebApplicationInitializer{
 
         // настраиваем маппинг Dispatcher Servlet-а
         ServletRegistration.Dynamic servlet =
-                servletContext.addServlet( DISPATCHER_SERVLET_NAME , new DispatcherServlet( ctx ) );
+                servletContext.addServlet( "dispatcher" , new DispatcherServlet( ctx ) );
         servlet.addMapping( "/" );
         servlet.setLoadOnStartup( 1 );
     }
