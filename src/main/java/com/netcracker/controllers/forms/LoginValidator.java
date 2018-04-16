@@ -32,12 +32,12 @@ public class LoginValidator implements Validator{
         if( errors.hasErrors() ) return;
 
         LoginForm form = ( LoginForm ) o;
-        Specification<PersonEntity> login =
-                ( root , criteriaQuery , criteriaBuilder ) -> criteriaBuilder.equal( root.get(
-                        "login" ) , form.login );
-        Specification<PersonEntity> password =
-                ( root , criteriaQuery , criteriaBuilder ) -> criteriaBuilder.equal( root.get(
-                        "pass" ) , form.pass );
+        Specification<PersonEntity> login = ( root , criteriaQuery , criteriaBuilder ) -> {
+            return criteriaBuilder.equal( root.get( "login" ) , form.login );
+        };
+        Specification<PersonEntity> password = ( root , criteriaQuery , criteriaBuilder ) -> {
+            return criteriaBuilder.equal( root.get( "pass" ) , form.pass );
+        };
         if( !personRepository.findOne( login.and( password ) ).isPresent() ){
             errors.rejectValue( "login" ,
                                 "" ,

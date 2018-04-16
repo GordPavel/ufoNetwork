@@ -25,9 +25,10 @@ import java.util.Properties;
 @EnableJpaRepositories( basePackageClasses = Application.class )
 public class JpaConfig{
 
-    @Value( "${jndi.name}" )           String jndiName;
-    @Value( "${db.dialect}" ) private  String dialect;
-    @Value( "${db.show_sql}" ) private String showSql;
+    @Value( "${jndi.name}" ) private         String jndiName;
+    @Value( "${db.dialect}" ) private        String dialect;
+    @Value( "${db.default.schema}" ) private String schema;
+    @Value( "${db.show_sql}" ) private       String showSql;
 
     @Bean
     public DataSource dataSource() throws NamingException{
@@ -49,6 +50,7 @@ public class JpaConfig{
         Properties jpaProperties = new Properties();
         jpaProperties.put( Environment.DIALECT , dialect );
         jpaProperties.put( Environment.SHOW_SQL , showSql );
+        jpaProperties.put( Environment.DEFAULT_SCHEMA , schema );
         entityManagerFactoryBean.setJpaProperties( jpaProperties );
 
         return entityManagerFactoryBean;

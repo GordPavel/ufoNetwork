@@ -14,27 +14,28 @@ import java.util.List;
 @RequiredArgsConstructor
 @NoArgsConstructor( access = AccessLevel.PROTECTED )
 public class GroupEntity{
+
     @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY )
+    @GeneratedValue( strategy = GenerationType.AUTO )
     @Column( name = "id" )
-    private Long   id;
+    private Long id;
+
     @Basic
     @Column( name = "name", unique = true, nullable = false )
     @NonNull
     private String name;
+
     @Basic
     @Column( name = "media" )
     private byte[] media;
 
-    //    todo Осторожнее с полями, у которых FetchType.LAZY, потому что они загружаются лениво, то
-// есть только после первого обращения к ним
-    @ManyToOne( cascade = CascadeType.DETACH )
+    @ManyToOne
     @JoinColumn( name = "owner_group" )
     @NonNull
     private PersonEntity owner;
 
-    @ManyToMany( mappedBy = "groups" ) private List<PersonEntity>  users;
-    @OneToMany( cascade = CascadeType.DETACH,
-                fetch = FetchType.EAGER,
-                mappedBy = "toGroup" ) private List<MessageEntity> messages;
+    @ManyToMany( mappedBy = "groups", cascade = CascadeType.DETACH, fetch = FetchType.EAGER )
+    private List<PersonEntity> users;
+
+    @OneToMany( mappedBy = "toGroup" ) private List<MessageEntity> messages;
 }

@@ -37,7 +37,7 @@ public class PersonPageController{
             @CookieValue( name = "userID" )
                     Long userId , Model model ){
 //        todo Не авторизованный пользователь
-        if( userId == null ) return "forward:/";
+        if( userId == null ) return "redirect:/";
         Optional<PersonEntity> one = personRepository.findById( id );
         if( one.isPresent() ){
             model.addAttribute( "person" , one.get() );

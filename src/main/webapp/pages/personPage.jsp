@@ -9,23 +9,25 @@
     <title> Профиль пользователя</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="<c:url value="/resources/js/bootstrap.min.js"/>"></script>
+    <%--@elvariable id="person" type="com.netcracker.DAO.PersonEntity"--%>
 </head>
 
 <body>
 <%@include file="/resources/templates/header.jsp" %>
 <div class="content">
-    <div id="img3"><img src='images\u157.png'></div>
+    <div id="img3">
+        <img src='<c:url value="/user-${person.id}/image"/>' style="width:100px;height:100px;">
+    </div>
     <div id="table1">
         <label id="t1">Список групп</label>
         <div class="list-group">
-            <a href="#" class="list-group-item">Группа1</a>
-            <a href="#" class="list-group-item">Группа2</a>
-            <a href="#" class="list-group-item">Группа3</a>
+            <c:forEach items="${person.groups}" var="group">
+                <a href="<c:url value="/group-${group.id}}"/>" class="list-group-item">${group.name}</a>
+            </c:forEach>
         </div>
-
     </div>
     <div id="name7">
-        <p>Имя:</p>
+        <p>Имя: ${person.name}</p>
     </div>
     <div id="table2">
         <table>
@@ -33,39 +35,15 @@
                 <th align='center'>Личные данные</th>
             </tr> <!--ряд с ячейками заголовков-->
             <tr>
-                <td align='left'>Возраст:</td>
+                <td align='left'>Возраст: ${person.age}</td>
             </tr>
             <tr>
-                <td align='left'>Пол:</td>
+                <td align='left'>Пол:${person.sex}</td>
             </tr>
             <tr>
-                <td align='left'>Раса:</td>
+                <td align='left'>Раса:${person.race.name}</td>
             </tr>          <!--ряд с ячейками тела таблицы-->
         </table>
-        <a href="#x" class="overlay" id="win1"></a>
-        <div class="popup" id="win3">
-            <p>Название:
-            <p></p><input name="name"></p>
-            <p>Создатель:
-            <p></p><input name="creator"></p>
-            <p>Категории:</p>
-            <p>Здесь может быть организован поиск по группам</p>
-            <button class="btn" onclick=""> Поиск</button>
-            <a class="close" title="Закрыть" href="#close"></a>
-        </div>
-        <a href="#x" class="overlay" id="win2"></a>
-        <div class="popup" id="win4">
-            <p>Имя:
-            <p></p><input name="nam"></p>
-            <p>Раса:
-            <p></p><input name="race"></p>
-            <p>Возраст:
-            <p></p><input name="age"></p>
-            <p>Пол:
-            <p></p><input name="sex"></p>
-            <button class="btn" onclick=""> Поиск</button>
-            <a class="close" title="Закрыть" href="#close"></a>
-        </div>
     </div>
 </div>
 <%@include file="/resources/templates/footer.jsp" %>

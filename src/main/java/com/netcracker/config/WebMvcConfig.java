@@ -2,6 +2,7 @@ package com.netcracker.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -24,6 +25,7 @@ public class WebMvcConfig extends WebMvcConfigurationSupport{
 
     @Override
     public void configureMessageConverters( List<HttpMessageConverter<?>> converters ){
+        converters.add( new ByteArrayHttpMessageConverter() );
         converters.add( new MappingJackson2HttpMessageConverter() );
         super.configureMessageConverters( converters );
     }
@@ -70,7 +72,7 @@ public class WebMvcConfig extends WebMvcConfigurationSupport{
         registry.addResourceHandler( "/resources/**" ).addResourceLocations( "/resources/" );
     }
 
-//    Сам хз, но без этого не работает
+    //    Сам хз, но без этого не работает
     @Override
     @Bean
     public HandlerMapping resourceHandlerMapping(){

@@ -15,15 +15,17 @@ import java.util.List;
 @EqualsAndHashCode( of = "id" )
 @ToString( exclude = "persons" )
 public class RaceEntity{
+
     @Id
     @SequenceGenerator( name = "race_id", sequenceName = "race_id_seq" )
     @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "race_id" )
     @Column( name = "id" )
-    private Long               id;
+    private Long id;
+
     @Basic
     @Column( name = "name", unique = true, updatable = false, nullable = false )
-    private String             name;
-    @Transient
+    private String name;
+
     @OneToMany( fetch = FetchType.LAZY, mappedBy = "race" )
     private List<PersonEntity> persons;
 }

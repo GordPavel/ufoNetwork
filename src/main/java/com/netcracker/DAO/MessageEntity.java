@@ -17,8 +17,7 @@ import java.sql.Date;
 public class MessageEntity{
 
     @Id
-    @SequenceGenerator( name = "message_id", sequenceName = "message_id_seq" )
-    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "message_id" )
+    @GeneratedValue( strategy = GenerationType.AUTO )
     @Column( name = "id" )
     private Long id;
 
@@ -26,16 +25,18 @@ public class MessageEntity{
     @JoinColumn( name = "writer" )
     private PersonEntity writer;
 
-    @ManyToOne( cascade = CascadeType.DETACH, fetch = FetchType.EAGER, optional = false )
+    @ManyToOne( optional = false )
     @JoinColumn( name = "to_group", nullable = false )
     private GroupEntity toGroup;
 
     @Basic
     @Column( name = "text", nullable = false )
     private String text;
+
     @Basic
     @Column( name = "date_of_submition", nullable = false )
-    private Date   dateOfSubmition;
+    private Date dateOfSubmition;
+
     @Basic
     @Column( name = "media" )
     private byte[] media;
