@@ -1,7 +1,6 @@
 package com.netcracker.impl;
 
 import com.netcracker.DAO.GroupEntity;
-import com.netcracker.DAO.PersonEntity;
 import com.netcracker.repository.GroupRepository;
 import com.netcracker.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,27 +29,12 @@ public class GroupServiceImplementation implements GroupService{
     }
 
     @Override
-    public List<PersonEntity> getMembers( Long id ){
-        return groupRepository.getOne( id ).getUsers();
-    }
-
-    @Override
     public GroupEntity getById( Long id ){
         return groupRepository.getOne( id );
     }
 
     @Override
-    public List<GroupEntity> getAll(){
-        return groupRepository.findAll();
-    }
-
-    @Override
     public GroupEntity editGroup( GroupEntity groupEntity ){
         return groupRepository.saveAndFlush( groupEntity );
-    }
-
-    @Override
-    public List<GroupEntity> getByOwner( PersonEntity personEntity ){
-        return groupRepository.getByOwner( personEntity );
     }
 }

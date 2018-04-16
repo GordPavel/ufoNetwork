@@ -1,11 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE HTML>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/bootstrap.min.css"/>"/>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/1.css"/>"/>
+    <jsp:include page="/resources/templates/includes.jsp"/>
     <title> Страничка входа</title>
     <script type="text/javascript">
         function show(state) {
@@ -15,97 +15,115 @@
     </script>
 </head>
 <body>
-<div class="header">
-    <div id="mainmenu">
-        <ul class="nav navbar-nav">
-            <img id="icon1" src='<c:url value="/resources/images/favicon.ico"/>' width='30'
-                 height='30'
-                 align='left'>
-            <li class="dropdown"><a href="#" data-toggle="dropdown"><span class="glyphicon glyphicon-search"></span>
-                Поиск <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                    <li><a href="#win1">Группы</a></li>
-                    <li><a href="#win2">Пользователи</a></li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-</div>
-
+<%@include file="/resources/templates/header.jsp" %>
 <div class="content">
     <div onclick="show('none')" id="wrap"></div>
+
     <!-- Всплывающее окно-->
     <%--todo Окно регистрации--%>
-    <div id="window">
-        <!-- Крестик-->
-        <span class="close" onclick="show('none')">X</span>
-        <p>Логин:
-        <p></p><input name="user"></p>
-        <p>Имя:
-        <p></p><input name="nam"></p>
-        <p>Раса:
-        <p></p><input name="race"></p>
-        <p>Возраст:
-        <p></p><input name="age"></p>
-        <p>Пол:
-        <p></p><input name="sex"></p>
-        <p>Пароль:
-        <p></p><input name="pass" type="password"></p>
-        <p>Подтверждение пароля:
-        <p></p><input name="sub_pass" type="password"></p>
-        <p> &nbsp; </p>
-        <p> &nbsp; </p>
-        <button class="btn" onclick="show('none')" align="left"> Отмена</button>
-        <button class="btn" onclick="" id="right"> Зарегистрироваться</button>
-    </div>
-    <a href="#x" class="overlay" id="win1"></a>
-    <div class="popup" id="win3">
-        <p>Название:
-        <p></p><input name="name"></p>
-        <p>Создатель:
-        <p></p><input name="creator"></p>
-        <p>Категории:</p>
-        <p>Здесь может быть организован поиск по группам</p>
-        <button class="btn" onclick=""> Поиск</button>
-        <a class="close" title="Закрыть" href="#close"></a>
-    </div>
-    <a href="#x" class="overlay" id="win2"></a>
-    <div class="popup" id="win4">
-        <p>Имя:
-        <p></p><input name="nam"></p>
-        <p>Раса:
-        <p></p><input name="race"></p>
-        <p>Возраст:
-        <p></p><input name="age"></p>
-        <p>Пол:
-        <p></p><input name="sex"></p>
-        <button class="btn" onclick=""> Поиск</button>
-        <a class="close" title="Закрыть" href="#close"></a>
-    </div>
-    <form:form method="post" id="login" autocomplete="on">
-        <p>
-            <ins>Логин:</ins>
-        <p> &nbsp; </p> <input name="user"/>
-        <p>
-            <ins>Пароль:</ins>
-        <p> &nbsp; </p> <input name="pass" type="password"/>
-        <p> &nbsp; </p>
-        <button class="btn" type="submit" id="enter"> Войти</button>
-        <p> &nbsp; </p>
-        <p> &nbsp; </p>
+    <c:url value="/registration" var="registrationUrl"/>
+    <form:form method="post" action="${registrationUrl}" modelAttribute="registrationForm"
+               enctype="multipart/form-data">
+        <div id="window">
+            <!-- Крестик-->
+            <span class="close" onclick="show('none')">X</span>
+
+            <label>Логин</label>
+            <spring:bind path="login">
+                <div>
+                    <form:input class="form-control" path="login"/><span></span>
+                    <form:errors path="login"/>
+                </div>
+            </spring:bind>
+
+            <label>Имя</label>
+            <spring:bind path="name">
+                <div>
+                    <form:input class="form-control" path="name"/><span></span>
+                    <form:errors path="name"/>
+                </div>
+            </spring:bind>
+
+            <label>Раса</label>
+            <spring:bind path="race">
+                <div>
+                    <form:input class="form-control" path="race"/><span></span>
+                    <form:errors path="race"/>
+                </div>
+            </spring:bind>
+
+            <label>Возраст</label>
+            <spring:bind path="age">
+                <div>
+                    <form:input class="form-control" path="age"/><span></span>
+                    <form:errors path="age"/>
+                </div>
+            </spring:bind>
+
+            <label>Пол</label>
+            <spring:bind path="sex">
+                <div>
+                    <form:input class="form-control" path="sex"/><span></span>
+                    <form:errors path="sex"/>
+                </div>
+            </spring:bind>
+
+            <label>Пароль</label>
+            <spring:bind path="pass">
+                <div>
+                    <form:input class="form-control" type="password" path="pass"/><span></span>
+                    <form:errors path="pass"/>
+                </div>
+            </spring:bind>
+
+            <label>Подтверджение пароля</label>
+            <spring:bind path="passAccept">
+                <div>
+                    <form:input class="form-control" type="password" path="passAccept"/><span></span>
+                    <form:errors path="passAccept"/>
+                </div>
+            </spring:bind>
+
+            <label>Фотография</label>
+            <spring:bind path="image">
+                <div>
+                    <form:input type="file" class="form-control" path="image"/><span></span>
+                    <form:errors path="image"/>
+                </div>
+            </spring:bind>
+
+            <button class="btn" onclick="show('none')" align="left"> Отмена</button>
+            <button class="btn" id="right"> Зарегистрироваться</button>
+        </div>
+    </form:form>
+    <form:form method="post" modelAttribute="loginForm">
+        <spring:bind path="login">
+            <div class="form-group ${status.error ? 'has-error' : ''}">
+                <label class="col-sm-2 control-label">Логин</label>
+                <div class="col-sm-10">
+                    <form:input path="login" class="form-control"
+                                id="name" placeholder="Логин"/>
+                    <form:errors path="login" class="control-label"/>
+                </div>
+            </div>
+        </spring:bind>
+        <spring:bind path="pass">
+            <div class="form-group ${status.error ? 'has-error' : ''}">
+                <label class="col-sm-2 control-label">Пароль</label>
+                <div class="col-sm-10">
+                    <form:password path="pass" class="form-control"
+                                id="name" placeholder="Логин"/>
+                    <form:errors path="pass" class="control-label"/>
+                </div>
+            </div>
+        </spring:bind>
+        <button type="submit" class="btn" id="enter"> Войти </button>
     </form:form>
     <!--Кнопка-->
     <button class="btn" id="register" onclick="show('block')" align="center"> Зарегистрироваться</button>
 
     <!--<p><input type="submit" value="Войти"></p>-->
 </div>
-
-
-<div class="footer">
-    <div id="rectangle"></div>
-    <label id="t1">SpaceNet © 2018</label>
-    <label id="t2">О проекте |</label>
-    <label id="t3">О разработчиках</label>
-</div>
+<%@include file="/resources/templates/footer.jsp" %>
 </body>
 </html>

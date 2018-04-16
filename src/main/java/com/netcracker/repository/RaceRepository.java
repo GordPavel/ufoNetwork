@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
  Repository interface for Races
  */
@@ -15,8 +17,8 @@ public interface RaceRepository extends JpaRepository<RaceEntity, Long>{
     /**
      search for race with name...
      */
-    @Query( "select re from RaceEntity re where re.name like ?1" )
-    RaceEntity getByName(
+    @Query( "select re from RaceEntity re where re.name like :name" )
+    Optional<RaceEntity> getByName(
             @Param( "name" )
                     String name );
 }

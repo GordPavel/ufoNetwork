@@ -4,6 +4,7 @@ import com.netcracker.DAO.GroupEntity;
 import com.netcracker.DAO.PersonEntity;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PersonService{
 
@@ -81,20 +82,11 @@ public interface PersonService{
     void leaveGroup( Long groupId , Long userId );
 
     /**
-     login person
-
-     @param login    - person`s login
-     @param password - person`s password
-
-     @return - logined person
-     */
-    PersonEntity loginPerson( String login , String password );
-
-    /**
      Find one user by login
 
      @param login login of user
+
      @return person entity from DB
      */
-    PersonEntity getByLogin( String login );
+    Optional<PersonEntity> getByLogin( String login );
 }

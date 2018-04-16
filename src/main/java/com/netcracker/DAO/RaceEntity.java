@@ -19,11 +19,11 @@ public class RaceEntity{
     @SequenceGenerator( name = "race_id", sequenceName = "race_id_seq" )
     @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "race_id" )
     @Column( name = "id" )
-    private                                 Long               id;
+    private Long               id;
     @Basic
     @Column( name = "name", unique = true, updatable = false, nullable = false )
-    private                                 String             name;
-    @OneToMany( cascade = CascadeType.DETACH,
-                fetch = FetchType.EAGER,
-                mappedBy = "race" ) private List<PersonEntity> persons;
+    private String             name;
+    @Transient
+    @OneToMany( fetch = FetchType.LAZY, mappedBy = "race" )
+    private List<PersonEntity> persons;
 }

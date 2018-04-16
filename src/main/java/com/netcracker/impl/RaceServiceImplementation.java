@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RaceServiceImplementation implements RaceService{
@@ -26,8 +27,7 @@ public class RaceServiceImplementation implements RaceService{
     }
 
     @Override
-    public RaceEntity getByName( String name ){
-
+    public Optional<RaceEntity> getByName( String name ){
         return raceRepository.getByName( name );
     }
 
@@ -44,7 +44,7 @@ public class RaceServiceImplementation implements RaceService{
     }
 
     @Override
-    public RaceEntity getById(Long id){
-        return raceRepository.getOne(id);
+    public RaceEntity getById( Long id ){
+        return raceRepository.getOne( id );
     }
 }

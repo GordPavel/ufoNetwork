@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="EntryPointsManager">
+    <list size="8">
+      <item index="0" class="java.lang.String" itemvalue="org.junit.Before" />
+      <item index="1" class="java.lang.String" itemvalue="org.junit.jupiter.api.BeforeAll" />
+      <item index="2" class="java.lang.String" itemvalue="org.springframework.web.bind.annotation.DeleteMapping" />
+      <item index="3" class="java.lang.String" itemvalue="org.springframework.web.bind.annotation.GetMapping" />
+      <item index="4" class="java.lang.String" itemvalue="org.springframework.web.bind.annotation.InitBinder" />
+      <item index="5" class="java.lang.String" itemvalue="org.springframework.web.bind.annotation.ModelAttribute" />
+      <item index="6" class="java.lang.String" itemvalue="org.springframework.web.bind.annotation.PostMapping" />
+      <item index="7" class="java.lang.String" itemvalue="org.springframework.web.bind.annotation.RequestMapping" />
+    </list>
+  </component>
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$" />
   </component>

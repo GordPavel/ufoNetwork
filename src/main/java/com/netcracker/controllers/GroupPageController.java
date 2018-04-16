@@ -2,6 +2,7 @@ package com.netcracker.controllers;
 
 import com.netcracker.DAO.GroupEntity;
 import com.netcracker.DAO.MessageEntity;
+import com.netcracker.repository.MessageRepository;
 import com.netcracker.service.GroupService;
 import com.netcracker.service.MessageService;
 import com.netcracker.service.PersonService;
@@ -15,7 +16,7 @@ import java.util.regex.Pattern;
 
 
 /**
- * Controller for groups. Group page, group create, group settings
+ Controller for groups. Group page, group create, group settings
  */
 @Controller
 @RequestMapping( "/groups" )
@@ -23,25 +24,27 @@ public class GroupPageController{
 
     @Autowired PersonService personService;
 
-    @Autowired MessageService messageService;
+    @Autowired MessageService    messageService;
+    @Autowired MessageRepository messageRepository;
 
     @Autowired GroupService groupService;
 
     /**
-     * Open group page
-     * @param id - group ID, path
-     * @param model - model to store params
-     * @return - group page
+     Open group page
+
+     @param id    - group ID, path
+     @param model - model to store params
+
+     @return - group page
      */
-    @GetMapping( value = "/{id}")
+    @GetMapping( value = "/{id}" )
     public String openPage(
             @PathVariable( value = "id" )
-                    Long id,
-            @CookieValue(name = "userID", defaultValue = "")
-                    Long userId,
-            Model model ){
+                    Long id ,
+            @CookieValue( name = "userID", defaultValue = "" )
+                    Long userId , Model model ){
 
-        if (userId == null){
+        if( userId == null ){
             return "redirect:/";
         }
 
@@ -52,12 +55,14 @@ public class GroupPageController{
     }
 
     /**
-     * Posting message in group
-     * @param writer - cookied user ID who post this message
-     * @param messageText - message text
-     * @param id - group ID, path
-     * @param model - model to store params
-     * @return - group page
+     Posting message in group
+
+     @param writer      - cookied user ID who post this message
+     @param messageText - message text
+     @param id          - group ID, path
+     @param model       - model to store params
+
+     @return - group page
      */
     @PostMapping( value = "/{id}", params = "message" )
     public String postMessage(
@@ -68,7 +73,7 @@ public class GroupPageController{
             @PathVariable( value = "id" )
                     Long id , Model model ){
 
-        if (writer == null){
+        if( writer == null ){
             return "redirect:/";
         }
 
@@ -78,11 +83,11 @@ public class GroupPageController{
         messageEntity.setText( messageText );
         messageEntity.setWriter( personService.getById( writer ) );
 
-        if (groupService.getById(id).getUsers().contains(writer)) {
-            messageService.addMessage(messageEntity);
-        } else {
+        if( groupService.getById( id ).getUsers().contains( writer ) ){
+            messageService.addMessage( messageEntity );
+        }else{
             //TODO: error mesage implementation
-            model.addAttribute("error_message","user can`t write here");
+            model.addAttribute( "error_message" , "user can`t write here" );
         }
 
         model.addAttribute( "group" , groupService.getById( id ) );
@@ -91,11 +96,13 @@ public class GroupPageController{
     }
 
     /**
-     * Delete message from group
-     * @param messageId - message to delete
-     * @param id - group ID, path
-     * @param model - model to store params
-     * @return - group page
+     Delete message from group
+
+     @param messageId - message to delete
+     @param id        - group ID, path
+     @param model     - model to store params
+
+     @return - group page
      */
     @DeleteMapping( value = "/{id}", params = "messageId" )
     public String deleteMessage(
@@ -103,19 +110,19 @@ public class GroupPageController{
                     Long messageId ,
             @PathVariable( value = "id" )
                     Long id ,
-            @CookieValue(name = "userID")
-                    Long userId,
-            Model model ){
+            @CookieValue( name = "userID" )
+                    Long userId , Model model ){
 
-        if (userId == null){
+        if( userId == null ){
             return "redirect:/";
         }
 
-        if (messageService.getMessageById(messageId).getWriter().equals(userId)||
-                messageService.getMessageById(messageId).getToGroup().getOwner().equals(userId)) {
-            //TODO: error mesage implementation
-            model.addAttribute("error_message","user can`t delete this");
-            messageService.delete(messageId);
+        MessageEntity message = messageRepository.getOne( messageId );
+        if( message.getWriter().getId().equals( userId ) ||
+            message.getToGroup().getOwner().getId().equals( userId ) ){
+            //TODO: error message implementation
+            model.addAttribute( "error_message" , "user can`t delete this" );
+            messageService.delete( messageId );
         }
         model.addAttribute( "group" , groupService.getById( id ) );
 
@@ -123,11 +130,13 @@ public class GroupPageController{
     }
 
     /**
-     * Joining the group
-     * @param join - cookied user ID, who wants to join
-     * @param id - group ID, path, where to join
-     * @param model - model to store params
-     * @return - group page
+     Joining the group
+
+     @param join  - cookied user ID, who wants to join
+     @param id    - group ID, path, where to join
+     @param model - model to store params
+
+     @return - group page
      */
     @PostMapping( value = "/{id}/join" )
     public String joinGroup(
@@ -136,15 +145,15 @@ public class GroupPageController{
             @PathVariable( value = "id" )
                     Long id , Model model ){
 
-        if (join == null){
+        if( join == null ){
             return "redirect:/";
         }
 
-        if (!personService.getById(join).getGroups().contains(groupService.getById(id))) {
-            personService.joinGroup(id, join);
-        } else {
+        if( !personService.getById( join ).getGroups().contains( groupService.getById( id ) ) ){
+            personService.joinGroup( id , join );
+        }else{
             //TODO: error mesage implementation
-            model.addAttribute("error_message","user already in group");
+            model.addAttribute( "error_message" , "user already in group" );
         }
         model.addAttribute( "group" , groupService.getById( id ) );
 
@@ -152,11 +161,13 @@ public class GroupPageController{
     }
 
     /**
-     * Leaving the group
-     * @param leave - cookied user ID, who wants to leave
-     * @param id - group ID, path, from where leave
-     * @param model - model to store params
-     * @return - group page
+     Leaving the group
+
+     @param leave - cookied user ID, who wants to leave
+     @param id    - group ID, path, from where leave
+     @param model - model to store params
+
+     @return - group page
      */
     @PostMapping( value = "/{id}/leave" )
     public String leaveGroup(
@@ -165,15 +176,15 @@ public class GroupPageController{
             @PathVariable( value = "id" )
                     Long id , Model model ){
 
-        if (leave == null){
+        if( leave == null ){
             return "redirect:/";
         }
 
-        if (personService.getById(leave).getGroups().contains(groupService.getById(id))) {
-            personService.leaveGroup(id, leave);
-        } else {
+        if( personService.getById( leave ).getGroups().contains( groupService.getById( id ) ) ){
+            personService.leaveGroup( id , leave );
+        }else{
             //TODO: error mesage implementation
-            model.addAttribute("error_message","user not in group");
+            model.addAttribute( "error_message" , "user not in group" );
         }
         model.addAttribute( "group" , groupService.getById( id ) );
 
@@ -183,20 +194,21 @@ public class GroupPageController{
     //Group creation
 
     /**
-     * open group crate page
-     * @param name - name of group, param to pre-fill name page
-     * @param model - model to store params
-     * @return - group creation page
+     open group crate page
+
+     @param name  - name of group, param to pre-fill name page
+     @param model - model to store params
+
+     @return - group creation page
      */
     @GetMapping( value = "/create" )
     public String openGroupCreatePage(
             @RequestParam( value = "name", defaultValue = "" )
                     String name ,
-            @CookieValue( name = "userID", defaultValue = "")
-                    Long userId,
-            Model model ){
+            @CookieValue( name = "userID", defaultValue = "" )
+                    Long userId , Model model ){
 
-        if (userId == null){
+        if( userId == null ){
             return "redirect:/";
         }
 
@@ -206,11 +218,13 @@ public class GroupPageController{
     }
 
     /**
-     * Creating page
-     * @param name - name of group
-     * @param model - model to store params
-     * @param ownerID - cookied user ID, owner of new group
-     * @return - group page
+     Creating page
+
+     @param name    - name of group
+     @param model   - model to store params
+     @param ownerID - cookied user ID, owner of new group
+
+     @return - group page
      */
     @PostMapping( value = "/create" )
     public String createGroup(
@@ -221,19 +235,19 @@ public class GroupPageController{
 
 //        todo : Валидация данных
 
-        if (ownerID == null){
+        if( ownerID == null ){
             return "redirect:/";
         }
 
-        Pattern p = Pattern.compile("[\\d\\s-_]+");
-        Matcher m = p.matcher(name);
-        if (m.matches()) {
+        Pattern p = Pattern.compile( "[\\d\\s-_]+" );
+        Matcher m = p.matcher( name );
+        if( m.matches() ){
             GroupEntity groupEntity = new GroupEntity( name , personService.getById( ownerID ) );
             groupService.addGroup( groupEntity );
             model.addAttribute( "group" , groupEntity );
-        } else{
+        }else{
             //TODO: error mesage implementation
-            model.addAttribute("error_message","unacceptable name");
+            model.addAttribute( "error_message" , "unacceptable name" );
             return "groupCreatePage";
         }
 
@@ -243,19 +257,20 @@ public class GroupPageController{
     //Group settings
 
     /**
-     * open settings page
-     * @param id - group ID, path
-     * @param model - model to store params
-     * @return - group settings page
+     open settings page
+
+     @param id    - group ID, path
+     @param model - model to store params
+
+     @return - group settings page
      */
-    @GetMapping( value = "/{id}/settings")
+    @GetMapping( value = "/{id}/settings" )
     public String openSettings(
             @PathVariable( value = "id" )
-                    Long id,
-            @CookieValue( name = "userID")
-                    Long userId,
-            Model model ){
-        if ((userId == null)||(groupService.getById(id).getOwner().getId()!=userId)){
+                    Long id ,
+            @CookieValue( name = "userID" )
+                    Long userId , Model model ){
+        if( ( userId == null ) || ( groupService.getById( id ).getOwner().getId() != userId ) ){
             return "redirect:/";
         }
         model.addAttribute( "group" , groupService.getById( id ) );
@@ -263,11 +278,13 @@ public class GroupPageController{
     }
 
     /**
-     * update settings of group
-     * @param newName - new name of group
-     * @param id - group ID, path
-     * @param model - model to store params
-     * @return - group settings page
+     update settings of group
+
+     @param newName - new name of group
+     @param id      - group ID, path
+     @param model   - model to store params
+
+     @return - group settings page
      */
     @PostMapping( value = "/{id}/settings", params = "newName" )
     public String updateGroup(
@@ -275,11 +292,10 @@ public class GroupPageController{
                     String newName ,
             @PathVariable( value = "id" )
                     Long id ,
-            @CookieValue( name = "userID", defaultValue = "")
-                    Long userId,
-            Model model ){
+            @CookieValue( name = "userID", defaultValue = "" )
+                    Long userId , Model model ){
 
-        if ((userId == null)||(groupService.getById(id).getOwner().getId()!=userId)){
+        if( ( userId == null ) || ( groupService.getById( id ).getOwner().getId() != userId ) ){
             return "redirect:/";
         }
 

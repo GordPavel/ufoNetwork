@@ -5,16 +5,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import org.springframework.web.servlet.handler.AbstractHandlerMapping;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
-import java.time.Duration;
 import java.util.List;
 
 @Configuration
@@ -66,10 +67,17 @@ public class WebMvcConfig extends WebMvcConfigurationSupport{
 
     @Override
     public void addResourceHandlers( ResourceHandlerRegistry registry ){
-        String resources = "/resources/";
-        registry.addResourceHandler( resources + "**" )
-                .addResourceLocations( resources )
-                .setCachePeriod( ( int ) Duration.ofDays( 1 ).getSeconds() );
+        registry.addResourceHandler( "/resources/**" ).addResourceLocations( "/resources/" );
+    }
+
+//    Сам хз, но без этого не работает
+    @Override
+    @Bean
+    public HandlerMapping resourceHandlerMapping(){
+        AbstractHandlerMapping handlerMapping =
+                ( AbstractHandlerMapping ) super.resourceHandlerMapping();
+        handlerMapping.setOrder( -1 );
+        return handlerMapping;
     }
 
     @Override

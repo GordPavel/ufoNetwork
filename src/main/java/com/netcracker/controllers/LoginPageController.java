@@ -1,186 +1,149 @@
 package com.netcracker.controllers;
 
 import com.netcracker.DAO.PersonEntity;
+import com.netcracker.controllers.forms.LoginForm;
+import com.netcracker.controllers.forms.LoginValidator;
+import com.netcracker.controllers.forms.RegistrationValidator;
+import com.netcracker.controllers.forms.RegistrationForm;
 import com.netcracker.service.PersonService;
 import com.netcracker.service.RaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.time.Duration;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
- * Controller for login, registration page
+ Controller for login, registration page
  */
 @Controller
-@RequestMapping( "/" )
+@RequestMapping
 public class LoginPageController{
 
-    @Autowired
-    PersonService personService;
-    @Autowired
-    RaceService raceService;
+    @Autowired PersonService         personService;
+    @Autowired RaceService           raceService;
+    @Autowired RegistrationValidator registrationValidator;
+    @Autowired LoginValidator        loginValidator;
+
+    @InitBinder( "loginForm" )
+    protected void initLoginBinder( WebDataBinder binder ){
+        binder.setValidator( loginValidator );
+    }
+
+    @InitBinder( "registrationForm" )
+    protected void initRegistrationBinder( WebDataBinder binder ){
+        binder.setValidator( registrationValidator );
+    }
+
+    @ModelAttribute( "loginForm" )
+    public LoginForm loginForm(){
+        return new LoginForm();
+    }
+
+    @ModelAttribute( "registrationForm" )
+    public RegistrationForm registrationForm(){
+        return new RegistrationForm();
+    }
 
     /**
-     * Open login page
-     * @param login - user`s login to pre-filling page
-     * @param model - model to store params
-     * @return login page
-     */
-    @GetMapping( )
-    public String open(
-            @RequestParam( value = "login", defaultValue = "" )
-                    String login , Model model ){
+     Open login page
 
-        model.addAttribute( "login" , login );
+     @return login page
+     */
+    @GetMapping
+    public String open( Model model ){
         return "loginPage";
     }
 
     /**
-     * Logining out, cleaning cookie
-     * @param response - clear cookie
-     * @return login page
-     */
-    @GetMapping(value = "/logout")
-    public String logout(
-          HttpServletResponse response ){
+     Logining out, cleaning cookie
 
-        response.addCookie( new Cookie( "userID" , null ) );
-        return "loginPage";
+     @param response - clear cookie
+
+     @return login page
+     */
+    @GetMapping( value = "/logout" )
+    public String logout( HttpServletResponse response ){
+        response.addCookie( getCookie( null ) );
+        return "redirect:/";
     }
 
     /**
-     * Login.
-     * @param login - user`s login
-     * @param password - user`s password
-     * @param model - model to store params
-     * @param response - add cookie
-     * @return logined users page
+     Login.
+
+     @param loginForm - form with login data
+     @param model     - model to store params
+     @param response  - add cookie
+
+     @return logined users page
      */
-    @PostMapping( )
+    @PostMapping
     public String login(
-            @RequestParam( value = "login", defaultValue = "" )
-                    String login ,
-            @RequestParam( value = "password", defaultValue = "" )
-                    String password , Model model , HttpServletResponse response ){
-
-        PersonEntity personEntity = personService.getByLogin( login );
-
-        if( password.equals( personEntity.getPass() ) ){
-            model.addAttribute( "person" , personEntity );
-
-//            Для автоматического удаления кук через 3 часа
-            Cookie id = new Cookie( "userID" , personEntity.getId().toString() );
-            id.setMaxAge( ( int ) Duration.ofHours( 3 ).getSeconds() );
-            response.addCookie( id );
-
-            return "personPage";
-        }else{
-            //TODO: error mesage implementation
-            model.addAttribute("error_message","Login or password incorrect");
-            model.addAttribute("login",login);
-            return "redirect:/";
+            @Validated
+            @ModelAttribute( "loginForm" )
+                    LoginForm loginForm , BindingResult errors , Model model ,
+            HttpServletResponse response ){
+        if( errors.hasErrors() ){
+            return "loginPage";
         }
+        Long userId = personService.getByLogin( loginForm.getLogin() )
+                                   .map( PersonEntity::getId )
+                                   .orElseThrow( IllegalStateException::new );
+        response.addCookie( getCookie( userId ) );
+        return "redirect:/persons/" + userId;
     }
 
     /**
-     * open registration page with pre-filled fields
-     * @param login - user`s login
-     * @param name - user`s name
-     * @param race - user`s race
-     * @param age - user`s age
-     * @param sex - user`s sex
-     * @param model - model to store params
-     * @return registration page
+     Returns cookie with user id and 3 hours live time, if id isn't null, otherwise it returns
+     empty cookie that'll die in next moment
+
+     @param userId could be null to supply empty cookie
+
+     @return cookie with user's id
      */
-    @GetMapping( value = "/registration")
-    public String openRegistration(
-            @RequestParam( value = "login", defaultValue = "" )
-                    String login ,
-            @RequestParam( value = "name", defaultValue = "" )
-                    String name ,
-            @RequestParam( value = "race", defaultValue = "" )
-                    String race ,
-            @RequestParam( value = "age" )
-                    Integer age ,
-            @RequestParam( value = "sex", defaultValue = "" )
-                    String sex , Model model ){
-
-        model.addAttribute( "login" , login );
-        model.addAttribute( "name" , name );
-        model.addAttribute( "race" , race );
-        model.addAttribute( "age" , age );
-        model.addAttribute( "sex" , sex );
-
-        return ( "registrationPage" );
-
+    private Cookie getCookie( Long userId ){
+        Cookie id = new Cookie( "userID" , String.valueOf( userId ) );
+        id.setMaxAge( ( int ) Duration.ofHours( 3 ).getSeconds() );
+        return id;
     }
 
     /**
-     * register new user
-     * @param login - user`s login
-     * @param name - user`s name
-     * @param race - user`s race
-     * @param age - user`s age
-     * @param sex - user`s sex
-     * @param model - model to store params
-     * @return registred user`s page
+     register new user
+
+     @param registrationForm - form contains all info from user
+     @param model            - model to store params
+
+     @return registered user`s page
      */
-    @PostMapping( value = "/registration")
-    public String addPerson(
-            @RequestParam( value = "login", defaultValue = "" )
-                    String login ,
-            @RequestParam( value = "name", defaultValue = "" )
-                    String name ,
-            @RequestParam( value = "password", defaultValue = "" )
-                    String password ,
-            @RequestParam( value = "race", defaultValue = "" )
-                    String race ,
-            @RequestParam( value = "age" )
-                    Integer age ,
-            @RequestParam( value = "sex", defaultValue = "" )
-                    String sex , Model model, HttpServletResponse response ){
+    @PostMapping( value = "/registration" )
+    public String newUser(
+            @Validated
+            @ModelAttribute( "registrationForm" )
+                    RegistrationForm registrationForm , Model model , HttpServletResponse response ,
+            BindingResult bindingResult ) throws IOException{
+        if( bindingResult.hasErrors() ) return "registrationPage";
+//        todo Отлов ошибок
+        Long id = personService.addPerson( toPersonEntity( registrationForm ) ).getId();
+        response.addCookie( getCookie( id ) );
+        return "redirect:/persons/" + id;
+    }
 
-        Pattern p = Pattern.compile("[\\d\\s-_]+");
-        Matcher loginMatcher = p.matcher(login);
-        Matcher nameMatcher = p.matcher(name);
-        Matcher raceMatcher = p.matcher(race);
-        Matcher sexMatcher = p.matcher(sex);
-
-        if (!p.matcher(login).matches()){
-            //TODO: error mesage implementation
-            model.addAttribute("error_message","unacceptable login");
-            return "registrationPage";
-        }
-        if (!p.matcher(name).matches()){
-            //TODO: error mesage implementation
-            model.addAttribute("error_message","unacceptable name");
-            return "registrationPage";
-        }
-        if (!p.matcher(race).matches()){
-            //TODO: error mesage implementation
-            model.addAttribute("error_message","unacceptable race");
-            return "registrationPage";
-        }
-        if (!p.matcher(sex).matches()){
-            //TODO: error mesage implementation
-            model.addAttribute("error_message","unacceptable sex");
-            return "registrationPage";
-        }
-
-        PersonEntity personEntity =
-                new PersonEntity( login , password , name , raceService.getByName( race ) );
-        personEntity.setAge( age );
-        personEntity.setSex( sex );
-        model.addAttribute( "person" , personService.addPerson( personEntity ) );
-        response.addCookie( new Cookie( "userID" , null ) );
-
-        return ( "personPage" );
-
+    private PersonEntity toPersonEntity( RegistrationForm form ) throws IOException{
+        PersonEntity entity = new PersonEntity( form.getLogin() ,
+                                                form.getPass() ,
+                                                form.getName() ,
+                                                raceService.getByName( form.getRace() )
+                                                           .orElseThrow( IllegalArgumentException::new ) );
+        entity.setAge( form.getAge() );
+        entity.setSex( form.getSex() );
+        entity.setMedia( form.getImage().getBytes() );
+        return entity;
     }
 }

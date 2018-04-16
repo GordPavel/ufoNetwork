@@ -3,6 +3,7 @@ package com.netcracker.service;
 import com.netcracker.DAO.RaceEntity;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface RaceService{
 
@@ -25,11 +26,10 @@ public interface RaceService{
     /**
      Searh for Race with same name
 
-     @param name - *+name+*
-
      @return
+     @param name - *+name+*
      */
-    RaceEntity getByName( String name );
+    Optional<RaceEntity> getByName( String name );
 
     /**
      Searh for Race with same id

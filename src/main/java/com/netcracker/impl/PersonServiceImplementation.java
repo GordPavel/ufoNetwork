@@ -7,8 +7,12 @@ import com.netcracker.repository.PersonRepository;
 import com.netcracker.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.Predicate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PersonServiceImplementation implements PersonService{
@@ -19,7 +23,6 @@ public class PersonServiceImplementation implements PersonService{
 
     @Override
     public PersonEntity addPerson( PersonEntity personEntity ){
-
         return personRepository.saveAndFlush( personEntity );
     }
 
@@ -29,38 +32,45 @@ public class PersonServiceImplementation implements PersonService{
         personRepository.deleteById( id );
     }
 
-//    todo в таких запросах почитайте лучше о spring data specifications
+    //    todo в таких запросах почитайте лучше о spring data specifications
     @Override
     public List<PersonEntity> getBySearchParams( String name , Long raceID , Integer ageFrom ,
                                                  Integer ageTo , String sex ){
-        return personRepository.findAll( ( root , criteriaQuery , criteriaBuilder ) -> criteriaBuilder
-                .and( criteriaBuilder.like( root.get( "name" ) , name ) ,
-                      criteriaBuilder.equal( root.get( "race" ).get( "id" ) , raceID ) ,
-                      criteriaBuilder.between( root.get( "age" ) , ageFrom , ageTo ) ,
-                      criteriaBuilder.like( root.get( "sex" ) , sex ) ) );
+        return personRepository.findAll( ( root , criteriaQuery , criteriaBuilder ) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            if( name != null ){
+                predicates.add( criteriaBuilder.like( root.get( "name" ) , name ) );
+            }
+            if( raceID != null ){
+                predicates.add( criteriaBuilder.equal( root.get( "race" ).get( "id" ) , raceID ) );
+            }
+            predicates.add( criteriaBuilder.between( root.get( "age" ) ,
+                                                     ageFrom != null ? ageFrom : 0 ,
+                                                     ageTo != null ? ageTo : Integer.MAX_VALUE ) );
+            if( sex != null ){
+                predicates.add( criteriaBuilder.like( root.get( "sex" ) , sex ) );
+            }
+            return criteriaBuilder.and( predicates.toArray( new Predicate[]{} ) );
+        } );
     }
 
     @Override
     public List<GroupEntity> getGroups( Long id ){
-
-        return personRepository.getGroups( id );
+        return personRepository.getOne( id ).getGroups();
     }
 
     @Override
     public PersonEntity getById( Long id ){
-
         return personRepository.getOne( id );
     }
 
     @Override
     public PersonEntity editPerson( PersonEntity personEntity ){
-
         return personRepository.saveAndFlush( personEntity );
     }
 
     @Override
     public void joinGroup( Long id , Long userId ){
-
         PersonEntity user  = personRepository.getOne( userId );
         GroupEntity  group = groupRepository.getOne( id );
 
@@ -69,7 +79,6 @@ public class PersonServiceImplementation implements PersonService{
 
         personRepository.saveAndFlush( user );
         groupRepository.saveAndFlush( group );
-
     }
 
     @Override
@@ -82,16 +91,10 @@ public class PersonServiceImplementation implements PersonService{
 
         personRepository.saveAndFlush( user );
         groupRepository.saveAndFlush( group );
-
     }
 
     @Override
-    public PersonEntity loginPerson( String login , String password ){
-        return personRepository.login( login , password );
-    }
-
-    @Override
-    public PersonEntity getByLogin( String login ){
+    public Optional<PersonEntity> getByLogin( String login ){
         return personRepository.getByLogin( login );
     }
 }

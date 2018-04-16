@@ -1,7 +1,6 @@
 package com.netcracker.service;
 
 import com.netcracker.DAO.GroupEntity;
-import com.netcracker.DAO.PersonEntity;
 
 import java.util.List;
 
@@ -32,24 +31,6 @@ public interface GroupService{
     List<GroupEntity> getBySearchParams( String name , String ownerName );
 
     /**
-     search for Groups with specific members
-
-     @param id - id of group
-
-     @return - list of all users in group
-     */
-    List<PersonEntity> getMembers( Long id );
-
-    /**
-     search for Groups with specific members
-
-     @param personEntity - owner to search
-
-     @return - list of all groups which have personEntity as owner
-     */
-    List<GroupEntity> getByOwner( PersonEntity personEntity );
-
-    /**
      search for Group by it`s ID
 
      @param id - ID of group
@@ -57,13 +38,6 @@ public interface GroupService{
      @return - group with this ID
      */
     GroupEntity getById( Long id );
-
-    /**
-     get all groups
-
-     @return all groups on server
-     */
-    List<GroupEntity> getAll();
 
     /**
      edit group
