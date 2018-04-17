@@ -2,6 +2,8 @@ package com.netcracker.service;
 
 import com.netcracker.DAO.MessageEntity;
 
+import java.util.List;
+
 public interface MessageService{
 
     /**
@@ -19,4 +21,6 @@ public interface MessageService{
      @param id - id of message to delete
      */
     void delete( Long id );
+
+    List<MessageEntity> getByGroup( Long id);
 }

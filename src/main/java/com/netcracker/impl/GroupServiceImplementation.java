@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GroupServiceImplementation implements GroupService{
@@ -29,8 +30,8 @@ public class GroupServiceImplementation implements GroupService{
     }
 
     @Override
-    public GroupEntity getById( Long id ){
-        return groupRepository.getOne( id );
+    public Optional<GroupEntity> getById(Long id ){
+        return groupRepository.findById( id );
     }
 
     @Override

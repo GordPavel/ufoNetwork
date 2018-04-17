@@ -3,6 +3,7 @@ package com.netcracker.service;
 import com.netcracker.DAO.GroupEntity;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface GroupService{
 
@@ -37,7 +38,7 @@ public interface GroupService{
 
      @return - group with this ID
      */
-    GroupEntity getById( Long id );
+    Optional<GroupEntity> getById(Long id );
 
     /**
      edit group

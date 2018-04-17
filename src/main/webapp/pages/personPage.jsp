@@ -22,7 +22,7 @@
         <label id="t1">Список групп</label>
         <div class="list-group">
             <c:forEach items="${person.groups}" var="group">
-                <a href="<c:url value="/group-${group.id}}"/>" class="list-group-item">${group.name}</a>
+                <a href="<c:url value="/groups/${group.id}"/>" class="list-group-item">${group.name}</a>
             </c:forEach>
         </div>
     </div>
@@ -41,6 +41,7 @@
                 <td align='left'>Пол:${person.sex}</td>
             </tr>
             <tr>
+                <%--TODO: название рассы = ссылка на поиск по этой рассе--%>
                 <td align='left'>Раса:${person.race.name}</td>
             </tr>          <!--ряд с ячейками тела таблицы-->
         </table>
