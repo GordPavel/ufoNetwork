@@ -54,7 +54,7 @@ public interface PersonService{
 
      @return Person with same ID
      */
-    PersonEntity getById( Long id );
+    Optional<PersonEntity> getById( Long id );
 
     /**
      edit Person in db

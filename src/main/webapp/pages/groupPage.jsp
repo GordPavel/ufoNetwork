@@ -34,7 +34,7 @@
 
         <div class="list-group">
             <c:forEach items="${group.users}" var="user">
-                <a href="<c:url value="/persons/${user.id}"/>" class="list-group-item">${user.name}</a>
+                <a href="<c:url value="/persons/${user.id}"/>" style="">${user.name}</a>
             </c:forEach>
         </div>
     </div>
@@ -42,14 +42,23 @@
         <table border="1" width="99%">
             <c:forEach items="${group.messages}" var="message">
                 <tr>
-                    <th><b>${message.writer.name}</b>:<br/>${message.text}</th>
+                    <th><b>${message.writer.name}(${message.dateOfSubmition})</b>:
+                        <form method="POST" style="display: inline">
+                            <input type='button' class="btn" value='удалить'/>
+                            <input type="hidden" name="messageId" value="${message.id}"/>
+                        </form>
+                        <br/>${message.text}
+                    </th>
                 </tr>
             </c:forEach>
         </table>
 
     </div>
-    <textarea id="textarea2"></textarea>
-    <button class="btn" id="send"> Отправить </button>
+
+    <textarea form="addMessage" name="message" id="textarea2" style="resize: none;"></textarea>
+    <form method="POST" id="addMessage">
+        <input type="submit" class="btn" id="send" value="Отправить"/>
+    </form>
 </div>
 <%@include file="/resources/templates/footer.jsp" %>
 </body>

@@ -2,6 +2,7 @@ package com.netcracker.controllers;
 
 import com.netcracker.DAO.GroupEntity;
 import com.netcracker.DAO.MessageEntity;
+import com.netcracker.DAO.PersonEntity;
 import com.netcracker.repository.MessageRepository;
 import com.netcracker.service.GroupService;
 import com.netcracker.service.MessageService;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,7 +49,6 @@ public class GroupPageController{
         if( userId == null ){
             return "redirect:/";
         }
-
         GroupEntity groupEntity = groupService.getById( id ).get();
         groupEntity.setMessages(messageService.getByGroup(id));
         model.addAttribute( "group" , groupEntity );
@@ -55,80 +56,92 @@ public class GroupPageController{
         return "groupPage";
     }
 
-//    /**
-//     Posting message in group
-//
-//     @param writer      - cookied user ID who post this message
-//     @param messageText - message text
-//     @param id          - group ID, path
-//     @param model       - model to store params
-//
-//     @return - group page
-//     */
-//    @PostMapping( value = "/{id}", params = "message" )
-//    public String postMessage(
-//            @CookieValue( name = "userID", defaultValue = "" )
-//                    Long writer ,
-//            @RequestParam( value = "message" )
-//                    String messageText ,
-//            @PathVariable( value = "id" )
-//                    Long id , Model model ){
-//
-//        if( writer == null ){
-//            return "redirect:/";
-//        }
-//
-//        MessageEntity messageEntity = new MessageEntity();
-//
-//        messageEntity.setToGroup( groupService.getById( id ) );
-//        messageEntity.setText( messageText );
-//        messageEntity.setWriter( personService.getById( writer ) );
-//
-//        if( groupService.getById( id ).getUsers().contains( writer ) ){
-//            messageService.addMessage( messageEntity );
-//        }else{
-//            //TODO: error mesage implementation
-//            model.addAttribute( "error_message" , "user can`t write here" );
-//        }
-//
-//        model.addAttribute( "group" , groupService.getById( id ) );
-//
-//        return "groupPage";
-//    }
-//
-//    /**
-//     Delete message from group
-//
-//     @param messageId - message to delete
-//     @param id        - group ID, path
-//     @param model     - model to store params
-//
-//     @return - group page
-//     */
-//    @DeleteMapping( value = "/{id}", params = "messageId" )
-//    public String deleteMessage(
-//            @RequestParam( value = "messageId", defaultValue = "" )
-//                    Long messageId ,
-//            @PathVariable( value = "id" )
-//                    Long id ,
-//            @CookieValue( name = "userID" )
-//                    Long userId , Model model ){
-//
-//        if( userId == null ){
-//            return "redirect:/";
-//        }
-//
-//        MessageEntity message = messageRepository.getOne( messageId );
-//        if( message.getWriter().getId().equals( userId ) ||
-//            message.getToGroup().getOwner().getId().equals( userId ) ){
-//            //TODO: error message implementation
-//            model.addAttribute( "error_message" , "user can`t delete this" );
-//            messageService.delete( messageId );
-//        }
-//        model.addAttribute( "group" , groupService.getById( id ) );
-//
-//        return "groupPage";
-//    }
+    /**
+     Posting message in group
+
+     @param writer      - cookied user ID who post this message
+     @param messageText - message text
+     @param id          - group ID, path
+     @param model       - model to store params
+
+     @return - group page
+     */
+    @PostMapping( value = "/{id}", params = "message" )
+    public String postMessage(
+            @CookieValue( name = "userID", defaultValue = "" )
+                    Long writer ,
+            @RequestParam( value = "message" )
+                    String messageText ,
+            @PathVariable( value = "id" )
+                    Long id , Model model ){
+
+        if( writer == null ){
+            return "redirect:/";
+        }
+
+
+        MessageEntity messageEntity = new MessageEntity();
+        //TODO: check present
+        PersonEntity writerEntity = personService.getById( writer ).get();
+        messageEntity.setToGroup( groupService.getById( id ).get() );
+        /////////////////////////////////////
+        messageEntity.setText( messageText.replaceAll("\n","</br>") );
+        messageEntity.setWriter( writerEntity );
+        messageEntity.setDateOfSubmition(new Date(System.currentTimeMillis()));
+
+        if( groupService.getById( id ).get().getUsers().contains( writerEntity ) ){
+            messageService.addMessage( messageEntity );
+        }else{
+            //TODO: error mesage implementation
+            model.addAttribute( "error_message" , "user can`t write here" );
+        }
+
+        GroupEntity groupEntity = groupService.getById( id ).get();
+        groupEntity.setMessages(messageService.getByGroup(id));
+        model.addAttribute( "group" , groupEntity );
+
+        return "redirect:/groups/"+id;
+    }
+
+    /**
+     Delete message from group
+
+     @param messageId - message to delete
+     @param id        - group ID, path
+     @param model     - model to store params
+
+     @return - group page
+     */
+    @PostMapping( value = "/{id}", params = "messageId" )
+    public String deleteMessage(
+            @RequestParam( value = "messageId", defaultValue = "" )
+                    Long messageId ,
+            @PathVariable( value = "id" )
+                    Long id ,
+            @CookieValue( name = "userID" )
+                    Long userId , Model model ){
+
+        if( userId == null ){
+            return "redirect:/";
+        }
+
+        //TODO: check present
+        MessageEntity message = messageRepository.findById( messageId ).get();
+        //////////////////////////
+        if( !( message.getWriter().getId().equals( userId ) ||
+            message.getToGroup().getOwner().getId().equals( userId ) ) ){
+            //TODO: error message implementation
+            model.addAttribute( "error_message" , "user can`t delete this" );
+            return "redirect:/groups/"+id;
+        }
+
+        messageService.delete( messageId );
+        GroupEntity groupEntity = groupService.getById( id ).get();
+        groupEntity.setMessages(messageService.getByGroup(id));
+        model.addAttribute( "group" , groupEntity );
+
+        return "redirect:/groups/"+id;
+    }
 //
 //    /**
 //     Joining the group
