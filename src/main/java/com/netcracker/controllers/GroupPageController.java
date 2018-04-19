@@ -142,68 +142,68 @@ public class GroupPageController{
 
         return "redirect:/groups/"+id;
     }
-//
-//    /**
-//     Joining the group
-//
-//     @param join  - cookied user ID, who wants to join
-//     @param id    - group ID, path, where to join
-//     @param model - model to store params
-//
-//     @return - group page
-//     */
-//    @PostMapping( value = "/{id}/join" )
-//    public String joinGroup(
-//            @CookieValue( name = "userID", defaultValue = "" )
-//                    Long join ,
-//            @PathVariable( value = "id" )
-//                    Long id , Model model ){
-//
-//        if( join == null ){
-//            return "redirect:/";
-//        }
-//
-//        if( !personService.getById( join ).getGroups().contains( groupService.getById( id ) ) ){
-//            personService.joinGroup( id , join );
-//        }else{
-//            //TODO: error mesage implementation
-//            model.addAttribute( "error_message" , "user already in group" );
-//        }
-//        model.addAttribute( "group" , groupService.getById( id ) );
-//
-//        return "groupPage";
-//    }
-//
-//    /**
-//     Leaving the group
-//
-//     @param leave - cookied user ID, who wants to leave
-//     @param id    - group ID, path, from where leave
-//     @param model - model to store params
-//
-//     @return - group page
-//     */
-//    @PostMapping( value = "/{id}/leave" )
-//    public String leaveGroup(
-//            @CookieValue( name = "userID", defaultValue = "" )
-//                    Long leave ,
-//            @PathVariable( value = "id" )
-//                    Long id , Model model ){
-//
-//        if( leave == null ){
-//            return "redirect:/";
-//        }
-//
-//        if( personService.getById( leave ).getGroups().contains( groupService.getById( id ) ) ){
-//            personService.leaveGroup( id , leave );
-//        }else{
-//            //TODO: error mesage implementation
-//            model.addAttribute( "error_message" , "user not in group" );
-//        }
-//        model.addAttribute( "group" , groupService.getById( id ) );
-//
-//        return "groupPage";
-//    }
+
+    /**
+     Joining the group
+
+     @param join  - cookied user ID, who wants to join
+     @param id    - group ID, path, where to join
+     @param model - model to store params
+
+     @return - group page
+     */
+    @GetMapping( value = "/{id}/join" )
+    public String joinGroup(
+            @CookieValue( name = "userID", defaultValue = "" )
+                    Long join ,
+            @PathVariable( value = "id" )
+                    Long id , Model model ){
+
+        if( join == null ){
+            return "redirect:/";
+        }
+
+        if( !personService.getById( join ).get().getGroups().contains( groupService.getById( id ).get() ) ){
+            personService.joinGroup( id , join );
+        }else{
+            //TODO: error mesage implementation
+            model.addAttribute( "error_message" , "user already in group" );
+        }
+        model.addAttribute( "group" , groupService.getById( id ) );
+
+        return "redirect:/groups/"+id;
+    }
+
+    /**
+     Leaving the group
+
+     @param leave - cookied user ID, who wants to leave
+     @param id    - group ID, path, from where leave
+     @param model - model to store params
+
+     @return - group page
+     */
+    @GetMapping( value = "/{id}/leave" )
+    public String leaveGroup(
+            @CookieValue( name = "userID", defaultValue = "" )
+                    Long leave ,
+            @PathVariable( value = "id" )
+                    Long id , Model model ){
+
+        if( leave == null ){
+            return "redirect:/";
+        }
+
+        if( personService.getById( leave ).get().getGroups().contains( groupService.getById( id ).get() ) ){
+            personService.leaveGroup( id , leave );
+        }else{
+            //TODO: error mesage implementation
+            model.addAttribute( "error_message" , "user not in group" );
+        }
+        model.addAttribute( "group" , groupService.getById( id ) );
+
+        return "redirect:/groups/"+id;
+    }
 //
 //    //Group creation
 //
