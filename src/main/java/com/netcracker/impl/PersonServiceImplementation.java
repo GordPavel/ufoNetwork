@@ -60,8 +60,8 @@ public class PersonServiceImplementation implements PersonService{
     }
 
     @Override
-    public PersonEntity getById( Long id ){
-        return personRepository.getOne( id );
+    public Optional<PersonEntity> getById( Long id ){
+        return personRepository.findById( id );
     }
 
     @Override
