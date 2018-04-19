@@ -17,7 +17,8 @@ import java.sql.Date;
 public class MessageEntity{
 
     @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY )
+    @SequenceGenerator( name = "message_sequence", sequenceName = "message_id_seq" )
+    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "message_sequence" )
     @Column( name = "id" )
     private Long id;
 

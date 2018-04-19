@@ -19,7 +19,11 @@ import org.springframework.util.ClassUtils;
 import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import java.util.List;
 import java.util.Properties;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Configuration
 @PropertySource( "classpath:jpa.properties" )

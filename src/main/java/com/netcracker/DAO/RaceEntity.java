@@ -17,8 +17,8 @@ import java.util.List;
 public class RaceEntity{
 
     @Id
-    @SequenceGenerator( name = "race_id", sequenceName = "race_id_seq" )
-    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "race_id" )
+    @SequenceGenerator( name = "race_sequence", sequenceName = "race_id_seq" )
+    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "race_sequence" )
     @Column( name = "id" )
     private Long id;
 
@@ -26,6 +26,5 @@ public class RaceEntity{
     @Column( name = "name", unique = true, updatable = false, nullable = false )
     private String name;
 
-    @OneToMany( fetch = FetchType.LAZY, mappedBy = "race" )
-    private List<PersonEntity> persons;
+    @OneToMany( fetch = FetchType.LAZY, mappedBy = "race" ) private List<PersonEntity> persons;
 }

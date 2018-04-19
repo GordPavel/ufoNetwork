@@ -17,7 +17,8 @@ import java.util.List;
 public class PersonEntity{
 
     @Id
-    @GeneratedValue( strategy = GenerationType.AUTO )
+    @SequenceGenerator( name = "person_sequence", sequenceName = "person_id_seq" )
+    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "person_sequence" )
     @Column( name = "id" )
     private Long id;
 
@@ -48,9 +49,9 @@ public class PersonEntity{
     @Column( name = "age" )
     private Integer age;
 
-    @Basic
-    @Column( name = "media" )
-    private byte[] media;
+    @OneToOne( cascade = CascadeType.ALL )
+    @PrimaryKeyJoinColumn
+    private PersonMediaEntity media;
 
     @ManyToOne( optional = false )
     @JoinColumn( name = "race", nullable = false )

@@ -1,10 +1,12 @@
 package com.netcracker.controllers;
 
 import com.netcracker.DAO.PersonEntity;
+import com.netcracker.DAO.PersonMediaEntity;
+import com.netcracker.DAO.RaceEntity;
 import com.netcracker.controllers.forms.LoginForm;
 import com.netcracker.controllers.forms.LoginValidator;
-import com.netcracker.controllers.forms.RegistrationValidator;
 import com.netcracker.controllers.forms.RegistrationForm;
+import com.netcracker.controllers.forms.RegistrationValidator;
 import com.netcracker.service.PersonService;
 import com.netcracker.service.RaceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.Duration;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  Controller for login, registration page
@@ -59,6 +63,11 @@ public class LoginPageController{
      */
     @GetMapping
     public String open( Model model ){
+        model.addAttribute( "races" ,
+                            raceService.getAll()
+                                       .parallelStream()
+                                       .map( RaceEntity::getName )
+                                       .collect( toList() ) );
         return "loginPage";
     }
 
@@ -143,7 +152,10 @@ public class LoginPageController{
                                                            .orElseThrow( IllegalArgumentException::new ) );
         entity.setAge( form.getAge() );
         entity.setSex( form.getSex() );
-        entity.setMedia( form.getImage().getBytes() );
+        PersonMediaEntity media = new PersonMediaEntity();
+        media.setImage( form.getImage().getBytes() );
+        media.setPerson( entity );
+        entity.setMedia( media );
         return entity;
     }
 }

@@ -31,7 +31,7 @@
             <label>Логин</label>
             <spring:bind path="login">
                 <div>
-                    <form:input class="form-control" path="login"/><span></span>
+                    <form:input class="form-control" path="login" placeholder="Логин"/><span></span>
                     <form:errors path="login"/>
                 </div>
             </spring:bind>
@@ -39,23 +39,21 @@
             <label>Имя</label>
             <spring:bind path="name">
                 <div>
-                    <form:input class="form-control" path="name"/><span></span>
+                    <form:input class="form-control" path="name" placeholder="Имя"/><span></span>
                     <form:errors path="name"/>
                 </div>
             </spring:bind>
 
             <label>Раса</label>
             <spring:bind path="race">
-                <div>
-                    <form:input class="form-control" path="race"/><span></span>
-                    <form:errors path="race"/>
-                </div>
+                <form:select path="race" items="${races}"/>
+                <form:errors path="race"/>
             </spring:bind>
 
             <label>Возраст</label>
             <spring:bind path="age">
                 <div>
-                    <form:input class="form-control" path="age"/><span></span>
+                    <form:input class="form-control" path="age" placeholder="Возраст"/><span></span>
                     <form:errors path="age"/>
                 </div>
             </spring:bind>
@@ -63,7 +61,7 @@
             <label>Пол</label>
             <spring:bind path="sex">
                 <div>
-                    <form:input class="form-control" path="sex"/><span></span>
+                    <form:input class="form-control" path="sex" placeholder="Пол"/><span></span>
                     <form:errors path="sex"/>
                 </div>
             </spring:bind>
@@ -71,7 +69,7 @@
             <label>Пароль</label>
             <spring:bind path="pass">
                 <div>
-                    <form:input class="form-control" type="password" path="pass"/><span></span>
+                    <form:input class="form-control" type="password" path="pass" placeholder="Пароль"/><span></span>
                     <form:errors path="pass"/>
                 </div>
             </spring:bind>
@@ -79,7 +77,7 @@
             <label>Подтверджение пароля</label>
             <spring:bind path="passAccept">
                 <div>
-                    <form:input class="form-control" type="password" path="passAccept"/><span></span>
+                    <form:input class="form-control" type="password" path="passAccept" placeholder="Подтверждение"/><span></span>
                     <form:errors path="passAccept"/>
                 </div>
             </spring:bind>
@@ -92,8 +90,8 @@
                 </div>
             </spring:bind>
 
-            <button class="btn" onclick="show('none')" align="left"> Отмена</button>
-            <button class="btn" id="right"> Зарегистрироваться</button>
+            <button class="btn btn-primary" onclick="show('none')" align="left"> Отмена</button>
+            <button type="submit" class="btn btn-primary" id="right"> Зарегистрироваться</button>
         </div>
     </form:form>
     <form:form method="post" modelAttribute="loginForm">
@@ -112,12 +110,12 @@
                 <label class="col-sm-2 control-label">Пароль</label>
                 <div class="col-sm-10">
                     <form:password path="pass" class="form-control"
-                                id="name" placeholder="Логин"/>
+                                   id="name" placeholder="Логин"/>
                     <form:errors path="pass" class="control-label"/>
                 </div>
             </div>
         </spring:bind>
-        <button type="submit" class="btn" id="enter"> Войти </button>
+        <button type="submit" class="btn" id="enter"> Войти</button>
     </form:form>
     <!--Кнопка-->
     <button class="btn" id="register" onclick="show('block')" align="center"> Зарегистрироваться</button>

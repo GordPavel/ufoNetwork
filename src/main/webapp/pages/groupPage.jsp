@@ -23,7 +23,8 @@
                 <th align='center'>${group.name}</th>
             </tr> <!--ряд с ячейками заголовков-->
             <tr>
-                <td align='left'>Владелец: <a href="<c:url value="/persons/${group.owner.id}"/>">${group.owner.name}</a></td>
+                <td align='left'>Владелец: <a href="<c:url value="/persons/${group.owner.id}"/>">${group.owner.name}</a>
+                </td>
             </tr>
         </table>
     </div>
@@ -31,7 +32,6 @@
         <label>Список участников</label>
     </div>
     <div id="l2" style="overflow:auto; width: 30%; max-height: 20%;">
-
         <div class="list-group">
             <c:forEach items="${group.users}" var="user">
                 <a href="<c:url value="/persons/${user.id}"/>" style="">${user.name}</a>
