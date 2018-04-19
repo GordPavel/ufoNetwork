@@ -1,3 +1,8 @@
+<%@ page import="java.util.List" %>
+<%@ page import="org.springframework.beans.factory.annotation.Autowired" %>
+<%@ page import="com.netcracker.repository.PersonRepository" %>
+<%@ page import="com.netcracker.DAO.GroupEntity" %>
+<%@ page import="com.netcracker.DAO.PersonEntity" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
@@ -20,7 +25,12 @@
     <div id="l1">
         <table>
             <tr>
-                <th align='center'>${group.name}</th>
+                <th align='center'>${group.name}
+                    <c:if test="${group.owner.id.toString().equals(cookie[\"userID\"].value)}">
+                        <a href="<c:url value="/groups/${group.id}/settings"/>">Настройки</a>
+                    </c:if>
+
+                </th>
             </tr> <!--ряд с ячейками заголовков-->
             <tr>
                 <td align='left'>Владелец: <a href="<c:url value="/persons/${group.owner.id}"/>">${group.owner.name}</a>
@@ -29,12 +39,15 @@
         </table>
     </div>
     <div id="l3">
+        <a href="<c:url value="/groups/${group.id}/join"/>">Вступить в группу</a><br/>
+        <a href="<c:url value="/groups/${group.id}/leave"/>">Покинуть группу</a><br/>
         <label>Список участников</label>
     </div>
     <div id="l2" style="overflow:auto; width: 30%; max-height: 20%;">
         <div class="list-group">
             <c:forEach items="${group.users}" var="user">
                 <a href="<c:url value="/persons/${user.id}"/>" style="">${user.name}</a>
+                <br/>
             </c:forEach>
         </div>
     </div>
@@ -43,10 +56,12 @@
             <c:forEach items="${group.messages}" var="message">
                 <tr>
                     <th><b>${message.writer.name}(${message.dateOfSubmition})</b>:
-                        <form method="POST" style="display: inline">
-                            <input type='button' class="btn" value='удалить'/>
-                            <input type="hidden" name="messageId" value="${message.id}"/>
-                        </form>
+                        <c:if test="${message.writer.id.toString().equals(cookie[\"userID\"].value)||group.owner.id.toString().equals(cookie[\"userID\"].value)}">
+                            <form method="POST" style="display: inline">
+                                <input type='button' class="btn" value='удалить'/>
+                                <input type="hidden" name="messageId" value="${message.id}"/>
+                            </form>
+                        </c:if>
                         <br/>${message.text}
                     </th>
                 </tr>

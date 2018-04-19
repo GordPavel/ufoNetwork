@@ -71,10 +71,11 @@ public class PersonServiceImplementation implements PersonService{
 
     @Override
     public void joinGroup( Long id , Long userId ){
-        PersonEntity user  = personRepository.getOne( userId );
-        GroupEntity  group = groupRepository.getOne( id );
+        PersonEntity user  = personRepository.findById( userId ).get();
+        GroupEntity  group = groupRepository.findById( id ).get();
 
         user.getGroups().add( group );
+        System.out.println(user.getGroups());
         group.getUsers().add( user );
 
         personRepository.saveAndFlush( user );
@@ -83,8 +84,8 @@ public class PersonServiceImplementation implements PersonService{
 
     @Override
     public void leaveGroup( Long id , Long userId ){
-        PersonEntity user  = personRepository.getOne( userId );
-        GroupEntity  group = groupRepository.getOne( id );
+        PersonEntity user  = personRepository.findById( userId ).get();
+        GroupEntity  group = groupRepository.findById( id ).get();
 
         user.getGroups().remove( group );
         group.getUsers().remove( user );

@@ -61,7 +61,7 @@ public class PersonEntity{
     @ManyToMany( cascade = CascadeType.DETACH, fetch = FetchType.EAGER )
     @JoinTable( name = "person_group",
                 joinColumns = { @JoinColumn( name = "person" ) },
-                inverseJoinColumns = { @JoinColumn( name = "group" ) } )
+                inverseJoinColumns = { @JoinColumn( name = "\"group\"" ) } )
     private List<GroupEntity> groups;
 
     @OneToMany( mappedBy = "owner" ) private List<GroupEntity> rulingGroups;
