@@ -35,7 +35,7 @@ public class MessageEntity{
     private String text;
 
     @Basic
-    @Column( name = "date_of_submition", nullable = false )
+    @Column( name = "date_of_submition", insertable = false, updatable = false )
     private Date dateOfSubmition;
 
     @Basic

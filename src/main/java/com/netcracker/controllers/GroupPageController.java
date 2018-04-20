@@ -87,7 +87,7 @@ public class GroupPageController{
         /////////////////////////////////////
         messageEntity.setText( messageText.replaceAll("\n","</br>") );
         messageEntity.setWriter( writerEntity );
-        messageEntity.setDateOfSubmition(new Date(System.currentTimeMillis()));
+//        messageEntity.setDateOfSubmition(new Date(System.currentTimeMillis()));
 
         if( groupService.getById( id ).get().getUsers().contains( writerEntity ) ){
             messageService.addMessage( messageEntity );

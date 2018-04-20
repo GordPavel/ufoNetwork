@@ -15,13 +15,16 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="<c:url value="/resources/js/bootstrap.min.js"/>"></script>
     <%--@elvariable id="group" type="com.netcracker.DAO.GroupEntity"--%>
+    <%
+        boolean member = false;
+    %>
 </head>
 <body>
 <%@include file="/resources/templates/header.jsp" %>
 <div class="content">
 
-    <div id="img1"><img src='/resources/images/u157.png'></div>
-    <div id="img2"><img src='/resources/images/chat-104.png' width="32" height="32"></div>
+    <div id="img1"><img src='<c:url value="/group-${group.id}/image"/>'></div>
+    <div id="img2"><img src='/resources/images/chat-104.png' src='<c:url value="/user-${person.id}/image"/>'width="32" height="32"></div>
     <div id="l1">
         <table>
             <tr>
@@ -39,14 +42,27 @@
         </table>
     </div>
     <div id="l3">
-        <a href="<c:url value="/groups/${group.id}/join"/>">Вступить в группу</a><br/>
-        <a href="<c:url value="/groups/${group.id}/leave"/>">Покинуть группу</a><br/>
+        <c:forEach items="${group.users}" var="user">
+            <c:if test="${user.id.toString().equals(cookie[\"userID\"].value)}">
+                <%
+                    member=true;
+                %>
+            </c:if>
+        </c:forEach>
+        <c:choose>
+            <c:when test="<%=member%>">
+                <a href="<c:url value="/groups/${group.id}/leave"/>">Покинуть группу</a><br/>
+            </c:when>
+            <c:otherwise>
+                <a href="<c:url value="/groups/${group.id}/join"/>">Вступить в группу</a><br/>
+            </c:otherwise>
+        </c:choose>
         <label>Список участников</label>
     </div>
     <div id="l2" style="overflow:auto; width: 30%; max-height: 20%;">
         <div class="list-group">
             <c:forEach items="${group.users}" var="user">
-                <a href="<c:url value="/persons/${user.id}"/>" style="">${user.name}</a>
+                <a href="<c:url value="/persons/${user.id}"/>" style="">${user.name} (${user.race.name},${user.age})</a>
                 <br/>
             </c:forEach>
         </div>
