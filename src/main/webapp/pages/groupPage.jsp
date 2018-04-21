@@ -31,12 +31,42 @@
             $.ajax({
                 url: "${pageContext.request.contextPath}/groups/" + ${group.id} +"/messages",
                 type: 'GET',
-                timeout: 5 * 1000,
+                timeout: 60 * 1000,
                 success: function (response) {
                     var divs = response.map(function (message) {
                         return generateMessage(message.id, message.text, message.date, message.writerId, message.writerName);
                     }).join('\n');
                     $('#messages').html(divs);
+                },
+                error: errorHandler
+            });
+        }
+
+        function schelduleAjax() {
+            ajaxAllMessagesOfGroup();
+            setInterval(schelduleAjax, 10 * 1000);
+        }
+
+        function sendMessage() {
+            var data = JSON.stringify({
+                messageText: $('#textarea2').val(),
+            });
+            var errorHandler = function () {
+                alert('Сообщение не может быть отправлено')
+            };
+            $.ajax({
+                url: "${pageContext.request.contextPath}/groups/" + ${group.id} +"/message",
+                type: 'POST',
+                timeout: 5 * 1000,
+                contentType: "application/json",
+                data: data,
+                success: function (response) {
+                    if (response === 'fail') {
+                        errorHandler();
+                    } else {
+                        $('#textarea2').val("");
+                    }
+                    ajaxAllMessagesOfGroup();
                 },
                 error: errorHandler
             });
@@ -51,40 +81,18 @@
                 type: 'DELETE',
                 timeout: 1000 * 5,
                 success: function (response) {
-                    ajaxAllMessagesOfGroup();
-                    if (response !== "success") {
+                    if ("success" !== response) {
                         errorHandler();
                     }
+                    ajaxAllMessagesOfGroup();
                 },
                 error: errorHandler
             });
         }
 
         $(document).ready(function () {
-            $('#send').click(function () {
-                var data = JSON.stringify({
-                    messageText: $('#textarea2').val(),
-                });
-                var errorHandler = function () {
-                    alert('Сообщение не может быть отправлено')
-                };
-                $.ajax({
-                    url: "${pageContext.request.contextPath}/groups/" + ${group.id} +"/message",
-                    type: 'POST',
-                    timeout: 5 * 1000,
-                    contentType: "application/json",
-                    data: data,
-                    success: function (response) {
-                        ajaxAllMessagesOfGroup();
-                        if (response === 'fail') {
-                            errorHandler();
-                        } else {
-                            $('#textarea2').val("");
-                        }
-                    },
-                    error: errorHandler
-                });
-            });
+            $('#send').click(sendMessage);
+            setInterval(schelduleAjax, 10 * 1000);
         });
     </script>
 </head>
@@ -93,7 +101,8 @@
 <div class="content">
 
     <div id="img1"><img src='<c:url value="/group-${group.id}/image"/>'></div>
-    <div id="img2"><img src='/resources/images/chat-104.png' src='<c:url value="/user-${person.id}/image"/>'width="32" height="32"></div>
+    <div id="img2"><img src='/resources/images/chat-104.png' src='<c:url value="/user-${person.id}/image"/>' width="32"
+                        height="32"></div>
     <div id="l1">
         <table>
             <tr>
@@ -114,7 +123,7 @@
         <c:forEach items="${group.users}" var="user">
             <c:if test="${user.id.toString().equals(cookie[\"userID\"].value)}">
                 <%
-                    member=true;
+                    member = true;
                 %>
             </c:if>
         </c:forEach>

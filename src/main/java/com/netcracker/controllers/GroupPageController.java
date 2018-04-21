@@ -76,28 +76,6 @@ public class GroupPageController{
         return "groupPage";
     }
 
-    @PostMapping( value = "/{id}/message", produces = "application/json" )
-    public @ResponseBody
-    String postMessage(
-            @CookieValue( name = "userID", required = false )
-                    Long writerId ,
-            @PathVariable( "id" )
-                    Long groupId ,
-            @RequestBody
-                    Map<String, String> requestBody , Model model ){
-        try{
-            MessageEntity message = messageRepository.findById( messageService.addMessage( groupId ,
-                                                                                           writerId ,
-                                                                                           requestBody
-                                                                                                   .get( "messageText" ) ) )
-                                                     .get();
-            return mapper.writeValueAsString( messageToJsonMap( message ) );
-        }catch( IllegalArgumentException | JsonProcessingException e ){
-            return "fail";
-        }
-    }
-
-
     private LinkedHashMap<String, String> messageToJsonMap( MessageEntity message ){
         return new LinkedHashMap<String, String>(){{
             put( "id" , message.getId().toString() );
@@ -109,6 +87,24 @@ public class GroupPageController{
             put( "writerName" , message.getWriter().getName() );
         }};
     }
+
+    @PostMapping( value = "/{id}/message" )
+    public @ResponseBody
+    String postMessage(
+            @CookieValue( name = "userID", required = false )
+                    Long writerId ,
+            @PathVariable( "id" )
+                    Long groupId ,
+            @RequestBody
+                    Map<String, String> requestBody , Model model ){
+        try{
+            messageService.addMessage( groupId , writerId , requestBody.get( "messageText" ) );
+            return "success";
+        }catch( IllegalArgumentException e ){
+            return "fail";
+        }
+    }
+
 
     /**
      Ajax request to delete message from group
@@ -127,17 +123,18 @@ public class GroupPageController{
         } ).orElse( "fail" );
     }
 
-    @GetMapping( value = "/{id}/messages", produces = "application/json" )
+    @GetMapping( value = "/{id}/messages", produces = "application/json; charset=UTF-8" )
     public @ResponseBody
     String getAllMessagesOfGroup(
             @PathVariable( "id" )
                     Long groupId ) throws JsonProcessingException{
-        return mapper.writeValueAsString( groupRepository.getMessagesById( groupId )
-                                                         .parallelStream()
-                                                         .sorted( Comparator.comparing(
-                                                                 MessageEntity::getDateOfSubmition ) )
-                                                         .map( this::messageToJsonMap )
-                                                         .collect( Collectors.toList() ) );
+        String response = mapper.writeValueAsString( groupRepository.getMessagesById( groupId )
+                                                             .parallelStream()
+                                                             .sorted( Comparator.comparing(
+                                                                     MessageEntity::getDateOfSubmition ) )
+                                                             .map( this::messageToJsonMap )
+                                                             .collect( Collectors.toList() ) );
+        return response;
     }
 
     /**
@@ -161,9 +158,7 @@ public class GroupPageController{
         }
 
 //        todo Ленивая Загрузка
-        if( !personRepository.findById( join )
-                             .get()
-                             .getGroups()
+        if( !personRepository.getGroupsById( id )
                              .contains( groupRepository.findById( id ).get() ) ){
             personService.joinGroup( id , join );
         }else{
