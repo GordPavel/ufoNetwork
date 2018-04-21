@@ -76,15 +76,6 @@ public class GroupPageController{
         return "groupPage";
     }
 
-    /**
-     Posting message in group
-
-     @param writerId    - authenticated user ID who post this message
-     @param requestBody - contains data about message
-     @param model       - model to store params
-
-     @return - group page
-     */
     @PostMapping( value = "/{id}/message", produces = "application/json" )
     public @ResponseBody
     String postMessage(
@@ -105,6 +96,7 @@ public class GroupPageController{
             return "fail";
         }
     }
+
 
     private LinkedHashMap<String, String> messageToJsonMap( MessageEntity message ){
         return new LinkedHashMap<String, String>(){{
@@ -142,7 +134,8 @@ public class GroupPageController{
                     Long groupId ) throws JsonProcessingException{
         return mapper.writeValueAsString( groupRepository.getMessagesById( groupId )
                                                          .parallelStream()
-                                                         .sorted( Comparator.comparing( MessageEntity::getDateOfSubmition ) )
+                                                         .sorted( Comparator.comparing(
+                                                                 MessageEntity::getDateOfSubmition ) )
                                                          .map( this::messageToJsonMap )
                                                          .collect( Collectors.toList() ) );
     }
@@ -162,6 +155,7 @@ public class GroupPageController{
                     Long join ,
             @PathVariable( value = "id" )
                     Long id , Model model ){
+
         if( join == null ){
             return "redirect:/";
         }
@@ -184,7 +178,7 @@ public class GroupPageController{
     /**
      Leaving the group
 
-     @param leave - cookies user ID, who wants to leave
+     @param leave - cookied user ID, who wants to leave
      @param id    - group ID, path, from where leave
      @param model - model to store params
 
@@ -295,10 +289,10 @@ public class GroupPageController{
 //                    Long id ,
 //            @CookieValue( name = "userID" )
 //                    Long userId , Model model ){
-//        if( ( userId == null ) || ( groupRepository.findById( id ).getOwner().getId() != userId ) ){
+//        if( ( userId == null ) || ( groupService.getById( id ).getOwner().getId() != userId ) ){
 //            return "redirect:/";
 //        }
-//        model.addAttribute( "group" , groupRepository.findById( id ) );
+//        model.addAttribute( "group" , groupService.getById( id ) );
 //        return "groupSettingsPage";
 //    }
 //
@@ -320,11 +314,11 @@ public class GroupPageController{
 //            @CookieValue( name = "userID", defaultValue = "" )
 //                    Long userId , Model model ){
 //
-//        if( ( userId == null ) || ( groupRepository.findById( id ).getOwner().getId() != userId ) ){
+//        if( ( userId == null ) || ( groupService.getById( id ).getOwner().getId() != userId ) ){
 //            return "redirect:/";
 //        }
 //
-//        GroupEntity toEdit = groupRepository.findById( id );
+//        GroupEntity toEdit = groupService.getById( id );
 //        toEdit.setName( newName );
 //        model.addAttribute( "group" , groupService.editGroup( toEdit ) );
 //        return "groupSettingsPage";

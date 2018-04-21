@@ -1,6 +1,8 @@
 package com.netcracker.controllers;
 
+import com.netcracker.DAO.GroupMediaEntity;
 import com.netcracker.DAO.PersonMediaEntity;
+import com.netcracker.repository.GroupRepository;
 import com.netcracker.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -10,12 +12,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping( "/user-{id}/image" )
+@RequestMapping( "/" )
 public class ImagesController{
     @Autowired private PersonRepository   personRepository;
     @Autowired private ApplicationContext context;
+    @Autowired private GroupRepository    groupRepository;
 
-    @GetMapping( produces = "image/png" )
+    @GetMapping( value = "/user-{id}/image", produces = "image/png" )
     @ResponseBody
     @ResponseStatus( HttpStatus.OK )
     Resource getImage(
@@ -24,5 +27,15 @@ public class ImagesController{
         return personRepository.getMediaById( id )
                                .map( PersonMediaEntity::getImage ).<Resource> map( ByteArrayResource::new )
                 .orElse( context.getResource( "/resources/images/user.png" ) );
+    }
+
+    @GetMapping( value = "/group-{id}/image", produces = "image/png" )
+    @ResponseBody
+    @ResponseStatus( HttpStatus.OK )
+    Resource getGroupImage(
+            @PathVariable( "id" )
+                    Long id ){
+        return groupRepository.getMediaById( id ).map( GroupMediaEntity::getImage ).<Resource> map(
+                ByteArrayResource::new ).orElse( context.getResource( "/resources/images/group.png" ) );
     }
 }
