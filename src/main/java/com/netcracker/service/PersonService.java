@@ -1,69 +1,58 @@
 package com.netcracker.service;
 
-import com.netcracker.DAO.GroupEntity;
 import com.netcracker.DAO.PersonEntity;
+import com.netcracker.DAO.PersonLazyFields;
+import com.netcracker.controllers.forms.RegistrationForm;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 public interface PersonService{
 
     /**
-     add Person to db
+     Find one person and load specified lazy properties
 
-     @param personEntity - Person to add
+     @param id     - id of person
+     @param fields - specified person's properties to load
 
-     @return - added Person
+     @return Optional of person if id is valid and otherwise empty Optional
      */
-    PersonEntity addPerson( PersonEntity personEntity );
+    Optional<PersonEntity> findById( Long id , PersonLazyFields... fields );
 
     /**
-     delete person froom db by it ID
+     List persons and load specified lazy properties
 
-     @param Id - ID of person, that must be deleted
+     @param fields - specified person's properties to load
+
+     @return list of users
      */
-    void delete( Long Id );
+    List<PersonEntity> listAll( PersonLazyFields... fields );
+
+
+    /**
+     add Person to db
+
+     @param registrationForm - form with data of new user
+
+     @return - returns id of new person
+     */
+    Long addPerson( RegistrationForm registrationForm ) throws IOException;
 
     /**
      Search for person by parameters
 
+     @return - list of persons suitable for search parameters
      @param name    - *+name+* of Person
      @param raceID  - Person`s race`s id
      @param ageFrom - Person`s age >= age
      @param ageTo   - Persin`s age =< age
      @param sex     - Person`s *+sex+*
-
-     @return - list of persons suitable for search parameters
+     @param fields
      */
-    List<PersonEntity> getBySearchParams( String name , Long raceID , Integer ageFrom ,
-                                          Integer ageTo , String sex );
-
-    /**
-     search for Group where is member with specific id
-
-     @param Id - id of user
-
-     @return - list of Persons-members of group
-     */
-    List<GroupEntity> getGroups( Long Id );
-
-    /**
-     get Person by ID
-
-     @param id - Person`s ID
-
-     @return Person with same ID
-     */
-    Optional<PersonEntity> getById( Long id );
-
-    /**
-     edit Person in db
-
-     @param personEntity - Person to edit
-
-     @return - edited Person
-     */
-    PersonEntity editPerson( PersonEntity personEntity );
+    List<PersonEntity> listWithSpecifications( String name , Long raceID , Integer ageFrom ,
+                                               Integer ageTo , String sex ,
+                                               PersonLazyFields... fields );
 
     /**
      add person to group
@@ -80,13 +69,4 @@ public interface PersonService{
      @param userId  - user`s ID
      */
     void leaveGroup( Long groupId , Long userId );
-
-    /**
-     Find one user by login
-
-     @param login login of user
-
-     @return person entity from DB
-     */
-    Optional<PersonEntity> getByLogin( String login );
 }

@@ -1,5 +1,6 @@
 package com.netcracker.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netcracker.Application;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -31,6 +32,11 @@ public class WebMvcConfig extends WebMvcConfigurationSupport{
         converters.add( new ByteArrayHttpMessageConverter() );
         converters.add( new MappingJackson2HttpMessageConverter() );
         super.configureMessageConverters( converters );
+    }
+
+    @Bean
+    public ObjectMapper objectMapper(){
+        return new ObjectMapper();
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.netcracker.controllers;
 
-import com.netcracker.DAO.PersonEntity;
 import com.netcracker.DAO.PersonMediaEntity;
 import com.netcracker.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +21,7 @@ public class ImagesController{
     Resource getImage(
             @PathVariable( "id" )
                     Long id ){
-        return personRepository.findById( id )
-                               .map( PersonEntity::getMedia )
+        return personRepository.getMediaById( id )
                                .map( PersonMediaEntity::getImage ).<Resource> map( ByteArrayResource::new )
                 .orElse( context.getResource( "/resources/images/user.png" ) );
     }

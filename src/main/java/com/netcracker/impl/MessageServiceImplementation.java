@@ -1,31 +1,29 @@
 package com.netcracker.impl;
 
 import com.netcracker.DAO.MessageEntity;
+import com.netcracker.repository.GroupRepository;
 import com.netcracker.repository.MessageRepository;
-import com.netcracker.service.GroupService;
+import com.netcracker.repository.PersonRepository;
 import com.netcracker.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class MessageServiceImplementation implements MessageService{
 
     @Autowired private MessageRepository messageRepository;
-    @Autowired private GroupService groupService;
+    @Autowired private PersonRepository  personRepository;
+    @Autowired private GroupRepository   groupRepository;
 
     @Override
-    public MessageEntity addMessage( MessageEntity messageEntity ){
-
-        return messageRepository.saveAndFlush( messageEntity );
+    public Long addMessage( Long groupId , Long writerId , String text )
+            throws IllegalArgumentException{
+        MessageEntity messageEntity = new MessageEntity();
+        messageEntity.setWriter( personRepository.findById( writerId )
+                                                 .orElseThrow( IllegalArgumentException::new ) );
+        messageEntity.setToGroup( groupRepository.findById( groupId )
+                                                 .orElseThrow( IllegalArgumentException::new ) );
+        messageEntity.setText( text );
+        return messageRepository.saveAndFlush( messageEntity ).getId();
     }
-
-    @Override
-    public void delete( Long id ){
-        messageRepository.deleteById( id );
-    }
-
-    @Override
-    public List<MessageEntity> getByGroup(Long id) {return messageRepository.getByGroup(groupService.getById(id).get());}
 }

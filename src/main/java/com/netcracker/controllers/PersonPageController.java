@@ -1,6 +1,8 @@
 package com.netcracker.controllers;
 
 import com.netcracker.DAO.PersonEntity;
+import com.netcracker.DAO.PersonLazyFields;
+import com.netcracker.repository.GroupRepository;
 import com.netcracker.repository.PersonRepository;
 import com.netcracker.service.PersonService;
 import com.netcracker.service.RaceService;
@@ -20,6 +22,7 @@ public class PersonPageController{
 
     @Autowired PersonService    personService;
     @Autowired PersonRepository personRepository;
+    @Autowired GroupRepository  groupRepository;
     @Autowired RaceService      raceService;
 
     /**
@@ -38,7 +41,7 @@ public class PersonPageController{
                     Long userId , Model model ){
 //        todo Не авторизованный пользователь
         if( userId == null ) return "redirect:/";
-        Optional<PersonEntity> one = personRepository.findById( id );
+        Optional<PersonEntity> one = personService.findById( id , PersonLazyFields.GROUPS );
         if( one.isPresent() ){
             model.addAttribute( "person" , one.get() );
             if( id.equals( userId ) ){

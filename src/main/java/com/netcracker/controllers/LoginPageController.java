@@ -1,12 +1,12 @@
 package com.netcracker.controllers;
 
 import com.netcracker.DAO.PersonEntity;
-import com.netcracker.DAO.PersonMediaEntity;
 import com.netcracker.DAO.RaceEntity;
 import com.netcracker.controllers.forms.LoginForm;
 import com.netcracker.controllers.forms.LoginValidator;
 import com.netcracker.controllers.forms.RegistrationForm;
 import com.netcracker.controllers.forms.RegistrationValidator;
+import com.netcracker.repository.PersonRepository;
 import com.netcracker.service.PersonService;
 import com.netcracker.service.RaceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +21,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.Duration;
-
-import static java.util.stream.Collectors.toList;
+import java.util.stream.Collectors;
 
 /**
  Controller for login, registration page
@@ -31,10 +30,23 @@ import static java.util.stream.Collectors.toList;
 @RequestMapping
 public class LoginPageController{
 
-    @Autowired PersonService         personService;
-    @Autowired RaceService           raceService;
-    @Autowired RegistrationValidator registrationValidator;
-    @Autowired LoginValidator        loginValidator;
+    private final PersonService         personService;
+    private final PersonRepository      personRepository;
+    private final RaceService           raceService;
+    private final RegistrationValidator registrationValidator;
+    private final LoginValidator        loginValidator;
+
+    @Autowired
+    public LoginPageController( PersonService personService , PersonRepository personRepository ,
+                                RaceService raceService ,
+                                RegistrationValidator registrationValidator ,
+                                LoginValidator loginValidator ){
+        this.personService = personService;
+        this.personRepository = personRepository;
+        this.raceService = raceService;
+        this.registrationValidator = registrationValidator;
+        this.loginValidator = loginValidator;
+    }
 
     @InitBinder( "loginForm" )
     protected void initLoginBinder( WebDataBinder binder ){
@@ -67,7 +79,7 @@ public class LoginPageController{
                             raceService.getAll()
                                        .parallelStream()
                                        .map( RaceEntity::getName )
-                                       .collect( toList() ) );
+                                       .collect( Collectors.toList() ) );
         return "loginPage";
     }
 
@@ -102,9 +114,9 @@ public class LoginPageController{
         if( errors.hasErrors() ){
             return "loginPage";
         }
-        Long userId = personService.getByLogin( loginForm.getLogin() )
-                                   .map( PersonEntity::getId )
-                                   .orElseThrow( IllegalStateException::new );
+        Long userId = personRepository.getByLogin( loginForm.getLogin() )
+                                      .map( PersonEntity::getId )
+                                      .orElseThrow( IllegalStateException::new );
         response.addCookie( getCookie( userId ) );
         return "redirect:/persons/" + userId;
     }
@@ -135,27 +147,20 @@ public class LoginPageController{
     public String newUser(
             @Validated
             @ModelAttribute( "registrationForm" )
-                    RegistrationForm registrationForm , Model model , HttpServletResponse response ,
-            BindingResult bindingResult ) throws IOException{
-        if( bindingResult.hasErrors() ) return "registrationPage";
+                    RegistrationForm registrationForm , BindingResult bindingResult , Model model ,
+            HttpServletResponse response ) throws IOException{
+        if( bindingResult.hasErrors() ){
+            model.addAttribute( "races" ,
+                                raceService.getAll()
+                                           .parallelStream()
+                                           .map( RaceEntity::getName )
+                                           .collect( Collectors.toList() ) );
+            return "loginPage";
+        }
 //        todo Отлов ошибок
-        Long id = personService.addPerson( toPersonEntity( registrationForm ) ).getId();
+        Long id = personService.addPerson( registrationForm );
         response.addCookie( getCookie( id ) );
         return "redirect:/persons/" + id;
     }
 
-    private PersonEntity toPersonEntity( RegistrationForm form ) throws IOException{
-        PersonEntity entity = new PersonEntity( form.getLogin() ,
-                                                form.getPass() ,
-                                                form.getName() ,
-                                                raceService.getByName( form.getRace() )
-                                                           .orElseThrow( IllegalArgumentException::new ) );
-        entity.setAge( form.getAge() );
-        entity.setSex( form.getSex() );
-        PersonMediaEntity media = new PersonMediaEntity();
-        media.setImage( form.getImage().getBytes() );
-        media.setPerson( entity );
-        entity.setMedia( media );
-        return entity;
-    }
 }

@@ -16,7 +16,7 @@ import java.util.List;
 public class GroupEntity{
 
     @Id
-    @SequenceGenerator( name = "group_sequence", sequenceName = "group_id_seq" )
+    @SequenceGenerator( name = "group_sequence", sequenceName = "group_id_seq", allocationSize = 1 )
     @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "group_sequence" )
     @Column( name = "id" )
     private Long id;
@@ -26,7 +26,7 @@ public class GroupEntity{
     @NonNull
     private String name;
 
-    @OneToOne
+    @OneToOne( fetch = FetchType.LAZY, cascade = CascadeType.ALL )
     @PrimaryKeyJoinColumn
     private GroupMediaEntity media;
 
@@ -35,9 +35,9 @@ public class GroupEntity{
     @NonNull
     private PersonEntity owner;
 
-    @ManyToMany( mappedBy = "groups",
-                 cascade = CascadeType.DETACH,
-                 fetch = FetchType.EAGER ) private List<PersonEntity> users;
+    @ManyToMany( mappedBy = "groups" ) private List<PersonEntity> users;
 
-    @OneToMany( mappedBy = "toGroup" ) private List<MessageEntity> messages;
+    @OneToMany( mappedBy = "toGroup" )
+    @OrderBy( "dateOfSubmition desc" )
+    private List<MessageEntity> messages;
 }

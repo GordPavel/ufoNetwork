@@ -1,26 +1,16 @@
 package com.netcracker.service;
 
-import com.netcracker.DAO.MessageEntity;
-
-import java.util.List;
-
 public interface MessageService{
 
     /**
      add message to db
 
-     @param messageEntity - message to add
+     @param groupId  - id of group
+     @param writerId - id of person
+     @param text     - text of message
 
      @return - added message
      */
-    MessageEntity addMessage( MessageEntity messageEntity );
+    Long addMessage( Long groupId , Long writerId , String text );
 
-    /**
-     delete message by ID
-
-     @param id - id of message to delete
-     */
-    void delete( Long id );
-
-    List<MessageEntity> getByGroup( Long id);
 }

@@ -17,7 +17,7 @@ import java.util.List;
 public class RaceEntity{
 
     @Id
-    @SequenceGenerator( name = "race_sequence", sequenceName = "race_id_seq" )
+    @SequenceGenerator( name = "race_sequence", sequenceName = "race_id_seq", allocationSize = 1 )
     @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "race_sequence" )
     @Column( name = "id" )
     private Long id;

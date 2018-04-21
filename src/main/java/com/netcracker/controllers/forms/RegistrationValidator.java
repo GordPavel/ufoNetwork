@@ -40,10 +40,11 @@ public class RegistrationValidator implements Validator{
             errors.rejectValue( "passAccept" , "" , "Пароли должны совпадать" );
         if( !raceRepository.getByName( form.race ).isPresent() )
             errors.rejectValue( "race" , "" , "Такой расы не существует в системе" );
-        if( !form.image.getOriginalFilename().matches( "^.+\\.(jpg|jpeg|png)$" ) )
+        if( form.image.isEmpty() ) form.setImage( null );
+        else if( !form.image.getOriginalFilename().matches( "^.+\\.(jpg|jpeg|png)$" ) )
             errors.rejectValue( "image" ,
                                 "" ,
                                 "Можно загружать только в форматах jpg | jpeg | png" );
-        if( form.image.isEmpty() ) form.image = null;
+
     }
 }

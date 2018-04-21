@@ -1,6 +1,7 @@
 package com.netcracker.service;
 
 import com.netcracker.DAO.GroupEntity;
+import com.netcracker.DAO.GroupLazyFields;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,18 +9,9 @@ import java.util.Optional;
 public interface GroupService{
 
     /**
-     add Group to db
-
-     @param groupEntity - group to add
+     add Group to db@param groupEntity - group to add
      */
-    GroupEntity addGroup( GroupEntity groupEntity );
-
-    /**
-     delete Group by ID
-
-     @param id - ID of group to delete
-     */
-    void delete( Long id );
+    Long addGroup( GroupEntity groupEntity );
 
     /**
      search for Groups with specific owner name
@@ -32,20 +24,21 @@ public interface GroupService{
     List<GroupEntity> getBySearchParams( String name , String ownerName );
 
     /**
-     search for Group by it`s ID
+     Find one group and load specified lazy properties
 
-     @param id - ID of group
+     @param id     - id of group
+     @param fields - specified group's properties to load
 
-     @return - group with this ID
+     @return Optional of group if id is valid and otherwise empty Optional
      */
-    Optional<GroupEntity> getById(Long id );
+    Optional<GroupEntity> findById( Long id , GroupLazyFields... fields );
 
     /**
-     edit group
+     List groups and load specified lazy properties
 
-     @param groupEntity - edited group we need to save
+     @param fields - specified group's properties to load
 
-     @return - edited group
+     @return list of groups
      */
-    GroupEntity editGroup( GroupEntity groupEntity );
+    List<GroupEntity> listAll( GroupLazyFields... fields );
 }

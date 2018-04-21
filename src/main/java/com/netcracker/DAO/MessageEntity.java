@@ -3,21 +3,21 @@ package com.netcracker.DAO;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table( name = "message", schema = "ufonetwork", catalog = "ufonetwork" )
 @Getter
 @Setter
 @EqualsAndHashCode( of = "id" )
-@ToString( exclude = { "media" } )
 public class MessageEntity{
 
     @Id
-    @SequenceGenerator( name = "message_sequence", sequenceName = "message_id_seq" )
+    @SequenceGenerator( name = "message_sequence",
+                        sequenceName = "message_id_seq",
+                        allocationSize = 1 )
     @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "message_sequence" )
     @Column( name = "id" )
     private Long id;
@@ -34,11 +34,7 @@ public class MessageEntity{
     @Column( name = "text", nullable = false )
     private String text;
 
-    @Basic
-    @Column( name = "date_of_submition", nullable = false )
-    private Date dateOfSubmition;
-
-    @Basic
-    @Column( name = "media" )
-    private byte[] media;
+    @Column( name = "date_of_submition", nullable = false, insertable = false, updatable = false )
+    @Convert( converter = ZonedDateTimeConverter.class )
+    private ZonedDateTime dateOfSubmition;
 }

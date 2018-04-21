@@ -17,9 +17,11 @@ import java.util.List;
 public class PersonEntity{
 
     @Id
-    @SequenceGenerator( name = "person_sequence", sequenceName = "person_id_seq" )
+    @SequenceGenerator( name = "person_sequence",
+                        sequenceName = "person_id_seq",
+                        allocationSize = 1 )
     @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "person_sequence" )
-    @Column( name = "id" )
+    @Column( name = "id", updatable = false, nullable = false )
     private Long id;
 
     @Basic
@@ -49,7 +51,7 @@ public class PersonEntity{
     @Column( name = "age" )
     private Integer age;
 
-    @OneToOne( cascade = CascadeType.ALL )
+    @OneToOne( fetch = FetchType.LAZY, cascade = CascadeType.ALL )
     @PrimaryKeyJoinColumn
     private PersonMediaEntity media;
 
@@ -58,10 +60,11 @@ public class PersonEntity{
     @NonNull
     private RaceEntity race;
 
-    @ManyToMany( cascade = CascadeType.DETACH, fetch = FetchType.EAGER )
+    @ManyToMany
     @JoinTable( name = "person_group",
-                joinColumns = { @JoinColumn( name = "person" ) },
-                inverseJoinColumns = { @JoinColumn( name = "\"group\"" ) } )
+                joinColumns = { @JoinColumn( name = "person", referencedColumnName = "id" ) },
+                inverseJoinColumns = {
+                        @JoinColumn( name = "group", referencedColumnName = "id" ) } )
     private List<GroupEntity> groups;
 
     @OneToMany( mappedBy = "owner" ) private List<GroupEntity> rulingGroups;

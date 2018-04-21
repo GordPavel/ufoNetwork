@@ -5,7 +5,10 @@ import com.netcracker.service.RaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,21 +17,21 @@ import java.util.regex.Pattern;
 @RequestMapping( value = "/persons" )
 public class PersonSearchPageController{
 
-    @Autowired
-    PersonService personService;
+    @Autowired PersonService personService;
 
-    @Autowired
-    RaceService raceService;
+    @Autowired RaceService raceService;
 
     /**
-     * Open user`s search page with pre-filled fields
-     * @param name - user`s name
-     * @param raceID - user`s race
-     * @param ageFrom - minimum user`s age
-     * @param ageTo - maximum user`s age
-     * @param sex - user`s sex
-     * @param model - model to store params
-     * @return search page
+     Open user`s search page with pre-filled fields
+
+     @param name    - user`s name
+     @param raceID  - user`s race
+     @param ageFrom - minimum user`s age
+     @param ageTo   - maximum user`s age
+     @param sex     - user`s sex
+     @param model   - model to store params
+
+     @return search page
      */
     @GetMapping( value = "/search" )
     public String searchParams(
@@ -42,11 +45,10 @@ public class PersonSearchPageController{
                     Integer ageTo ,
             @RequestParam( value = "sex", defaultValue = "" )
                     String sex ,
-            @CookieValue( name = "userID", defaultValue = "")
-                    Long userId,
-            Model model ){
+            @CookieValue( name = "userID", defaultValue = "" )
+                    Long userId , Model model ){
 
-        if (userId == null){
+        if( userId == null ){
             return "redirect:/";
         }
 
@@ -59,14 +61,16 @@ public class PersonSearchPageController{
     }
 
     /**
-     * Open user`s search result page
-     * @param name - user`s name
-     * @param raceID - user`s race
-     * @param ageFrom - minimum user`s age
-     * @param ageTo - maximum user`s age
-     * @param sex - user`s sex
-     * @param model - model to store params
-     * @return search result page
+     Open user`s search result page
+
+     @param name    - user`s name
+     @param raceID  - user`s race
+     @param ageFrom - minimum user`s age
+     @param ageTo   - maximum user`s age
+     @param sex     - user`s sex
+     @param model   - model to store params
+
+     @return search result page
      */
     @GetMapping( value = "/search/result" )
     public String searchResult(
@@ -80,44 +84,43 @@ public class PersonSearchPageController{
                     Integer ageTo ,
             @RequestParam( value = "sex", defaultValue = "" )
                     String sex ,
-            @CookieValue( name = "userID", defaultValue = "")
-                    Long userId,
-            Model model ){
+            @CookieValue( name = "userID", defaultValue = "" )
+                    Long userId , Model model ){
 
-        Pattern p = Pattern.compile("[\\d\\s-_\\*\\?]+");
-        Matcher nameMatcher = p.matcher(name);
-        Matcher sexMatcher = p.matcher(sex);
+        Pattern p           = Pattern.compile( "[\\d\\s-_\\*\\?]+" );
+        Matcher nameMatcher = p.matcher( name );
+        Matcher sexMatcher  = p.matcher( sex );
 
-        if (!p.matcher(name).matches()){
+        if( !p.matcher( name ).matches() ){
             //TODO: error mesage implementation
-            model.addAttribute("error_message","unacceptable name");
+            model.addAttribute( "error_message" , "unacceptable name" );
             return "personSearchPage";
         }
-        if (!p.matcher(sex).matches()){
+        if( !p.matcher( sex ).matches() ){
             //TODO: error mesage implementation
-            model.addAttribute("error_message","unacceptable sex");
+            model.addAttribute( "error_message" , "unacceptable sex" );
             return "personSearchPage";
         }
-        if (ageFrom>ageTo){
+        if( ageFrom > ageTo ){
             //TODO: error mesage implementation
-            model.addAttribute("error_message","incorrect age parameters");
+            model.addAttribute( "error_message" , "incorrect age parameters" );
             return "personSearchPage";
         }
-        if (raceService.getById(raceID)==null){
+        if( raceService.getById( raceID ) == null ){
             //TODO: error mesage implementation
-            model.addAttribute("error_message","incorrect race");
+            model.addAttribute( "error_message" , "incorrect race" );
             return "personSearchPage";
         }
 
-        if (userId == null){
+        if( userId == null ){
             return "redirect:/";
         }
         model.addAttribute( "persons" ,
-                personService.getBySearchParams( name ,
-                        raceID ,
-                        ageFrom ,
-                        ageTo ,
-                        sex ) );
+                            personService.listWithSpecifications( name ,
+                                                                  raceID ,
+                                                                  ageFrom ,
+                                                                  ageTo ,
+                                                                  sex ) );
 
         return "personSearchResult";
     }

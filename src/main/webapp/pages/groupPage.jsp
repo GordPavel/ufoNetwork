@@ -1,8 +1,3 @@
-<%@ page import="java.util.List" %>
-<%@ page import="org.springframework.beans.factory.annotation.Autowired" %>
-<%@ page import="com.netcracker.repository.PersonRepository" %>
-<%@ page import="com.netcracker.DAO.GroupEntity" %>
-<%@ page import="com.netcracker.DAO.PersonEntity" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
@@ -15,11 +10,85 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="<c:url value="/resources/js/bootstrap.min.js"/>"></script>
     <%--@elvariable id="group" type="com.netcracker.DAO.GroupEntity"--%>
+    <script>
+        function generateMessage(id, text, date, writerId, writerName) {
+            return "<div id=\"message-" + id + "\">\n" +
+                "                    <b>" + writerName + " " + date + "</b>:\n" +
+                (writerId === ${cookie.userID.value} || ${group.owner.id} === ${cookie.userID.value} ?
+                    "                        <button class=\"btn btn-primary deleteMessage\" onclick=\"deleteMessage(" + id + ")\" value=\"Удалить\"></button>" : "") +
+
+                "                    <br>" + text + "\n" +
+                "                </div>";
+        }
+
+        function ajaxAllMessagesOfGroup() {
+            var errorHandler = function () {
+                alert('Сообщения не может быть получены')
+            };
+            $.ajax({
+                url: "${pageContext.request.contextPath}/groups/" + ${group.id} +"/messages",
+                type: 'GET',
+                timeout: 5 * 1000,
+                success: function (response) {
+                    var divs = response.map(function (message) {
+                        return generateMessage(message.id, message.text, message.date, message.writerId, message.writerName);
+                    }).join('\n');
+                    $('#messages').html(divs);
+                },
+                error: errorHandler
+            });
+        }
+
+        function deleteMessage(messageId) {
+            var errorHandler = function () {
+                alert('Сообщение не может быть удалено')
+            };
+            $.ajax({
+                url: "${pageContext.request.contextPath}/groups/message-".concat(messageId.toString()),
+                type: 'DELETE',
+                timeout: 1000 * 5,
+                success: function (response) {
+                    ajaxAllMessagesOfGroup();
+                    if (response !== "success") {
+                        errorHandler();
+                    }
+                },
+                error: errorHandler
+            });
+        }
+
+        $(document).ready(function () {
+            $('#send').click(function () {
+                var data = JSON.stringify({
+                    messageText: $('#textarea2').val(),
+                });
+                var errorHandler = function () {
+                    alert('Сообщение не может быть отправлено')
+                };
+                $.ajax({
+                    url: "${pageContext.request.contextPath}/groups/" + ${group.id} +"/message",
+                    type: 'POST',
+                    timeout: 5 * 1000,
+                    contentType: "application/json",
+                    data: data,
+                    success: function (response) {
+                        ajaxAllMessagesOfGroup();
+                        if (response === 'fail') {
+                            errorHandler();
+                        } else {
+                            $('#textarea2').val("");
+                        }
+                    },
+                    error: errorHandler
+                });
+            });
+        });
+    </script>
 </head>
 <body>
 <%@include file="/resources/templates/header.jsp" %>
 <div class="content">
-
+    <%-- todo Что это за фотографии?--%>
     <div id="img1"><img src='/resources/images/u157.png'></div>
     <div id="img2"><img src='/resources/images/chat-104.png' width="32" height="32"></div>
     <div id="l1">
@@ -52,28 +121,21 @@
         </div>
     </div>
     <div id="l6" style="overflow-y:auto; width: 30%; max-height: 50%;">
-        <table border="1" width="99%">
+        <div id="messages" border="1" width="99%">
             <c:forEach items="${group.messages}" var="message">
-                <tr>
-                    <th><b>${message.writer.name}(${message.dateOfSubmition})</b>:
-                        <c:if test="${message.writer.id.toString().equals(cookie[\"userID\"].value)||group.owner.id.toString().equals(cookie[\"userID\"].value)}">
-                            <form method="POST" style="display: inline">
-                                <input type='button' class="btn" value='удалить'/>
-                                <input type="hidden" name="messageId" value="${message.id}"/>
-                            </form>
-                        </c:if>
-                        <br/>${message.text}
-                    </th>
-                </tr>
+                <div id="message-${message.id}">
+                    <b>${message.writer.name} ${message.dateOfSubmition.format(formatter)}</b>:
+                    <c:if test="${message.writer.id.toString().equals(cookie[\"userID\"].value)||group.owner.id.toString().equals(cookie[\"userID\"].value)}">
+                        <button class="btn btn-primary deleteMessage" onclick="deleteMessage(${message.id})"
+                                value="Удалить"></button>
+                    </c:if>
+                    </br>${message.text}
+                </div>
             </c:forEach>
-        </table>
-
+        </div>
     </div>
-
-    <textarea form="addMessage" name="message" id="textarea2" style="resize: none;"></textarea>
-    <form method="POST" id="addMessage">
-        <input type="submit" class="btn" id="send" value="Отправить"/>
-    </form>
+    <textarea name="message" id="textarea2" style="resize: none;"></textarea>
+    <input type="submit" class="btn" id="send" value="Отправить"/>
 </div>
 <%@include file="/resources/templates/footer.jsp" %>
 </body>

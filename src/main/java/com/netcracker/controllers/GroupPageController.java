@@ -1,9 +1,13 @@
 package com.netcracker.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netcracker.DAO.GroupEntity;
+import com.netcracker.DAO.GroupLazyFields;
 import com.netcracker.DAO.MessageEntity;
-import com.netcracker.DAO.PersonEntity;
+import com.netcracker.repository.GroupRepository;
 import com.netcracker.repository.MessageRepository;
+import com.netcracker.repository.PersonRepository;
 import com.netcracker.service.GroupService;
 import com.netcracker.service.MessageService;
 import com.netcracker.service.PersonService;
@@ -12,9 +16,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import javax.servlet.http.HttpServletRequest;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
@@ -24,33 +33,44 @@ import java.util.regex.Pattern;
 @RequestMapping( "/groups" )
 public class GroupPageController{
 
-    @Autowired PersonService personService;
-
+    @Autowired PersonService     personService;
+    @Autowired PersonRepository  personRepository;
     @Autowired MessageService    messageService;
     @Autowired MessageRepository messageRepository;
-
-    @Autowired GroupService groupService;
+    @Autowired GroupService      groupService;
+    @Autowired GroupRepository   groupRepository;
+    @Autowired ObjectMapper      mapper;
 
     /**
      Open group page
 
-     @param id    - group ID, path
-     @param model - model to store params
+     @param groupId - group ID, path
+     @param model   - model to store params
 
      @return - group page
      */
     @GetMapping( value = "/{id}" )
     public String openPage(
             @PathVariable( value = "id" )
-                    Long id ,
+                    Long groupId ,
             @CookieValue( name = "userID", defaultValue = "" )
-                    Long userId , Model model ){
-
+                    Long userId , Model model , HttpServletRequest request ){
         if( userId == null ){
             return "redirect:/";
         }
-        GroupEntity groupEntity = groupService.getById( id ).get();
-        groupEntity.setMessages(messageService.getByGroup(id));
+//        todo Обработка ошибок
+        GroupEntity groupEntity =
+                groupService.findById( groupId , GroupLazyFields.MESSAGES , GroupLazyFields.USERS )
+                            .get();
+        //noinspection ResultOfMethodCallIgnored
+        ZoneId zoneId =
+                ZoneId.of( Calendar.getInstance( request.getLocale() ).getTimeZone().getID() );
+        groupEntity.getMessages()
+                   .parallelStream()
+                   .peek( message -> message.setDateOfSubmition( message.getDateOfSubmition()
+                                                                        .withZoneSameInstant( zoneId ) ) )
+                   .close();
+        model.addAttribute( "formatter" , DateTimeFormatter.ofPattern( "dd.MM.yyyy HH:mm" ) );
         model.addAttribute( "group" , groupEntity );
 
         return "groupPage";
@@ -59,88 +79,72 @@ public class GroupPageController{
     /**
      Posting message in group
 
-     @param writer      - cookied user ID who post this message
-     @param messageText - message text
-     @param id          - group ID, path
+     @param writerId    - authenticated user ID who post this message
+     @param requestBody - contains data about message
      @param model       - model to store params
 
      @return - group page
      */
-    @PostMapping( value = "/{id}", params = "message" )
-    public String postMessage(
-            @CookieValue( name = "userID", defaultValue = "" )
-                    Long writer ,
-            @RequestParam( value = "message" )
-                    String messageText ,
-            @PathVariable( value = "id" )
-                    Long id , Model model ){
-
-        if( writer == null ){
-            return "redirect:/";
+    @PostMapping( value = "/{id}/message", produces = "application/json" )
+    public @ResponseBody
+    String postMessage(
+            @CookieValue( name = "userID", required = false )
+                    Long writerId ,
+            @PathVariable( "id" )
+                    Long groupId ,
+            @RequestBody
+                    Map<String, String> requestBody , Model model ){
+        try{
+            MessageEntity message = messageRepository.findById( messageService.addMessage( groupId ,
+                                                                                           writerId ,
+                                                                                           requestBody
+                                                                                                   .get( "messageText" ) ) )
+                                                     .get();
+            return mapper.writeValueAsString( messageToJsonMap( message ) );
+        }catch( IllegalArgumentException | JsonProcessingException e ){
+            return "fail";
         }
+    }
 
-
-        MessageEntity messageEntity = new MessageEntity();
-        //TODO: check present
-        PersonEntity writerEntity = personService.getById( writer ).get();
-        messageEntity.setToGroup( groupService.getById( id ).get() );
-        /////////////////////////////////////
-        messageEntity.setText( messageText.replaceAll("\n","</br>") );
-        messageEntity.setWriter( writerEntity );
-        messageEntity.setDateOfSubmition(new Date(System.currentTimeMillis()));
-
-        if( groupService.getById( id ).get().getUsers().contains( writerEntity ) ){
-            messageService.addMessage( messageEntity );
-        }else{
-            //TODO: error mesage implementation
-            model.addAttribute( "error_message" , "user can`t write here" );
-        }
-
-        GroupEntity groupEntity = groupService.getById( id ).get();
-        groupEntity.setMessages(messageService.getByGroup(id));
-        model.addAttribute( "group" , groupEntity );
-
-        return "redirect:/groups/"+id;
+    private LinkedHashMap<String, String> messageToJsonMap( MessageEntity message ){
+        return new LinkedHashMap<String, String>(){{
+            put( "id" , message.getId().toString() );
+            put( "text" , message.getText() );
+            put( "date" ,
+                 message.getDateOfSubmition()
+                        .format( DateTimeFormatter.ofPattern( "dd.MM.yyyy HH:mm" ) ) );
+            put( "writerId" , message.getWriter().getId().toString() );
+            put( "writerName" , message.getWriter().getName() );
+        }};
     }
 
     /**
-     Delete message from group
-
-     @param messageId - message to delete
-     @param id        - group ID, path
-     @param model     - model to store params
-
-     @return - group page
+     Ajax request to delete message from group
      */
-    @PostMapping( value = "/{id}", params = "messageId" )
-    public String deleteMessage(
-            @RequestParam( value = "messageId", defaultValue = "" )
-                    Long messageId ,
-            @PathVariable( value = "id" )
-                    Long id ,
-            @CookieValue( name = "userID" )
-                    Long userId , Model model ){
+    @DeleteMapping( value = "/message-{id}" )
+    public @ResponseBody
+    String deleteMessage(
+            @CookieValue( value = "userID", required = false )
+                    Long writerId ,
+            @PathVariable( "id" )
+                    Long messageId ){
+        return messageRepository.findById( messageId ).map( message -> {
+            if( !message.getWriter().getId().equals( writerId ) ) return null;
+            messageRepository.deleteById( messageId );
+            return "success";
+        } ).orElse( "fail" );
+    }
 
-        if( userId == null ){
-            return "redirect:/";
-        }
-
-        //TODO: check present
-        MessageEntity message = messageRepository.findById( messageId ).get();
-        //////////////////////////
-        if( !( message.getWriter().getId().equals( userId ) ||
-            message.getToGroup().getOwner().getId().equals( userId ) ) ){
-            //TODO: error message implementation
-            model.addAttribute( "error_message" , "user can`t delete this" );
-            return "redirect:/groups/"+id;
-        }
-
-        messageService.delete( messageId );
-        GroupEntity groupEntity = groupService.getById( id ).get();
-        groupEntity.setMessages(messageService.getByGroup(id));
-        model.addAttribute( "group" , groupEntity );
-
-        return "redirect:/groups/"+id;
+    @GetMapping( value = "/{id}/messages", produces = "application/json" )
+    public @ResponseBody
+    String getAllMessagesOfGroup(
+            @PathVariable( "id" )
+                    Long groupId ) throws JsonProcessingException{
+        return mapper.writeValueAsString( groupRepository.getMessagesById( groupId )
+                                                         .parallelStream()
+                                                         .sorted( Comparator.comparing( MessageEntity::getDateOfSubmition ) )
+                                                         .map( this::messageToJsonMap )
+                                                         .collect( Collectors.toList() ) );
     }
 
     /**
@@ -158,26 +162,29 @@ public class GroupPageController{
                     Long join ,
             @PathVariable( value = "id" )
                     Long id , Model model ){
-
         if( join == null ){
             return "redirect:/";
         }
 
-        if( !personService.getById( join ).get().getGroups().contains( groupService.getById( id ).get() ) ){
+//        todo Ленивая Загрузка
+        if( !personRepository.findById( join )
+                             .get()
+                             .getGroups()
+                             .contains( groupRepository.findById( id ).get() ) ){
             personService.joinGroup( id , join );
         }else{
-            //TODO: error mesage implementation
+            //TODO: error message implementation
             model.addAttribute( "error_message" , "user already in group" );
         }
-        model.addAttribute( "group" , groupService.getById( id ) );
+        model.addAttribute( "group" , groupRepository.findById( id ) );
 
-        return "redirect:/groups/"+id;
+        return "redirect:/groups/" + id;
     }
 
     /**
      Leaving the group
 
-     @param leave - cookied user ID, who wants to leave
+     @param leave - cookies user ID, who wants to leave
      @param id    - group ID, path, from where leave
      @param model - model to store params
 
@@ -194,15 +201,19 @@ public class GroupPageController{
             return "redirect:/";
         }
 
-        if( personService.getById( leave ).get().getGroups().contains( groupService.getById( id ).get() ) ){
+//        todo Ленивая загрузка
+        if( personRepository.findById( leave )
+                            .get()
+                            .getGroups()
+                            .contains( groupRepository.findById( id ).get() ) ){
             personService.leaveGroup( id , leave );
         }else{
             //TODO: error mesage implementation
             model.addAttribute( "error_message" , "user not in group" );
         }
-        model.addAttribute( "group" , groupService.getById( id ) );
+        model.addAttribute( "group" , groupRepository.findById( id ) );
 
-        return "redirect:/groups/"+id;
+        return "redirect:/groups/" + id;
     }
 //
 //    //Group creation
@@ -284,10 +295,10 @@ public class GroupPageController{
 //                    Long id ,
 //            @CookieValue( name = "userID" )
 //                    Long userId , Model model ){
-//        if( ( userId == null ) || ( groupService.getById( id ).getOwner().getId() != userId ) ){
+//        if( ( userId == null ) || ( groupRepository.findById( id ).getOwner().getId() != userId ) ){
 //            return "redirect:/";
 //        }
-//        model.addAttribute( "group" , groupService.getById( id ) );
+//        model.addAttribute( "group" , groupRepository.findById( id ) );
 //        return "groupSettingsPage";
 //    }
 //
@@ -309,11 +320,11 @@ public class GroupPageController{
 //            @CookieValue( name = "userID", defaultValue = "" )
 //                    Long userId , Model model ){
 //
-//        if( ( userId == null ) || ( groupService.getById( id ).getOwner().getId() != userId ) ){
+//        if( ( userId == null ) || ( groupRepository.findById( id ).getOwner().getId() != userId ) ){
 //            return "redirect:/";
 //        }
 //
-//        GroupEntity toEdit = groupService.getById( id );
+//        GroupEntity toEdit = groupRepository.findById( id );
 //        toEdit.setName( newName );
 //        model.addAttribute( "group" , groupService.editGroup( toEdit ) );
 //        return "groupSettingsPage";

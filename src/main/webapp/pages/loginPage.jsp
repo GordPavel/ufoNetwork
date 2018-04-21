@@ -20,7 +20,6 @@
     <div onclick="show('none')" id="wrap"></div>
 
     <!-- Всплывающее окно-->
-    <%--todo Окно регистрации--%>
     <c:url value="/registration" var="registrationUrl"/>
     <form:form method="post" action="${registrationUrl}" modelAttribute="registrationForm"
                enctype="multipart/form-data">
@@ -47,7 +46,7 @@
             <label>Раса</label>
             <spring:bind path="race">
                 <form:select path="race" items="${races}"/>
-                <form:errors path="race"/>
+                <form:errors path="race" cssStyle="color: red"/>
             </spring:bind>
 
             <label>Возраст</label>
@@ -77,7 +76,8 @@
             <label>Подтверджение пароля</label>
             <spring:bind path="passAccept">
                 <div>
-                    <form:input class="form-control" type="password" path="passAccept" placeholder="Подтверждение"/><span></span>
+                    <form:input class="form-control" type="password" path="passAccept"
+                                placeholder="Подтверждение"/><span></span>
                     <form:errors path="passAccept"/>
                 </div>
             </spring:bind>
@@ -117,10 +117,7 @@
         </spring:bind>
         <button type="submit" class="btn" id="enter"> Войти</button>
     </form:form>
-    <!--Кнопка-->
     <button class="btn" id="register" onclick="show('block')" align="center"> Зарегистрироваться</button>
-
-    <!--<p><input type="submit" value="Войти"></p>-->
 </div>
 <%@include file="/resources/templates/footer.jsp" %>
 </body>
