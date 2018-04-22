@@ -60,11 +60,11 @@ public class PersonEntity{
     @NonNull
     private RaceEntity race;
 
-    @ManyToMany
+    @ManyToMany( cascade = CascadeType.MERGE )
     @JoinTable( name = "person_group",
                 joinColumns = { @JoinColumn( name = "person", referencedColumnName = "id" ) },
                 inverseJoinColumns = {
-                        @JoinColumn( name = "group", referencedColumnName = "id" ) } )
+                        @JoinColumn( name = "\"group\"", referencedColumnName = "id" ) } )
     private List<GroupEntity> groups;
 
     @OneToMany( mappedBy = "owner" ) private List<GroupEntity> rulingGroups;

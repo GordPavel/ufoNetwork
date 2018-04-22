@@ -42,13 +42,14 @@ public interface PersonService{
     /**
      Search for person by parameters
 
-     @return - list of persons suitable for search parameters
      @param name    - *+name+* of Person
      @param raceID  - Person`s race`s id
      @param ageFrom - Person`s age >= age
      @param ageTo   - Persin`s age =< age
      @param sex     - Person`s *+sex+*
-     @param fields
+     @param fields  - specify which lazy fields will be loaded
+
+     @return - list of persons suitable for search parameters
      */
     List<PersonEntity> listWithSpecifications( String name , Long raceID , Integer ageFrom ,
                                                Integer ageTo , String sex ,

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netcracker.DAO.GroupEntity;
 import com.netcracker.DAO.GroupLazyFields;
 import com.netcracker.DAO.MessageEntity;
+import com.netcracker.DAO.PersonEntity;
 import com.netcracker.repository.GroupRepository;
 import com.netcracker.repository.MessageRepository;
 import com.netcracker.repository.PersonRepository;
@@ -16,13 +17,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import java.time.ZoneId;
+import java.io.IOException;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  Controller for groups. Group page, group create, group settings
  */
 @Controller
-@RequestMapping( "/groups" )
+@RequestMapping( "/groups/{id}" )
 public class GroupPageController{
 
     @Autowired PersonService     personService;
@@ -49,31 +49,87 @@ public class GroupPageController{
 
      @return - group page
      */
-    @GetMapping( value = "/{id}" )
+    @GetMapping
     public String openPage(
             @PathVariable( value = "id" )
                     Long groupId ,
-            @CookieValue( name = "userID", defaultValue = "" )
-                    Long userId , Model model , HttpServletRequest request ){
-        if( userId == null ){
-            return "redirect:/";
-        }
+            @CookieValue( name = "userID", required = false )
+                    Long userId , Model model ){
+        if( userId == null ) return "redirect:/";
 //        todo Обработка ошибок
         GroupEntity groupEntity =
                 groupService.findById( groupId , GroupLazyFields.MESSAGES , GroupLazyFields.USERS )
                             .get();
-        //noinspection ResultOfMethodCallIgnored
-        ZoneId zoneId =
-                ZoneId.of( Calendar.getInstance( request.getLocale() ).getTimeZone().getID() );
-        groupEntity.getMessages()
-                   .parallelStream()
-                   .peek( message -> message.setDateOfSubmition( message.getDateOfSubmition()
-                                                                        .withZoneSameInstant( zoneId ) ) )
-                   .close();
         model.addAttribute( "formatter" , DateTimeFormatter.ofPattern( "dd.MM.yyyy HH:mm" ) );
         model.addAttribute( "group" , groupEntity );
+        model.addAttribute( "isMember" ,
+                            groupEntity.getUsers()
+                                       .parallelStream()
+                                       .map( PersonEntity::getId )
+                                       .anyMatch( Predicate.isEqual( userId ) ) );
 
         return "groupPage";
+    }
+
+    /**
+     Ajax request to get all messages of group
+
+     @return json array contains messages
+     */
+    @GetMapping( value = "/messages", produces = "application/json; charset=UTF-8" )
+    public @ResponseBody
+    String getAllMessagesOfGroup(
+            @PathVariable( "id" )
+                    Long groupId ,
+            @CookieValue( name = "userID", required = false )
+                    Long writerId ) throws IOException{
+        if( writerId == null ){
+            return mapper.writeValueAsString( new LinkedHashMap<String, String>(){{
+                put( "error" , "home" );
+            }} );
+        }
+        return mapper.writeValueAsString( groupRepository.getMessagesById( groupId )
+                                                         .parallelStream()
+                                                         .sorted( Comparator.comparing(
+                                                                 MessageEntity::getDateOfSubmition ) )
+                                                         .map( this::messageToJsonMap )
+                                                         .collect( Collectors.toList() ) );
+    }
+
+    @PostMapping( value = "/message" )
+    public @ResponseBody
+    String postMessage(
+            @CookieValue( name = "userID", required = false )
+                    Long writerId ,
+            @PathVariable( "id" )
+                    Long groupId ,
+            @RequestBody
+                    Map<String, String> requestBody , Model model ){
+        if( writerId == null ) return "home";
+        try{
+            messageService.addMessage( groupId , writerId , requestBody.get( "messageText" ) );
+            return "success";
+        }catch( IllegalArgumentException e ){
+            return "fail";
+        }
+    }
+
+    /**
+     Ajax request to delete message from group
+     */
+    @DeleteMapping( value = "/message-{messageId}" )
+    public @ResponseBody
+    String deleteMessage(
+            @CookieValue( value = "userID", required = false )
+                    Long writerId ,
+            @PathVariable( "messageId" )
+                    Long messageId ){
+        if( writerId == null ) return "home";
+        return messageRepository.findById( messageId ).map( message -> {
+            if( !message.getWriter().getId().equals( writerId ) ) return "fail";
+            messageRepository.deleteById( messageId );
+            return "success";
+        } ).orElse( "fail" );
     }
 
     private LinkedHashMap<String, String> messageToJsonMap( MessageEntity message ){
@@ -88,121 +144,67 @@ public class GroupPageController{
         }};
     }
 
-    @PostMapping( value = "/{id}/message" )
+    /**
+     Response to ajax request to join the group
+
+     @param userId  - cookied user ID, who wants to join
+     @param groupId - group ID, path, where to join
+
+     @return - json object of user's data
+     */
+    @PostMapping( value = "/join", produces = "application/json; charset=UTF-8" )
     public @ResponseBody
-    String postMessage(
+    String joinGroup(
             @CookieValue( name = "userID", required = false )
-                    Long writerId ,
-            @PathVariable( "id" )
-                    Long groupId ,
-            @RequestBody
-                    Map<String, String> requestBody , Model model ){
-        try{
-            messageService.addMessage( groupId , writerId , requestBody.get( "messageText" ) );
-            return "success";
-        }catch( IllegalArgumentException e ){
-            return "fail";
-        }
-    }
-
-
-    /**
-     Ajax request to delete message from group
-     */
-    @DeleteMapping( value = "/message-{id}" )
-    public @ResponseBody
-    String deleteMessage(
-            @CookieValue( value = "userID", required = false )
-                    Long writerId ,
-            @PathVariable( "id" )
-                    Long messageId ){
-        return messageRepository.findById( messageId ).map( message -> {
-            if( !message.getWriter().getId().equals( writerId ) ) return null;
-            messageRepository.deleteById( messageId );
-            return "success";
-        } ).orElse( "fail" );
-    }
-
-    @GetMapping( value = "/{id}/messages", produces = "application/json; charset=UTF-8" )
-    public @ResponseBody
-    String getAllMessagesOfGroup(
-            @PathVariable( "id" )
-                    Long groupId ) throws JsonProcessingException{
-        String response = mapper.writeValueAsString( groupRepository.getMessagesById( groupId )
-                                                             .parallelStream()
-                                                             .sorted( Comparator.comparing(
-                                                                     MessageEntity::getDateOfSubmition ) )
-                                                             .map( this::messageToJsonMap )
-                                                             .collect( Collectors.toList() ) );
-        return response;
-    }
-
-    /**
-     Joining the group
-
-     @param join  - cookied user ID, who wants to join
-     @param id    - group ID, path, where to join
-     @param model - model to store params
-
-     @return - group page
-     */
-    @GetMapping( value = "/{id}/join" )
-    public String joinGroup(
-            @CookieValue( name = "userID", defaultValue = "" )
-                    Long join ,
+                    Long userId ,
             @PathVariable( value = "id" )
-                    Long id , Model model ){
-
-        if( join == null ){
-            return "redirect:/";
+                    Long groupId ) throws JsonProcessingException{
+        if( userId == null ){
+            return mapper.writeValueAsString( new LinkedHashMap<String, String>(){{
+                put( "error" , "home" );
+            }} );
         }
 
-//        todo Ленивая Загрузка
-        if( !personRepository.getGroupsById( id )
-                             .contains( groupRepository.findById( id ).get() ) ){
-            personService.joinGroup( id , join );
-        }else{
-            //TODO: error message implementation
-            model.addAttribute( "error_message" , "user already in group" );
-        }
-        model.addAttribute( "group" , groupRepository.findById( id ) );
-
-        return "redirect:/groups/" + id;
+//        todo Обработка ошибок
+        GroupEntity  group  = groupService.findById( groupId , GroupLazyFields.USERS ).get();
+        PersonEntity person = personRepository.findById( userId ).get();
+        if( group.getUsers()
+                 .parallelStream()
+                 .map( PersonEntity::getId )
+                 .anyMatch( Predicate.isEqual( userId ) ) ) return "fail";
+        personService.joinGroup( groupId , userId );
+        return mapper.writeValueAsString( new LinkedHashMap<String, String>(){{
+            put( "id" , person.getId().toString() );
+            put( "name" , person.getName() );
+            put( "race" , person.getRace().getName() );
+            put( "age" , person.getAge().toString() );
+        }} );
     }
 
     /**
      Leaving the group
 
-     @param leave - cookied user ID, who wants to leave
-     @param id    - group ID, path, from where leave
-     @param model - model to store params
+     @param userId  - cookied user ID, who wants to leave
+     @param groupId - group ID, path, from where leave
+     @param model   - model to store params
 
      @return - group page
      */
-    @GetMapping( value = "/{id}/leave" )
-    public String leaveGroup(
-            @CookieValue( name = "userID", defaultValue = "" )
-                    Long leave ,
+    @PostMapping( value = "/leave" )
+    public @ResponseBody
+    String leaveGroup(
+            @CookieValue( name = "userID", required = false )
+                    Long userId ,
             @PathVariable( value = "id" )
-                    Long id , Model model ){
-
-        if( leave == null ){
-            return "redirect:/";
-        }
-
-//        todo Ленивая загрузка
-        if( personRepository.findById( leave )
-                            .get()
-                            .getGroups()
-                            .contains( groupRepository.findById( id ).get() ) ){
-            personService.leaveGroup( id , leave );
-        }else{
-            //TODO: error mesage implementation
-            model.addAttribute( "error_message" , "user not in group" );
-        }
-        model.addAttribute( "group" , groupRepository.findById( id ) );
-
-        return "redirect:/groups/" + id;
+                    Long groupId , Model model ){
+        if( userId == null ) return "home";
+        GroupEntity group = groupService.findById( groupId , GroupLazyFields.USERS ).get();
+        if( group.getUsers()
+                 .parallelStream()
+                 .map( PersonEntity::getId )
+                 .noneMatch( Predicate.isEqual( userId ) ) ) return "fail";
+        personService.leaveGroup( groupId , userId );
+        return userId.toString();
     }
 //
 //    //Group creation

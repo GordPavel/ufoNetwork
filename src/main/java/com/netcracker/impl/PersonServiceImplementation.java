@@ -23,18 +23,10 @@ import java.util.stream.Collectors;
 @Service
 public class PersonServiceImplementation implements PersonService{
 
-    private final PersonRepository personRepository;
-    private final GroupRepository  groupRepository;
-    private final RaceRepository   raceRepository;
+    @Autowired private PersonRepository personRepository;
+    @Autowired private GroupRepository  groupRepository;
+    @Autowired private RaceRepository   raceRepository;
 
-    @Autowired
-    public PersonServiceImplementation( PersonRepository personRepository ,
-                                        GroupRepository groupRepository ,
-                                        RaceRepository raceRepository ){
-        this.personRepository = personRepository;
-        this.groupRepository = groupRepository;
-        this.raceRepository = raceRepository;
-    }
 
     @Override
     public Optional<PersonEntity> findById( Long id , PersonLazyFields... fields ){
@@ -111,28 +103,20 @@ public class PersonServiceImplementation implements PersonService{
     }
 
     @Override
-    public void joinGroup( Long id , Long userId ){
+    public void joinGroup( Long groupId , Long userId ){
 //        todo Обработка ошибок
-        PersonEntity user  = personRepository.findById( userId ).get();
-        GroupEntity  group = groupRepository.findById( id ).get();
-
+        PersonEntity user  = findById( userId , PersonLazyFields.GROUPS ).get();
+        GroupEntity  group = groupRepository.findById( groupId ).get();
         user.getGroups().add( group );
-//        group.getUsers().add( user );
-
         personRepository.saveAndFlush( user );
-//        groupRepository.saveAndFlush( group );
     }
 
     @Override
-    public void leaveGroup( Long id , Long userId ){
+    public void leaveGroup( Long groupId , Long userId ){
 //        todo Обработка ошибок
-        PersonEntity user  = personRepository.findById( userId ).get();
-        GroupEntity  group = groupRepository.findById( id ).get();
-
+        PersonEntity user  = findById( userId , PersonLazyFields.GROUPS ).get();
+        GroupEntity  group = groupRepository.findById( groupId ).get();
         user.getGroups().remove( group );
-//        group.getUsers().remove( user );
-
         personRepository.saveAndFlush( user );
-//        groupRepository.saveAndFlush( group );
     }
 }

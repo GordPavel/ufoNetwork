@@ -10,14 +10,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="<c:url value="/resources/js/bootstrap.min.js"/>"></script>
     <%--@elvariable id="group" type="com.netcracker.DAO.GroupEntity"--%>
-    <%
-        boolean member = false;
-    %>
     <script>
         function generateMessage(id, text, date, writerId, writerName) {
             return "<div id=\"message-" + id + "\">\n" +
                 "                    <b>" + writerName + " " + date + "</b>:\n" +
-                (writerId === ${cookie.userID.value} || ${group.owner.id} === ${cookie.userID.value} ?
+                ((parseInt(writerId) === ${cookie.userID.value} || ${group.owner.id} === ${cookie.userID.value}) ?
                     "                        <button class=\"btn btn-primary deleteMessage\" onclick=\"deleteMessage(" + id + ")\" value=\"Удалить\"></button>" : "") +
 
                 "                    <br>" + text + "\n" +
@@ -29,44 +26,39 @@
                 alert('Сообщения не может быть получены')
             };
             $.ajax({
-                url: "${pageContext.request.contextPath}/groups/" + ${group.id} +"/messages",
+                url: "${pageContext.request.contextPath}/groups/${group.id}/messages",
                 type: 'GET',
-                timeout: 60 * 1000,
+                timeout: 400,
                 success: function (response) {
-                    var divs = response.map(function (message) {
-                        return generateMessage(message.id, message.text, message.date, message.writerId, message.writerName);
-                    }).join('\n');
-                    $('#messages').html(divs);
+                    if (response.error === "home")
+                        window.location.href = "${pageContext.request.contextPath}";
+                    else {
+                        $('#messages').html(response.map(function (message) {
+                            return generateMessage(message.id, message.text, message.date, message.writerId, message.writerName);
+                        }).join('\n'));
+                    }
                 },
                 error: errorHandler
             });
         }
 
-        function schelduleAjax() {
-            ajaxAllMessagesOfGroup();
-            setInterval(schelduleAjax, 10 * 1000);
-        }
-
         function sendMessage() {
-            var data = JSON.stringify({
-                messageText: $('#textarea2').val(),
-            });
             var errorHandler = function () {
                 alert('Сообщение не может быть отправлено')
             };
             $.ajax({
-                url: "${pageContext.request.contextPath}/groups/" + ${group.id} +"/message",
+                url: "${pageContext.request.contextPath}/groups/${group.id}/message",
                 type: 'POST',
                 timeout: 5 * 1000,
                 contentType: "application/json",
-                data: data,
+                data: JSON.stringify({messageText: $('#textarea2').val()}),
                 success: function (response) {
-                    if (response === 'fail') {
+                    if (response === "fail")
                         errorHandler();
-                    } else {
+                    else {
+                        ajaxAllMessagesOfGroup();
                         $('#textarea2').val("");
                     }
-                    ajaxAllMessagesOfGroup();
                 },
                 error: errorHandler
             });
@@ -77,40 +69,78 @@
                 alert('Сообщение не может быть удалено')
             };
             $.ajax({
-                url: "${pageContext.request.contextPath}/groups/message-".concat(messageId.toString()),
+                url: "${pageContext.request.contextPath}/groups/${group.id}/message-".concat(messageId.toString()),
                 type: 'DELETE',
                 timeout: 1000 * 5,
                 success: function (response) {
-                    if ("success" !== response) {
+                    if (response === "fail")
                         errorHandler();
-                    }
-                    ajaxAllMessagesOfGroup();
+                    else if (response === "home")
+                        window.location.href = "${pageContext.request.contextPath}";
+                    else
+                        ajaxAllMessagesOfGroup();
                 },
                 error: errorHandler
             });
         }
 
+        function generateUsersHref(id, name, race, age) {
+            return "<a id=\"member-" + id + "\" href=\"${pageContext.request.contextPath}/persons/"
+                + id + "\">" + name + " (" + race + "," + age + ")</a><br/>";
+        }
+
+        function joinGroup() {
+            function errorHandler() {
+                alert("Нельзя вступить в группу");
+            }
+
+            $.post("${pageContext.request.contextPath}/groups/${group.id}/join").success(function (response) {
+                if (response === "fail")
+                    errorHandler();
+                else if (response === "home")
+                    window.location.href = "${pageContext.request.contextPath}";
+                else {
+                    $('#members').append(generateUsersHref(response.id, response.name, response.race, response.age));
+                    $('#l3').html("<button onclick=\"leaveGroup()\">Покинуть группу</button><br/>");
+                }
+            }).error(errorHandler);
+        }
+
+        function leaveGroup() {
+            function errorHandler() {
+                alert("Нельзя покинуть группу");
+            }
+
+            $.post("${pageContext.request.contextPath}/groups/${group.id}/leave").success(function (response) {
+                if (response === "fail")
+                    errorHandler();
+                else if (response === "home")
+                    window.location.href = "${pageContext.request.contextPath}";
+                else {
+                    $('#member-'.concat(response)).remove();
+                    $('#l3').html("<button onclick=\"joinGroup()\">Вступить в группу</button><br/>");
+                }
+            }).error(errorHandler);
+        }
+
         $(document).ready(function () {
             $('#send').click(sendMessage);
-            setInterval(schelduleAjax, 10 * 1000);
+            setInterval(ajaxAllMessagesOfGroup, 500);
         });
     </script>
 </head>
 <body>
 <%@include file="/resources/templates/header.jsp" %>
 <div class="content">
-
-    <div id="img1"><img src='<c:url value="/group-${group.id}/image"/>'></div>
-    <div id="img2"><img src='/resources/images/chat-104.png' src='<c:url value="/user-${person.id}/image"/>' width="32"
-                        height="32"></div>
+    <img src='<c:url value="/group-${group.id}/image"/>' width="32" height="32">
+    <%--<img src='<c:url value="/user-${person.id}/image"/>' width="32" height="32">--%>
     <div id="l1">
         <table>
             <tr>
                 <th align='center'>${group.name}
-                    <c:if test="${group.owner.id.toString().equals(cookie[\"userID\"].value)}">
+                    <c:if test="${group.owner.id.toString().equals(cookie['userID'].value)}">
                         <a href="<c:url value="/groups/${group.id}/settings"/>">Настройки</a>
                     </c:if>
-
                 </th>
             </tr> <!--ряд с ячейками заголовков-->
             <tr>
@@ -120,28 +150,23 @@
         </table>
     </div>
     <div id="l3">
-        <c:forEach items="${group.users}" var="user">
-            <c:if test="${user.id.toString().equals(cookie[\"userID\"].value)}">
-                <%
-                    member = true;
-                %>
-            </c:if>
-        </c:forEach>
         <c:choose>
-            <c:when test="<%=member%>">
-                <a href="<c:url value="/groups/${group.id}/leave"/>">Покинуть группу</a><br/>
+            <c:when test="${isMember}">
+                <button onclick="leaveGroup()">Покинуть группу</button>
+                <br/>
             </c:when>
             <c:otherwise>
-                <a href="<c:url value="/groups/${group.id}/join"/>">Вступить в группу</a><br/>
+                <button onclick="joinGroup()">Вступить в группу</button>
+                <br/>
             </c:otherwise>
         </c:choose>
-        <label>Список участников</label>
     </div>
     <div id="l2" style="overflow:auto; width: 30%; max-height: 20%;">
-        <div class="list-group">
+        <label>Список участников</label>
+        <div class="list-group" id="members">
             <c:forEach items="${group.users}" var="user">
-                <a href="<c:url value="/persons/${user.id}"/>" style="">${user.name} (${user.race.name},${user.age})</a>
-                <br/>
+                <a id="member-${user.id}"
+                   href="<c:url value="/persons/${user.id}"/>">${user.name}(${user.race.name},${user.age})</a><br/>
             </c:forEach>
         </div>
     </div>
