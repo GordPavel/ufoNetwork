@@ -33,13 +33,14 @@ public class RegistrationValidator implements Validator{
                                                    "passAccept" ,
                                                    "" ,
                                                    "Поле не может быть пустым" );
+        ValidationUtils.rejectIfEmptyOrWhitespace( errors ,
+                                                   "race" ,
+                                                   "" ,
+                                                   "Поле не может быть пустым" );
         if( errors.hasErrors() ) return;
-
         RegistrationForm form = ( RegistrationForm ) o;
         if( !form.pass.equals( form.passAccept ) )
             errors.rejectValue( "passAccept" , "" , "Пароли должны совпадать" );
-        if( !raceRepository.getByName( form.race ).isPresent() )
-            errors.rejectValue( "race" , "" , "Такой расы не существует в системе" );
         if( form.image.isEmpty() ) form.setImage( null );
         else if( !form.image.getOriginalFilename().matches( "^.+\\.(jpg|jpeg|png)$" ) )
             errors.rejectValue( "image" ,

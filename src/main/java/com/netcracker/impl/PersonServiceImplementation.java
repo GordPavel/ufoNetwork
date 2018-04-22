@@ -1,9 +1,6 @@
 package com.netcracker.impl;
 
-import com.netcracker.DAO.GroupEntity;
-import com.netcracker.DAO.PersonEntity;
-import com.netcracker.DAO.PersonLazyFields;
-import com.netcracker.DAO.PersonMediaEntity;
+import com.netcracker.DAO.*;
 import com.netcracker.controllers.forms.RegistrationForm;
 import com.netcracker.repository.GroupRepository;
 import com.netcracker.repository.PersonRepository;
@@ -60,11 +57,20 @@ public class PersonServiceImplementation implements PersonService{
 
     @Override
     public Long addPerson( RegistrationForm form ) throws IOException{
-        PersonEntity entity = new PersonEntity( form.getLogin() ,
-                                                form.getPass() ,
-                                                form.getName() ,
-                                                raceRepository.getByName( form.getRace() )
-                                                              .orElseThrow( IllegalStateException::new ) );
+        RaceEntity race;
+        if( raceRepository.findAll()
+                          .parallelStream()
+                          .map( RaceEntity::getName )
+                          .noneMatch( java.util.function.Predicate.isEqual( form.getRace() ) ) ){
+            race = new RaceEntity();
+            race.setName( form.getRace() );
+            raceRepository.saveAndFlush( race );
+        }else{
+            race = raceRepository.getByName( form.getRace() )
+                                 .orElseThrow( IllegalStateException::new );
+        }
+        PersonEntity entity =
+                new PersonEntity( form.getLogin() , form.getPass() , form.getName() , race );
         entity.setAge( form.getAge() );
         entity.setSex( form.getSex() );
         if( form.getImage() != null ){

@@ -31,7 +31,7 @@
             <spring:bind path="login">
                 <div>
                     <form:input class="form-control" path="login" placeholder="Логин"/><span></span>
-                    <form:errors path="login"/>
+                    <form:errors path="login" cssClass="error"/>
                 </div>
             </spring:bind>
 
@@ -39,21 +39,26 @@
             <spring:bind path="name">
                 <div>
                     <form:input class="form-control" path="name" placeholder="Имя"/><span></span>
-                    <form:errors path="name"/>
+                    <form:errors path="name" cssClass="error"/>
                 </div>
             </spring:bind>
 
             <label>Раса</label>
             <spring:bind path="race">
-                <form:select path="race" items="${races}"/>
-                <form:errors path="race" cssStyle="color: red"/>
+                <form:input path="race" list="races"/>
+                <datalist id="races">
+                    <c:forEach items="${races}" var="race">
+                        <option value="${race}"></option>
+                    </c:forEach>
+                </datalist>
+                <form:errors path="race" cssClass="error"/>
             </spring:bind>
 
             <label>Возраст</label>
             <spring:bind path="age">
                 <div>
                     <form:input class="form-control" path="age" placeholder="Возраст"/><span></span>
-                    <form:errors path="age"/>
+                    <form:errors path="age" cssClass="error"/>
                 </div>
             </spring:bind>
 
@@ -61,7 +66,7 @@
             <spring:bind path="sex">
                 <div>
                     <form:input class="form-control" path="sex" placeholder="Пол"/><span></span>
-                    <form:errors path="sex"/>
+                    <form:errors path="sex" cssClass="error"/>
                 </div>
             </spring:bind>
 
@@ -69,7 +74,7 @@
             <spring:bind path="pass">
                 <div>
                     <form:input class="form-control" type="password" path="pass" placeholder="Пароль"/><span></span>
-                    <form:errors path="pass"/>
+                    <form:errors path="pass" cssClass="error"/>
                 </div>
             </spring:bind>
 
@@ -78,7 +83,7 @@
                 <div>
                     <form:input class="form-control" type="password" path="passAccept"
                                 placeholder="Подтверждение"/><span></span>
-                    <form:errors path="passAccept"/>
+                    <form:errors path="passAccept" cssClass="error"/>
                 </div>
             </spring:bind>
 
@@ -86,7 +91,7 @@
             <spring:bind path="image">
                 <div>
                     <form:input type="file" class="form-control" path="image"/><span></span>
-                    <form:errors path="image"/>
+                    <form:errors path="image" cssClass="error"/>
                 </div>
             </spring:bind>
 

@@ -10,9 +10,8 @@ import java.util.TimeZone;
 public class ZonedDateTimeConverter implements AttributeConverter<ZonedDateTime, Calendar>{
     @Override
     public Calendar convertToDatabaseColumn( ZonedDateTime entityAttribute ){
-        if( entityAttribute == null ){
+        if( entityAttribute == null )
             return null;
-        }
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis( entityAttribute.toInstant().toEpochMilli() );
         calendar.setTimeZone( TimeZone.getTimeZone( entityAttribute.getZone() ) );
@@ -21,9 +20,8 @@ public class ZonedDateTimeConverter implements AttributeConverter<ZonedDateTime,
 
     @Override
     public ZonedDateTime convertToEntityAttribute( Calendar databaseColumn ){
-        if( databaseColumn == null ){
+        if( databaseColumn == null )
             return null;
-        }
         return ZonedDateTime.ofInstant( databaseColumn.toInstant() ,
                                         databaseColumn.getTimeZone().toZoneId() );
     }

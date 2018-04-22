@@ -26,5 +26,7 @@ public class RaceEntity{
     @Column( name = "name", unique = true, updatable = false, nullable = false )
     private String name;
 
-    @OneToMany( fetch = FetchType.LAZY, mappedBy = "race" ) private List<PersonEntity> persons;
+    @OneToMany( fetch = FetchType.LAZY,
+                mappedBy = "race",
+                cascade = CascadeType.ALL ) private List<PersonEntity> persons;
 }
