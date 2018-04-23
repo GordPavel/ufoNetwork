@@ -9,6 +9,7 @@
     <title>Страница группы</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="<c:url value="/resources/js/bootstrap.min.js"/>"></script>
+    <script src="<c:url value="/resources/js/jquery.sse.min.js"/>"></script>
     <%--@elvariable id="group" type="com.netcracker.DAO.GroupEntity"--%>
     <script>
         function generateMessage(id, text, date, writerId, writerName) {
@@ -109,6 +110,32 @@
 
         $(document).ready(function () {
             $('#send').click(sendMessage);
+            var sse = $.SSE('${pageContext.request.contextPath}/groups/${group.id}/messages/sse', {
+                onOpen: function (e) {
+                    console.log("Open");
+                    console.log(e);
+                },
+                onEnd: function (e) {
+                    console.log("End");
+                    console.log(e);
+                    alert('Вы оффлайн. Обновления могут не приходить. Лучше перезагрузить страницу');
+                },
+                onError: function (e) {
+                    console.log("Could not connect");
+                    alert('Вы оффлайн. Обновления могут не приходить. Лучше перезагрузить страницу');
+                },
+                events: {
+                    post: function (data) {
+                        data = JSON.parse(data.data);
+                        $('#messages').append(generateMessage(data.id, data.text, data.date, data.writerId, data.writerName));
+                    },
+                    delete: function (data) {
+                        data = JSON.parse(data.data);
+                        $('#message-' + data.id).remove();
+                    }
+                }
+            });
+            sse.start();
         });
     </script>
 </head>

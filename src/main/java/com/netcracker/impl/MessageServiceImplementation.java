@@ -12,6 +12,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.persistence.EntityManager;
 import java.io.IOException;
+import java.time.Duration;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,7 +33,7 @@ public class MessageServiceImplementation implements MessageService{
 
     @Override
     public SseEmitter getMessagesEmbitterByGroupId( Long id ){
-        SseEmitter sseEmitter = new SseEmitter( -1L );
+        SseEmitter sseEmitter = new SseEmitter( Duration.ofHours( 1 ).toMillis() );
         Optional.ofNullable( emittersByGroups.get( id ) ).orElseGet( () -> {
             List<SseEmitter> emitters = new ArrayList<>();
             emittersByGroups.put( id , emitters );
@@ -70,25 +71,33 @@ public class MessageServiceImplementation implements MessageService{
         entityManager.clear();
         MessageEntity message =
                 messageRepository.findById( messageId ).orElseThrow( IllegalStateException::new );
-        Optional.ofNullable( emittersByGroups.get( groupId ) )
-                .ifPresent( emitters -> emitters.forEach( emitter -> {
-                    try{
-                        emitter.send( new HashMap<String, String>(){{
-                            put( "type" , "new" );
-                            put( "id" , message.getId().toString() );
-                            put( "text" , message.getText() );
-                            put( "date" ,
-                                 message.getDateOfSubmition()
-                                        .format( DateTimeFormatter.ofPattern( "dd.MM.yyyy HH:mm" ) ) );
-                            put( "writerId" , message.getWriter().getId().toString() );
-                            put( "writerName" , message.getWriter().getName() );
-//                            todo Для тестирования
-                            put( "emittersOnGroup" , String.valueOf( emitters.size() ) );
-                        }} , MediaType.APPLICATION_JSON_UTF8 );
-                    }catch( IOException e ){
-                        emitter.completeWithError( e );
-                    }
-                } ) );
+        Optional.ofNullable( emittersByGroups.get( groupId ) ).ifPresent( emitters -> {
+            SseEmitter.SseEventBuilder data = SseEmitter.event()
+                                                        .reconnectTime( 500L )
+                                                        .name( "post" )
+                                                        .data( new HashMap<String, String>(){{
+                                                            put( "id" ,
+                                                                 message.getId().toString() );
+                                                            put( "text" , message.getText() );
+                                                            put( "date" ,
+                                                                 message.getDateOfSubmition()
+                                                                        .format( DateTimeFormatter.ofPattern(
+                                                                                "dd.MM.yyyy HH:mm" ) ) );
+                                                            put( "writerId" ,
+                                                                 message.getWriter()
+                                                                        .getId()
+                                                                        .toString() );
+                                                            put( "writerName" ,
+                                                                 message.getWriter().getName() );
+                                                        }} , MediaType.APPLICATION_JSON_UTF8 );
+            emitters.forEach( emitter -> {
+                try{
+                    emitter.send( data );
+                }catch( IOException e ){
+                    emitter.completeWithError( e );
+                }
+            } );
+        } );
     }
 
     @Override
@@ -104,18 +113,20 @@ public class MessageServiceImplementation implements MessageService{
                     messageId ) );
         Long groupId = message.getToGroup().getId();
         messageRepository.delete( message );
-        Optional.ofNullable( emittersByGroups.get( groupId ) )
-                .ifPresent( emitters -> emitters.forEach( emitter -> {
-                    try{
-                        emitter.send( new HashMap<String, String>(){{
-                            put( "type" , "delete" );
-                            put( "id" , messageId.toString() );
-//                            todo Для тестирования
-                            put( "emittersOnGroup" , String.valueOf( emitters.size() ) );
-                        }} , MediaType.APPLICATION_JSON_UTF8 );
-                    }catch( IOException e ){
-                        emitter.completeWithError( e );
-                    }
-                } ) );
+        Optional.ofNullable( emittersByGroups.get( groupId ) ).ifPresent( emitters -> {
+            SseEmitter.SseEventBuilder data = SseEmitter.event()
+                                                        .reconnectTime( 500L )
+                                                        .name( "delete" )
+                                                        .data( new HashMap<String, String>(){{
+                                                            put( "id" , messageId.toString() );
+                                                        }} , MediaType.APPLICATION_JSON_UTF8 );
+            emitters.forEach( emitter -> {
+                try{
+                    emitter.send( data );
+                }catch( IOException e ){
+                    emitter.completeWithError( e );
+                }
+            } );
+        } );
     }
 }
