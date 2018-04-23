@@ -19,29 +19,27 @@ public class GroupServiceImplementation implements GroupService{
 
     @Override
     public Optional<GroupEntity> findById( Long id , GroupLazyFields... fields ){
-        return groupRepository.findById( id ).map( group -> {
-            List<GroupLazyFields> lazyFields = Arrays.asList( fields );
-            if( lazyFields.contains( GroupLazyFields.MEDIA ) )
-                group.setMedia( groupRepository.getMediaById( group.getId() ).get() );
-            if( lazyFields.contains( GroupLazyFields.USERS ) )
-                group.setUsers( groupRepository.getUsersById( group.getId() ) );
-            if( lazyFields.contains( GroupLazyFields.MESSAGES ) )
-                group.setMessages( groupRepository.getMessagesById( group.getId() ) );
-            return group;
-        } );
+        List<GroupLazyFields> lazyFields = Arrays.asList( fields );
+        return groupRepository.findById( id ).map( group -> loadLazyFields( lazyFields , group ) );
     }
 
     @Override
     public List<GroupEntity> listAll( GroupLazyFields... fields ){
         List<GroupLazyFields> lazyFields = Arrays.asList( fields );
-        return groupRepository.findAll().parallelStream().peek( group -> {
-            if( lazyFields.contains( GroupLazyFields.MEDIA ) )
-                group.setMedia( groupRepository.getMediaById( group.getId() ).get() );
-            if( lazyFields.contains( GroupLazyFields.USERS ) )
-                group.setUsers( groupRepository.getUsersById( group.getId() ) );
-            if( lazyFields.contains( GroupLazyFields.MESSAGES ) )
-                group.setMessages( groupRepository.getMessagesById( group.getId() ) );
-        } ).collect( Collectors.toList() );
+        return groupRepository.findAll()
+                              .parallelStream()
+                              .map( group -> loadLazyFields( lazyFields , group ) )
+                              .collect( Collectors.toList() );
+    }
+
+    private GroupEntity loadLazyFields( List<GroupLazyFields> lazyFields , GroupEntity group ){
+        if( lazyFields.contains( GroupLazyFields.MEDIA ) )
+            group.setMedia( groupRepository.getMediaById( group.getId() ).get() );
+        if( lazyFields.contains( GroupLazyFields.USERS ) )
+            group.setUsers( groupRepository.getUsersById( group.getId() ) );
+        if( lazyFields.contains( GroupLazyFields.MESSAGES ) )
+            group.setMessages( groupRepository.getMessagesById( group.getId() ) );
+        return group;
     }
 
     @Override
@@ -50,7 +48,10 @@ public class GroupServiceImplementation implements GroupService{
     }
 
     @Override
-    public List<GroupEntity> getBySearchParams( String name , String ownerName ){
+    public List<GroupEntity> findBySpecifications( String name , String ownerName ){
+/*        todo Думаю лучше всего здесь подходит такая вешь
+               https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#query-by-example
+*/
         return groupRepository.getBySearchParams( name , ownerName );
     }
 }

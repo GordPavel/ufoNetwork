@@ -45,13 +45,11 @@ public class PersonSearchPageController{
                     Integer ageTo ,
             @RequestParam( value = "sex", defaultValue = "" )
                     String sex ,
-            @CookieValue( name = "userID", defaultValue = "" )
+//            Если оставить дефолтное значение, то никогда не будет == null
+            @CookieValue( name = "userID", required = false )
                     Long userId , Model model ){
 
-        if( userId == null ){
-            return "redirect:/";
-        }
-
+        if( userId == null ) return "redirect:/";
         model.addAttribute( "name" , name );
         model.addAttribute( "raceId" , raceID );
         model.addAttribute( "ageFrom" , ageFrom );
@@ -84,7 +82,8 @@ public class PersonSearchPageController{
                     Integer ageTo ,
             @RequestParam( value = "sex", defaultValue = "" )
                     String sex ,
-            @CookieValue( name = "userID", defaultValue = "" )
+//            Если оставить дефолтное значение, то никогда не будет == null
+            @CookieValue( name = "userID", required = false )
                     Long userId , Model model ){
 
         Pattern p           = Pattern.compile( "[\\d\\s-_\\*\\?]+" );
@@ -116,11 +115,11 @@ public class PersonSearchPageController{
             return "redirect:/";
         }
         model.addAttribute( "persons" ,
-                            personService.listWithSpecifications( name ,
-                                                                  raceID ,
-                                                                  ageFrom ,
-                                                                  ageTo ,
-                                                                  sex ) );
+                            personService.findBySpecifications( name ,
+                                                                raceID ,
+                                                                ageFrom ,
+                                                                ageTo ,
+                                                                sex ) );
 
         return "personSearchResult";
     }

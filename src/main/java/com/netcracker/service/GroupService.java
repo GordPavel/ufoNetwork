@@ -21,7 +21,7 @@ public interface GroupService{
 
      @return - list of all groups suitable for search parameters
      */
-    List<GroupEntity> getBySearchParams( String name , String ownerName );
+    List<GroupEntity> findBySpecifications( String name , String ownerName );
 
     /**
      Find one group and load specified lazy properties

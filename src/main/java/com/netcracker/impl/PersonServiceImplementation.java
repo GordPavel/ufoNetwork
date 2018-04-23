@@ -1,11 +1,15 @@
 package com.netcracker.impl;
 
-import com.netcracker.DAO.*;
+import com.netcracker.DAO.GroupEntity;
+import com.netcracker.DAO.PersonEntity;
+import com.netcracker.DAO.PersonLazyFields;
+import com.netcracker.DAO.PersonMediaEntity;
 import com.netcracker.controllers.forms.RegistrationForm;
 import com.netcracker.repository.GroupRepository;
 import com.netcracker.repository.PersonRepository;
 import com.netcracker.repository.RaceRepository;
 import com.netcracker.service.PersonService;
+import com.netcracker.service.RaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +27,7 @@ public class PersonServiceImplementation implements PersonService{
     @Autowired private PersonRepository personRepository;
     @Autowired private GroupRepository  groupRepository;
     @Autowired private RaceRepository   raceRepository;
+    @Autowired private RaceService      raceService;
 
 
     @Override
@@ -57,20 +62,12 @@ public class PersonServiceImplementation implements PersonService{
 
     @Override
     public Long addPerson( RegistrationForm form ) throws IOException{
-        RaceEntity race;
-        if( raceRepository.findAll()
-                          .parallelStream()
-                          .map( RaceEntity::getName )
-                          .noneMatch( java.util.function.Predicate.isEqual( form.getRace() ) ) ){
-            race = new RaceEntity();
-            race.setName( form.getRace() );
-            raceRepository.saveAndFlush( race );
-        }else{
-            race = raceRepository.getByName( form.getRace() )
-                                 .orElseThrow( IllegalStateException::new );
-        }
-        PersonEntity entity =
-                new PersonEntity( form.getLogin() , form.getPass() , form.getName() , race );
+        PersonEntity entity = new PersonEntity( form.getLogin() ,
+                                                form.getPass() ,
+                                                form.getName() ,
+                                                raceRepository.getByName( form.getRace() )
+                                                              .orElseGet( () -> raceService.addRace(
+                                                                      form.getRace() ) ) );
         entity.setAge( form.getAge() );
         entity.setSex( form.getSex() );
         if( form.getImage() != null ){
@@ -83,9 +80,13 @@ public class PersonServiceImplementation implements PersonService{
     }
 
     @Override
-    public List<PersonEntity> listWithSpecifications( String name , Long raceID , Integer ageFrom ,
-                                                      Integer ageTo , String sex ,
-                                                      PersonLazyFields... fields ){
+    public List<PersonEntity> findBySpecifications( String name , Long raceID , Integer ageFrom ,
+                                                    Integer ageTo , String sex ,
+                                                    PersonLazyFields... fields ){
+/*        todo Думаю лучше всего здесь подходит такая вешь
+               https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#query-by-example
+              Вместо Specification
+*/
         List<PersonLazyFields> lazyFields = Arrays.asList( fields );
         return personRepository.findAll( ( root , criteriaQuery , criteriaBuilder ) -> {
             List<Predicate> predicates = new ArrayList<>();
@@ -110,18 +111,34 @@ public class PersonServiceImplementation implements PersonService{
 
     @Override
     public void joinGroup( Long groupId , Long userId ){
-//        todo Обработка ошибок
-        PersonEntity user  = findById( userId , PersonLazyFields.GROUPS ).get();
-        GroupEntity  group = groupRepository.findById( groupId ).get();
+        PersonEntity user = findById( userId ,
+                                      PersonLazyFields.GROUPS ).orElseThrow( () -> new IllegalArgumentException(
+                "В базе нет пользователя с id " + userId ) );
+        GroupEntity group = groupRepository.findById( groupId )
+                                           .orElseThrow( () -> new IllegalArgumentException(
+                                                   "В базе нет группы с id " + groupId ) );
+        if( group.getUsers()
+                 .parallelStream()
+                 .map( PersonEntity::getId )
+                 .anyMatch( java.util.function.Predicate.isEqual( userId ) ) )
+            throw new IllegalStateException( "Пользователь уже есть в группе" );
         user.getGroups().add( group );
         personRepository.saveAndFlush( user );
     }
 
     @Override
     public void leaveGroup( Long groupId , Long userId ){
-//        todo Обработка ошибок
-        PersonEntity user  = findById( userId , PersonLazyFields.GROUPS ).get();
-        GroupEntity  group = groupRepository.findById( groupId ).get();
+        PersonEntity user = findById( userId ,
+                                      PersonLazyFields.GROUPS ).orElseThrow( () -> new IllegalArgumentException(
+                "В базе нет пользователя с id " + userId ) );
+        GroupEntity group = groupRepository.findById( groupId )
+                                           .orElseThrow( () -> new IllegalArgumentException(
+                                                   "В базе нет группы с id " + groupId ) );
+        if( group.getUsers()
+                 .parallelStream()
+                 .map( PersonEntity::getId )
+                 .noneMatch( java.util.function.Predicate.isEqual( userId ) ) )
+            throw new IllegalStateException( "Пользователь не в группе" );
         user.getGroups().remove( group );
         personRepository.saveAndFlush( user );
     }

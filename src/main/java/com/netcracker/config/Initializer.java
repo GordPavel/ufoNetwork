@@ -17,13 +17,13 @@ public class Initializer implements WebApplicationInitializer{
         ctx.register( WebMvcConfig.class );
         // добавляем в контекст слушателя с нашей конфигурацией
         servletContext.addListener( new ContextLoaderListener( ctx ) );
-
         ctx.setServletContext( servletContext );
 
         // настраиваем маппинг Dispatcher Servlet-а
         ServletRegistration.Dynamic servlet =
                 servletContext.addServlet( "dispatcher" , new DispatcherServlet( ctx ) );
         servlet.addMapping( "/" );
+        servlet.setAsyncSupported( true );
         servlet.setLoadOnStartup( 1 );
     }
 }

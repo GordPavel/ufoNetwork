@@ -21,111 +21,94 @@
                 "                </div>";
         }
 
-        function ajaxAllMessagesOfGroup() {
-            var errorHandler = function () {
-                alert('Сообщения не может быть получены')
-            };
-            $.ajax({
-                url: "${pageContext.request.contextPath}/groups/${group.id}/messages",
-                type: 'GET',
-                timeout: 400,
-                success: function (response) {
-                    if (response.error === "home")
-                        window.location.href = "${pageContext.request.contextPath}";
-                    else {
-                        $('#messages').html(response.map(function (message) {
-                            return generateMessage(message.id, message.text, message.date, message.writerId, message.writerName);
-                        }).join('\n'));
-                    }
-                },
-                error: errorHandler
-            });
+        function generateUsersHref(id, name, race, age) {
+            return "<div id=\"member-" + id + "\"><a href=\"${pageContext.request.contextPath}/persons/" + id + "\">" + name + " (" + race + "," + age + ")</a><br/></div>";
         }
 
+        var errorHandler = function () {
+            console.log('Ошибка соединения')
+        };
+
         function sendMessage() {
-            var errorHandler = function () {
-                alert('Сообщение не может быть отправлено')
-            };
             $.ajax({
-                url: "${pageContext.request.contextPath}/groups/${group.id}/message",
+                url: '${pageContext.request.contextPath}/groups/${group.id}/message',
                 type: 'POST',
-                timeout: 5 * 1000,
-                contentType: "application/json",
-                data: JSON.stringify({messageText: $('#textarea2').val()}),
+                // todo Исправить время
+                timeout: 10 * 60 * 1000,
+                data: $('#textarea2').val(),
+                contentType: "text/html;charset=utf-8",
                 success: function (response) {
-                    if (response === "fail")
-                        errorHandler();
-                    else {
-                        ajaxAllMessagesOfGroup();
-                        $('#textarea2').val("");
+                    if (response === "success") {
+                        console.log('Сообщение отправлено');
+                        $('#textarea2').val('');
                     }
+                    else if (response === "home")
+                        window.location.href = "${pageContext.request.contextPath}";
+                    else
+                        console.log(response);
                 },
                 error: errorHandler
             });
         }
 
         function deleteMessage(messageId) {
-            var errorHandler = function () {
-                alert('Сообщение не может быть удалено')
-            };
             $.ajax({
                 url: "${pageContext.request.contextPath}/groups/${group.id}/message-".concat(messageId.toString()),
                 type: 'DELETE',
-                timeout: 1000 * 5,
+                // todo Исправить время
+                timeout: 10 * 60 * 1000,
                 success: function (response) {
-                    if (response === "fail")
-                        errorHandler();
+                    if (response === "success")
+                        console.log("Сообщение удалено");
                     else if (response === "home")
                         window.location.href = "${pageContext.request.contextPath}";
                     else
-                        ajaxAllMessagesOfGroup();
+                        console.log(response);
                 },
                 error: errorHandler
             });
         }
 
-        function generateUsersHref(id, name, race, age) {
-            return "<a id=\"member-" + id + "\" href=\"${pageContext.request.contextPath}/persons/"
-                + id + "\">" + name + " (" + race + "," + age + ")</a><br/>";
-        }
-
         function joinGroup() {
-            function errorHandler() {
-                alert("Нельзя вступить в группу");
-            }
-
-            $.post("${pageContext.request.contextPath}/groups/${group.id}/join").success(function (response) {
-                if (response === "fail")
-                    errorHandler();
-                else if (response === "home")
-                    window.location.href = "${pageContext.request.contextPath}";
-                else {
-                    $('#members').append(generateUsersHref(response.id, response.name, response.race, response.age));
-                    $('#l3').html("<button onclick=\"leaveGroup()\">Покинуть группу</button><br/>");
-                }
-            }).error(errorHandler);
+            $.ajax({
+                url: '${pageContext.request.contextPath}/groups/${group.id}/join',
+                type: 'POST',
+                timeout: 1000,
+                success: function (response) {
+                    if (response === "success") {
+                        console.log("Вышел из группы");
+                        $('#l3').html("<button onclick=\"leaveGroup()\">Покинуть группу</button><br/>");
+                    }
+                    else if (response === "home")
+                        window.location.href = "${pageContext.request.contextPath}";
+                    else
+                        console.log(response);
+                },
+                error: errorHandler
+            });
         }
 
         function leaveGroup() {
-            function errorHandler() {
-                alert("Нельзя покинуть группу");
-            }
-
-            $.post("${pageContext.request.contextPath}/groups/${group.id}/leave").success(function (response) {
-                if (response === "fail")
-                    errorHandler();
-                else if (response === "home")
-                    window.location.href = "${pageContext.request.contextPath}";
-                else {
-                    $('#member-'.concat(response)).remove();
-                    $('#l3').html("<button onclick=\"joinGroup()\">Вступить в группу</button><br/>");
-                }
-            }).error(errorHandler);
+            $.ajax({
+                url: '${pageContext.request.contextPath}/groups/${group.id}/leave',
+                type: 'POST',
+                timeout: 1000,
+                success: function (response) {
+                    if (response === "success") {
+                        console.log("Вступил в группу");
+                        $('#l3').html("<button onclick=\"joinGroup()\">Вступить в группу</button><br/>");
+                    }
+                    else if (response === "home")
+                        window.location.href = "${pageContext.request.contextPath}";
+                    else
+                        console.log(response);
+                },
+                error: errorHandler
+            });
         }
 
         $(document).ready(function () {
             $('#send').click(sendMessage);
-            setInterval(ajaxAllMessagesOfGroup, 500);
         });
     </script>
 </head>
@@ -165,8 +148,9 @@
         <label>Список участников</label>
         <div class="list-group" id="members">
             <c:forEach items="${group.users}" var="user">
-                <a id="member-${user.id}"
-                   href="<c:url value="/persons/${user.id}"/>">${user.name}(${user.race.name},${user.age})</a><br/>
+                <div id="member-${user.id}"><a
+                        href="<c:url value="/persons/${user.id}"/>">${user.name}(${user.race.name},${user.age})</a><br/>
+                </div>
             </c:forEach>
         </div>
     </div>

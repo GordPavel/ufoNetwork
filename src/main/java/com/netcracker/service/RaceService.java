@@ -10,11 +10,10 @@ public interface RaceService{
     /**
      Add new Race to db
 
-     @param raceEntity - Race to add
-
      @return - added Race
+     @param name - Race to add
      */
-    RaceEntity addRace( RaceEntity raceEntity );
+    RaceEntity addRace( String name );
 
     /**
      delete Race from db

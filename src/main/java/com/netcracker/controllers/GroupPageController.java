@@ -1,10 +1,7 @@
 package com.netcracker.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netcracker.DAO.GroupEntity;
 import com.netcracker.DAO.GroupLazyFields;
-import com.netcracker.DAO.MessageEntity;
 import com.netcracker.DAO.PersonEntity;
 import com.netcracker.repository.GroupRepository;
 import com.netcracker.repository.MessageRepository;
@@ -16,14 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.io.IOException;
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 
 /**
@@ -39,7 +32,6 @@ public class GroupPageController{
     @Autowired MessageRepository messageRepository;
     @Autowired GroupService      groupService;
     @Autowired GroupRepository   groupRepository;
-    @Autowired ObjectMapper      mapper;
 
     /**
      Open group page
@@ -56,7 +48,7 @@ public class GroupPageController{
             @CookieValue( name = "userID", required = false )
                     Long userId , Model model ){
         if( userId == null ) return "redirect:/";
-//        todo Обработка ошибок
+//        todo Перевести на дефолтную страницу с сообщением об ошибке
         GroupEntity groupEntity =
                 groupService.findById( groupId , GroupLazyFields.MESSAGES , GroupLazyFields.USERS )
                             .get();
@@ -71,32 +63,16 @@ public class GroupPageController{
         return "groupPage";
     }
 
-    /**
-     Ajax request to get all messages of group
-
-     @return json array contains messages
-     */
-    @GetMapping( value = "/messages", produces = "application/json; charset=UTF-8" )
-    public @ResponseBody
-    String getAllMessagesOfGroup(
+    @GetMapping( value = "/messages/sse" )
+    SseEmitter subscribeOnMessagesOfGroup(
             @PathVariable( "id" )
-                    Long groupId ,
-            @CookieValue( name = "userID", required = false )
-                    Long writerId ) throws IOException{
-        if( writerId == null ){
-            return mapper.writeValueAsString( new LinkedHashMap<String, String>(){{
-                put( "error" , "home" );
-            }} );
-        }
-        return mapper.writeValueAsString( groupRepository.getMessagesById( groupId )
-                                                         .parallelStream()
-                                                         .sorted( Comparator.comparing(
-                                                                 MessageEntity::getDateOfSubmition ) )
-                                                         .map( this::messageToJsonMap )
-                                                         .collect( Collectors.toList() ) );
+                    Long groupId ){
+        return messageService.getMessagesEmbitterByGroupId( groupId );
     }
 
-    @PostMapping( value = "/message" )
+    @PostMapping( value = "/message",
+                  consumes = "text/html;charset=utf-8",
+                  produces = "text/html;charset=utf-8" )
     public @ResponseBody
     String postMessage(
             @CookieValue( name = "userID", required = false )
@@ -104,20 +80,20 @@ public class GroupPageController{
             @PathVariable( "id" )
                     Long groupId ,
             @RequestBody
-                    Map<String, String> requestBody , Model model ){
+                    String text , Model model ){
         if( writerId == null ) return "home";
         try{
-            messageService.addMessage( groupId , writerId , requestBody.get( "messageText" ) );
+            messageService.addMessage( groupId , writerId , text );
             return "success";
         }catch( IllegalArgumentException e ){
-            return "fail";
+            return e.getMessage();
         }
     }
 
     /**
      Ajax request to delete message from group
      */
-    @DeleteMapping( value = "/message-{messageId}" )
+    @DeleteMapping( value = "/message-{messageId}", produces = "text/html;charset=utf-8" )
     public @ResponseBody
     String deleteMessage(
             @CookieValue( value = "userID", required = false )
@@ -125,23 +101,12 @@ public class GroupPageController{
             @PathVariable( "messageId" )
                     Long messageId ){
         if( writerId == null ) return "home";
-        return messageRepository.findById( messageId ).map( message -> {
-            if( !message.getWriter().getId().equals( writerId ) ) return "fail";
-            messageRepository.deleteById( messageId );
+        try{
+            messageService.deleteMessage( writerId , messageId );
             return "success";
-        } ).orElse( "fail" );
-    }
-
-    private LinkedHashMap<String, String> messageToJsonMap( MessageEntity message ){
-        return new LinkedHashMap<String, String>(){{
-            put( "id" , message.getId().toString() );
-            put( "text" , message.getText() );
-            put( "date" ,
-                 message.getDateOfSubmition()
-                        .format( DateTimeFormatter.ofPattern( "dd.MM.yyyy HH:mm" ) ) );
-            put( "writerId" , message.getWriter().getId().toString() );
-            put( "writerName" , message.getWriter().getName() );
-        }};
+        }catch( IllegalArgumentException | IllegalStateException e ){
+            return e.getMessage();
+        }
     }
 
     /**
@@ -152,33 +117,20 @@ public class GroupPageController{
 
      @return - json object of user's data
      */
-    @PostMapping( value = "/join", produces = "application/json; charset=UTF-8" )
+    @PostMapping( value = "/join", produces = "text/html;charset=utf-8" )
     public @ResponseBody
     String joinGroup(
             @CookieValue( name = "userID", required = false )
                     Long userId ,
             @PathVariable( value = "id" )
-                    Long groupId ) throws JsonProcessingException{
-        if( userId == null ){
-            return mapper.writeValueAsString( new LinkedHashMap<String, String>(){{
-                put( "error" , "home" );
-            }} );
+                    Long groupId ){
+        if( userId == null ) return "home";
+        try{
+            personService.joinGroup( groupId , userId );
+            return "success";
+        }catch( IllegalStateException | IllegalArgumentException e ){
+            return e.getMessage();
         }
-
-//        todo Обработка ошибок
-        GroupEntity  group  = groupService.findById( groupId , GroupLazyFields.USERS ).get();
-        PersonEntity person = personRepository.findById( userId ).get();
-        if( group.getUsers()
-                 .parallelStream()
-                 .map( PersonEntity::getId )
-                 .anyMatch( Predicate.isEqual( userId ) ) ) return "fail";
-        personService.joinGroup( groupId , userId );
-        return mapper.writeValueAsString( new LinkedHashMap<String, String>(){{
-            put( "id" , person.getId().toString() );
-            put( "name" , person.getName() );
-            put( "race" , person.getRace().getName() );
-            put( "age" , person.getAge().toString() );
-        }} );
     }
 
     /**
@@ -190,7 +142,7 @@ public class GroupPageController{
 
      @return - group page
      */
-    @PostMapping( value = "/leave" )
+    @PostMapping( value = "/leave", produces = "text/html;charset=utf-8" )
     public @ResponseBody
     String leaveGroup(
             @CookieValue( name = "userID", required = false )
@@ -198,13 +150,12 @@ public class GroupPageController{
             @PathVariable( value = "id" )
                     Long groupId , Model model ){
         if( userId == null ) return "home";
-        GroupEntity group = groupService.findById( groupId , GroupLazyFields.USERS ).get();
-        if( group.getUsers()
-                 .parallelStream()
-                 .map( PersonEntity::getId )
-                 .noneMatch( Predicate.isEqual( userId ) ) ) return "fail";
-        personService.leaveGroup( groupId , userId );
-        return userId.toString();
+        try{
+            personService.leaveGroup( groupId , userId );
+            return "success";
+        }catch( IllegalStateException | IllegalArgumentException e ){
+            return e.getMessage();
+        }
     }
 //
 //    //Group creation

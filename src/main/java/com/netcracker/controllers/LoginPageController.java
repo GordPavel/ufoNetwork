@@ -21,6 +21,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.Duration;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -30,24 +31,13 @@ import java.util.stream.Collectors;
 @RequestMapping
 public class LoginPageController{
 
-    private final PersonService         personService;
-    private final PersonRepository      personRepository;
-    private final RaceService           raceService;
-    private final RegistrationValidator registrationValidator;
-    private final LoginValidator        loginValidator;
+    @Autowired private PersonService         personService;
+    @Autowired private PersonRepository      personRepository;
+    @Autowired private RaceService           raceService;
+    @Autowired private RegistrationValidator registrationValidator;
+    @Autowired private LoginValidator        loginValidator;
 
-    @Autowired
-    public LoginPageController( PersonService personService , PersonRepository personRepository ,
-                                RaceService raceService ,
-                                RegistrationValidator registrationValidator ,
-                                LoginValidator loginValidator ){
-        this.personService = personService;
-        this.personRepository = personRepository;
-        this.raceService = raceService;
-        this.registrationValidator = registrationValidator;
-        this.loginValidator = loginValidator;
-    }
-
+    //    Инициализация валидаторов
     @InitBinder( "loginForm" )
     protected void initLoginBinder( WebDataBinder binder ){
         binder.setValidator( loginValidator );
@@ -58,6 +48,7 @@ public class LoginPageController{
         binder.setValidator( registrationValidator );
     }
 
+    //    Инициализация форм
     @ModelAttribute( "loginForm" )
     public LoginForm loginForm(){
         return new LoginForm();
@@ -68,25 +59,53 @@ public class LoginPageController{
         return new RegistrationForm();
     }
 
-    /**
-     Open login page
+    //    Список всех доступных рас
+    @ModelAttribute( "races" )
+    public List<String> races(){
+        return raceService.getAll()
+                          .parallelStream()
+                          .map( RaceEntity::getName )
+                          .collect( Collectors.toList() );
+    }
 
-     @return login page
+    /**
+     Open log in page
+
+     @return log in page
      */
     @GetMapping
-    public String open( Model model ){
-        model.addAttribute( "races" ,
-                            raceService.getAll()
-                                       .parallelStream()
-                                       .map( RaceEntity::getName )
-                                       .collect( Collectors.toList() ) );
+    public String open(
+            @CookieValue( name = "userID", required = false )
+                    Long userId ){
+        if( userId != null ) return "redirect:/persons/" + userId;
         return "loginPage";
     }
 
     /**
-     Logining out, cleaning cookie
+     Login.
 
-     @param response - clear cookie
+     @param loginForm - form with login data
+     @param response  - add cookie
+
+     @return logged in users page
+     */
+    @PostMapping
+    public String login(
+            @Validated
+            @ModelAttribute( "loginForm" )
+                    LoginForm loginForm , BindingResult errors , HttpServletResponse response ){
+        if( errors.hasErrors() ) return "loginPage";
+        Long userId = personRepository.getByLogin( loginForm.getLogin() ).map( PersonEntity::getId )
+//        todo Перевести на дефолтную страницу с сообщением об ошибке
+                                      .orElseThrow( IllegalStateException::new );
+        response.addCookie( getCookie( userId ) );
+        return "redirect:/persons/" + userId;
+    }
+
+    /**
+     Log  out, cleaning cookie
+
+     @param response - response to put there no time to live cookie
 
      @return login page
      */
@@ -94,31 +113,6 @@ public class LoginPageController{
     public String logout( HttpServletResponse response ){
         response.addCookie( getCookie( null ) );
         return "redirect:/";
-    }
-
-    /**
-     Login.
-
-     @param loginForm - form with login data
-     @param model     - model to store params
-     @param response  - add cookie
-
-     @return logined users page
-     */
-    @PostMapping
-    public String login(
-            @Validated
-            @ModelAttribute( "loginForm" )
-                    LoginForm loginForm , BindingResult errors , Model model ,
-            HttpServletResponse response ){
-        if( errors.hasErrors() ){
-            return "loginPage";
-        }
-        Long userId = personRepository.getByLogin( loginForm.getLogin() )
-                                      .map( PersonEntity::getId )
-                                      .orElseThrow( IllegalStateException::new );
-        response.addCookie( getCookie( userId ) );
-        return "redirect:/persons/" + userId;
     }
 
     /**
@@ -131,7 +125,7 @@ public class LoginPageController{
      */
     private Cookie getCookie( Long userId ){
         Cookie id = new Cookie( "userID" , String.valueOf( userId ) );
-        id.setMaxAge( ( int ) Duration.ofHours( 3 ).getSeconds() );
+        id.setMaxAge( userId != null ? ( int ) Duration.ofHours( 3 ).getSeconds() : 0 );
         return id;
     }
 
@@ -149,15 +143,9 @@ public class LoginPageController{
             @ModelAttribute( "registrationForm" )
                     RegistrationForm registrationForm , BindingResult bindingResult , Model model ,
             HttpServletResponse response ) throws IOException{
-        if( bindingResult.hasErrors() ){
-            model.addAttribute( "races" ,
-                                raceService.getAll()
-                                           .parallelStream()
-                                           .map( RaceEntity::getName )
-                                           .collect( Collectors.toList() ) );
-            return "loginPage";
-        }
-//        todo Отлов ошибок
+        if( bindingResult.hasErrors() ) return "loginPage";
+
+//        todo Можно добавить перехватчик ошибки чтения фотографии
         Long id = personService.addPerson( registrationForm );
         response.addCookie( getCookie( id ) );
         return "redirect:/persons/" + id;

@@ -15,14 +15,14 @@ public class RaceServiceImplementation implements RaceService{
     @Autowired private RaceRepository raceRepository;
 
     @Override
-    public RaceEntity addRace( RaceEntity raceEntity ){
-
-        return raceRepository.saveAndFlush( raceEntity );
+    public RaceEntity addRace( String name ){
+        RaceEntity race = new RaceEntity();
+        race.setName( name );
+        return raceRepository.saveAndFlush( race );
     }
 
     @Override
     public void delete( Long id ){
-
         raceRepository.deleteById( id );
     }
 
@@ -33,13 +33,11 @@ public class RaceServiceImplementation implements RaceService{
 
     @Override
     public List<RaceEntity> getAll(){
-
         return raceRepository.findAll();
     }
 
     @Override
     public RaceEntity editRace( RaceEntity raceEntity ){
-
         return raceRepository.saveAndFlush( raceEntity );
     }
 

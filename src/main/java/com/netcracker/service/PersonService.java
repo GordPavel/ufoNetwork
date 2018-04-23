@@ -51,23 +51,31 @@ public interface PersonService{
 
      @return - list of persons suitable for search parameters
      */
-    List<PersonEntity> listWithSpecifications( String name , Long raceID , Integer ageFrom ,
-                                               Integer ageTo , String sex ,
-                                               PersonLazyFields... fields );
+    List<PersonEntity> findBySpecifications( String name , Long raceID , Integer ageFrom ,
+                                             Integer ageTo , String sex ,
+                                             PersonLazyFields... fields );
 
     /**
-     add person to group
+     Add person to group
 
      @param groupId - where must be added
      @param userId  - user`s ID
+
+     @throws IllegalStateException    - if user is already in group
+     @throws IllegalArgumentException - if user or group not contains in db
      */
-    void joinGroup( Long groupId , Long userId );
+    void joinGroup( Long groupId , Long userId )
+            throws IllegalStateException, IllegalArgumentException;
 
     /**
-     exclude person from group
+     Exclude person from group
 
      @param groupId - from where must be excluded
      @param userId  - user`s ID
+
+     @throws IllegalStateException    - if user isn't in group
+     @throws IllegalArgumentException - if user or group not contains in db
      */
-    void leaveGroup( Long groupId , Long userId );
+    void leaveGroup( Long groupId , Long userId )
+            throws IllegalArgumentException, IllegalStateException;
 }

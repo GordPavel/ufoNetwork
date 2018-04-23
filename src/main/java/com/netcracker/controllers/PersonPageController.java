@@ -37,9 +37,8 @@ public class PersonPageController{
     public String personPage(
             @PathVariable( value = "id" )
                     Long id ,
-            @CookieValue( name = "userID" )
+            @CookieValue( name = "userID", required = false )
                     Long userId , Model model ){
-//        todo Не авторизованный пользователь
         if( userId == null ) return "redirect:/";
         Optional<PersonEntity> one = personService.findById( id , PersonLazyFields.GROUPS );
         if( one.isPresent() ){
@@ -49,7 +48,7 @@ public class PersonPageController{
             }
             return "personPage";
         }else{
-//            todo: Нет пользователя
+//        todo Перевести на дефолтную страницу с сообщением об ошибке
             return "redirect:/";
         }
     }
