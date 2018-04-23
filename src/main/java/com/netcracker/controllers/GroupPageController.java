@@ -105,7 +105,7 @@ public class GroupPageController{
                     Long groupId ,
             @RequestBody
                     Map<String, String> requestBody , Model model ){
-        if( writerId == null ) return "home";
+        if( writerId == null || requestBody.get( "messageText" ).isEmpty()) return "home";
         try{
             messageService.addMessage( groupId , writerId , requestBody.get( "messageText" ) );
             return "success";
@@ -126,7 +126,7 @@ public class GroupPageController{
                     Long messageId ){
         if( writerId == null ) return "home";
         return messageRepository.findById( messageId ).map( message -> {
-            if( !message.getWriter().getId().equals( writerId ) ) return "fail";
+            if( !message.getWriter().getId().equals( writerId ) && !message.getToGroup().getOwner().getId().equals( writerId )) return "fail";
             messageRepository.deleteById( messageId );
             return "success";
         } ).orElse( "fail" );

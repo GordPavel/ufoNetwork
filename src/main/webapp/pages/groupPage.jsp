@@ -185,7 +185,14 @@
         </div>
     </div>
     <textarea name="message" id="textarea2" style="resize: none;"></textarea>
-    <input type="submit" class="btn" id="send" value="Отправить"/>
+    <c:choose>
+        <c:when test="${isMember}">
+            <input type="submit" class="btn" id="send" value="Отправить"/>
+        </c:when>
+        <c:otherwise>
+            <input type="submit" class="btn" id="send" disabled="true" value="Вступите в группу"/>
+        </c:otherwise>
+    </c:choose>
 </div>
 <%@include file="/resources/templates/footer.jsp" %>
 </body>
