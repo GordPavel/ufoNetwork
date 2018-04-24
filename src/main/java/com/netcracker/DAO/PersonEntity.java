@@ -51,6 +51,10 @@ public class PersonEntity{
     @Column( name = "age" )
     private Integer age;
 
+    @Basic
+    @Column( name = "deleted", insertable = false, updatable = false )
+    private Boolean deleted;
+
     @OneToOne( fetch = FetchType.LAZY, cascade = CascadeType.ALL )
     @PrimaryKeyJoinColumn
     private PersonMediaEntity media;

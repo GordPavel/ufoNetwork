@@ -141,6 +141,7 @@ public class GroupPageController{
                         .format( DateTimeFormatter.ofPattern( "dd.MM.yyyy HH:mm" ) ) );
             put( "writerId" , message.getWriter().getId().toString() );
             put( "writerName" , message.getWriter().getName() );
+            put( "writerDeleted" , message.getWriter().getDeleted().toString() );
         }};
     }
 

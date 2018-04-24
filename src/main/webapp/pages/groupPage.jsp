@@ -11,9 +11,19 @@
     <script src="<c:url value="/resources/js/bootstrap.min.js"/>"></script>
     <%--@elvariable id="group" type="com.netcracker.DAO.GroupEntity"--%>
     <script>
-        function generateMessage(id, text, date, writerId, writerName) {
+        function generateMessage(id, text, date, writerId, writerName, writerDeleted) {
+            if (writerDeleted==="true"){
+                return "<div id=\"message-" + id + "\">\n" +
+                    "                    <b> " + "DELETED " + date + "</b>:\n" +
+                    ((parseInt(writerId) === ${cookie.userID.value} || ${group.owner.id} === ${cookie.userID.value}) ?
+                        "                        <button class=\"btn btn-primary deleteMessage\" onclick=\"deleteMessage(" + id + ")\" value=\"Удалить\"></button>" : "") +
+
+                    "                    <br>" + text + "\n" +
+                    "                </div>";
+            }
             return "<div id=\"message-" + id + "\">\n" +
-                "                    <b>" + writerName + " " + date + "</b>:\n" +
+                "                    <b> " + "<a href=\"${pageContext.request.contextPath}/persons/"  + writerId + "\">"
+                + writerName + "</a> " + date + "</b>:\n" +
                 ((parseInt(writerId) === ${cookie.userID.value} || ${group.owner.id} === ${cookie.userID.value}) ?
                     "                        <button class=\"btn btn-primary deleteMessage\" onclick=\"deleteMessage(" + id + ")\" value=\"Удалить\"></button>" : "") +
 
@@ -34,7 +44,7 @@
                         window.location.href = "${pageContext.request.contextPath}";
                     else {
                         $('#messages').html(response.map(function (message) {
-                            return generateMessage(message.id, message.text, message.date, message.writerId, message.writerName);
+                            return generateMessage(message.id, message.text, message.date, message.writerId, message.writerName, message.writerDeleted);
                         }).join('\n'));
                     }
                 },
@@ -165,8 +175,10 @@
         <label>Список участников</label>
         <div class="list-group" id="members">
             <c:forEach items="${group.users}" var="user">
-                <a id="member-${user.id}"
-                   href="<c:url value="/persons/${user.id}"/>">${user.name}(${user.race.name},${user.age})</a><br/>
+                <c:if test="${!user.deleted}">
+                    <a id="member-${user.id}"
+                       href="<c:url value="/persons/${user.id}"/>">${user.name}(${user.race.name},${user.age})</a><br/>
+                </c:if>
             </c:forEach>
         </div>
     </div>
@@ -174,7 +186,14 @@
         <div id="messages" border="1" width="99%">
             <c:forEach items="${group.messages}" var="message">
                 <div id="message-${message.id}">
-                    <b>${message.writer.name} ${message.dateOfSubmition.format(formatter)}</b>:
+                    <c:choose>
+                        <c:when test="${!message.writer.deleted}">
+                            <b><a href="<c:url value="/persons/${message.writer.id}"/>">${message.writer.name}</a> ${message.dateOfSubmition.format(formatter)}</b>:
+                        </c:when>
+                        <c:otherwise>
+                            <b>DELETED ${message.dateOfSubmition.format(formatter)}</b>:
+                        </c:otherwise>
+                    </c:choose>
                     <c:if test="${message.writer.id.toString().equals(cookie[\"userID\"].value)||group.owner.id.toString().equals(cookie[\"userID\"].value)}">
                         <button class="btn btn-primary deleteMessage" onclick="deleteMessage(${message.id})"
                                 value="Удалить"></button>
