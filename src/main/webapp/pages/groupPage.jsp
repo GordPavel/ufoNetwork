@@ -12,23 +12,22 @@
     <%--@elvariable id="group" type="com.netcracker.DAO.GroupEntity"--%>
     <script>
         function generateMessage(id, text, date, writerId, writerName, writerDeleted) {
-            if (writerDeleted==="true"){
+
                 return "<div id=\"message-" + id + "\">\n" +
-                    "                    <b> " + "DELETED " + date + "</b>:\n" +
+                    "                    <b> " + generateMessageSign(writerId, writerName, writerDeleted) + date + "</b>:\n" +
                     ((parseInt(writerId) === ${cookie.userID.value} || ${group.owner.id} === ${cookie.userID.value}) ?
                         "                        <button class=\"btn btn-primary deleteMessage\" onclick=\"deleteMessage(" + id + ")\" value=\"Удалить\"></button>" : "") +
 
                     "                    <br>" + text + "\n" +
                     "                </div>";
-            }
-            return "<div id=\"message-" + id + "\">\n" +
-                "                    <b> " + "<a href=\"${pageContext.request.contextPath}/persons/"  + writerId + "\">"
-                + writerName + "</a> " + date + "</b>:\n" +
-                ((parseInt(writerId) === ${cookie.userID.value} || ${group.owner.id} === ${cookie.userID.value}) ?
-                    "                        <button class=\"btn btn-primary deleteMessage\" onclick=\"deleteMessage(" + id + ")\" value=\"Удалить\"></button>" : "") +
+        }
 
-                "                    <br>" + text + "\n" +
-                "                </div>";
+        function generateMessageSign(writerId, writerName, writerDeleted) {
+            if (writerDeleted==="true"){
+                return "DELETED ";
+            }
+            return "<a href=\"${pageContext.request.contextPath}/persons/"  + writerId + "\">"
+                + writerName + "</a> ";
         }
 
         function ajaxAllMessagesOfGroup() {
