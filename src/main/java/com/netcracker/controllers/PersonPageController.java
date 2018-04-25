@@ -2,6 +2,8 @@ package com.netcracker.controllers;
 
 import com.netcracker.DAO.PersonEntity;
 import com.netcracker.DAO.PersonLazyFields;
+import com.netcracker.controllers.forms.GroupCreateForm;
+import com.netcracker.controllers.forms.GroupCreateValidator;
 import com.netcracker.repository.GroupRepository;
 import com.netcracker.repository.PersonRepository;
 import com.netcracker.service.PersonService;
@@ -9,10 +11,8 @@ import com.netcracker.service.RaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -24,7 +24,18 @@ public class PersonPageController{
     @Autowired PersonRepository personRepository;
     @Autowired GroupRepository  groupRepository;
     @Autowired RaceService      raceService;
+    @Autowired
+    GroupCreateValidator groupCreateValidator;
 
+    @InitBinder( "groupCreateForm" )
+    protected void initGroupControlBinder( WebDataBinder binder ){
+        binder.setValidator( groupCreateValidator );
+    }
+
+    @ModelAttribute( "groupCreateForm" )
+    public GroupCreateForm groupCreateForm(){
+        return new GroupCreateForm();
+    }
     /**
      open user`s page
 

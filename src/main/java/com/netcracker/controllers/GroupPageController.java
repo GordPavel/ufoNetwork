@@ -2,10 +2,11 @@ package com.netcracker.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.netcracker.DAO.GroupEntity;
-import com.netcracker.DAO.GroupLazyFields;
-import com.netcracker.DAO.MessageEntity;
-import com.netcracker.DAO.PersonEntity;
+import com.netcracker.DAO.*;
+import com.netcracker.controllers.forms.GroupCreateForm;
+import com.netcracker.controllers.forms.GroupCreateValidator;
+import com.netcracker.controllers.forms.LoginForm;
+import com.netcracker.controllers.forms.RegistrationForm;
 import com.netcracker.repository.GroupRepository;
 import com.netcracker.repository.MessageRepository;
 import com.netcracker.repository.PersonRepository;
@@ -15,13 +16,15 @@ import com.netcracker.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -30,7 +33,7 @@ import java.util.stream.Collectors;
  Controller for groups. Group page, group create, group settings
  */
 @Controller
-@RequestMapping( "/groups/{id}" )
+@RequestMapping( "/groups" )
 public class GroupPageController{
 
     @Autowired PersonService     personService;
@@ -40,6 +43,17 @@ public class GroupPageController{
     @Autowired GroupService      groupService;
     @Autowired GroupRepository   groupRepository;
     @Autowired ObjectMapper      mapper;
+    @Autowired GroupCreateValidator groupCreateValidator;
+
+    @InitBinder( "groupCreateForm" )
+    protected void initGroupCreateBinder( WebDataBinder binder ){
+        binder.setValidator( groupCreateValidator );
+    }
+
+    @ModelAttribute( "groupCreateForm" )
+    public GroupCreateForm groupCreateForm(){
+        return new GroupCreateForm();
+    }
 
     /**
      Open group page
@@ -49,7 +63,7 @@ public class GroupPageController{
 
      @return - group page
      */
-    @GetMapping
+    @GetMapping("/{id}")
     public String openPage(
             @PathVariable( value = "id" )
                     Long groupId ,
@@ -76,7 +90,7 @@ public class GroupPageController{
 
      @return json array contains messages
      */
-    @GetMapping( value = "/messages", produces = "application/json; charset=UTF-8" )
+    @GetMapping( value = "/{id}/messages", produces = "application/json; charset=UTF-8" )
     public @ResponseBody
     String getAllMessagesOfGroup(
             @PathVariable( "id" )
@@ -96,7 +110,7 @@ public class GroupPageController{
                                                          .collect( Collectors.toList() ) );
     }
 
-    @PostMapping( value = "/message" )
+    @PostMapping( value = "/{id}/message" )
     public @ResponseBody
     String postMessage(
             @CookieValue( name = "userID", required = false )
@@ -117,7 +131,7 @@ public class GroupPageController{
     /**
      Ajax request to delete message from group
      */
-    @DeleteMapping( value = "/message-{messageId}" )
+    @DeleteMapping( value = "/{id}/message-{messageId}" )
     public @ResponseBody
     String deleteMessage(
             @CookieValue( value = "userID", required = false )
@@ -153,7 +167,7 @@ public class GroupPageController{
 
      @return - json object of user's data
      */
-    @PostMapping( value = "/join", produces = "application/json; charset=UTF-8" )
+    @PostMapping( value = "/{id}/join", produces = "application/json; charset=UTF-8" )
     public @ResponseBody
     String joinGroup(
             @CookieValue( name = "userID", required = false )
@@ -191,7 +205,7 @@ public class GroupPageController{
 
      @return - group page
      */
-    @PostMapping( value = "/leave" )
+    @PostMapping( value = "/{id}/leave" )
     public @ResponseBody
     String leaveGroup(
             @CookieValue( name = "userID", required = false )
@@ -207,69 +221,50 @@ public class GroupPageController{
         personService.leaveGroup( groupId , userId );
         return userId.toString();
     }
+
+    @GetMapping( value = "/create" )
+    public String openGroupCreatePage(
+            @CookieValue( name = "userID", defaultValue = "" )
+                    Long userId ){
+
+        if( userId == null ){
+            return "redirect:/";
+        }
+
+        return "redirect:/persons/"+userId;
+    }
 //
-//    //Group creation
-//
-//    /**
-//     open group crate page
-//
-//     @param name  - name of group, param to pre-fill name page
-//     @param model - model to store params
-//
-//     @return - group creation page
-//     */
-//    @GetMapping( value = "/create" )
-//    public String openGroupCreatePage(
-//            @RequestParam( value = "name", defaultValue = "" )
-//                    String name ,
-//            @CookieValue( name = "userID", defaultValue = "" )
-//                    Long userId , Model model ){
-//
-//        if( userId == null ){
-//            return "redirect:/";
-//        }
-//
-//        model.addAttribute( "name" , name );
-//
-//        return "groupCreatePage";
-//    }
-//
-//    /**
-//     Creating page
-//
-//     @param name    - name of group
-//     @param model   - model to store params
-//     @param ownerID - cookied user ID, owner of new group
-//
-//     @return - group page
-//     */
-//    @PostMapping( value = "/create" )
-//    public String createGroup(
-//            @RequestParam( value = "name", defaultValue = "" )
-//                    String name ,
-//            @CookieValue( name = "userID", defaultValue = "" )
-//                    Long ownerID , Model model ){
-//
-////        todo : Валидация данных
-//
-//        if( ownerID == null ){
-//            return "redirect:/";
-//        }
-//
-//        Pattern p = Pattern.compile( "[\\d\\s-_]+" );
-//        Matcher m = p.matcher( name );
-//        if( m.matches() ){
-//            GroupEntity groupEntity = new GroupEntity( name , personService.getById( ownerID ) );
-//            groupService.addGroup( groupEntity );
-//            model.addAttribute( "group" , groupEntity );
-//        }else{
-//            //TODO: error mesage implementation
-//            model.addAttribute( "error_message" , "unacceptable name" );
-//            return "groupCreatePage";
-//        }
-//
-//        return "groupPage";
-//    }
+    /**
+     Creating page
+
+     @param model   - model to store params
+
+     @return - group page
+     */
+    @PostMapping( value = "/create" )
+    public String createGroup(
+            @Validated
+            @ModelAttribute( "groupCreateForm" )
+                    GroupCreateForm groupCreateForm , BindingResult errors , Model model ,
+            HttpServletResponse response ,
+            @CookieValue( name = "userID", defaultValue = "" )
+                    Long userId ) throws IOException{
+
+//        todo : Валидация данных
+
+        if( userId == null ){
+            return "redirect:/";
+        }
+
+        if( errors.hasErrors() ){
+            return "personPage";
+        }
+
+        Long groupId = groupService.addGroup(groupCreateForm,userId);
+        personService.joinGroup(groupId,userId);
+
+        return "redirect:/groups/"+groupId;
+    }
 //
 //    //Group settings
 //

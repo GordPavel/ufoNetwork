@@ -34,6 +34,11 @@ public interface GroupRepository
             @Param( "ownerName" )
                     String ownerName );
 
+    @Query( "select ge from GroupEntity ge where ge.name like :name" )
+    List<GroupEntity> getByName(
+            @Param( "name" )
+                    String name );
+
     @Query( "select gr.media from GroupEntity gr where gr.id=:id" )
     Optional<GroupMediaEntity> getMediaById(
             @Param( "id" )

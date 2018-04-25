@@ -2,11 +2,15 @@ package com.netcracker.impl;
 
 import com.netcracker.DAO.GroupEntity;
 import com.netcracker.DAO.GroupLazyFields;
+import com.netcracker.DAO.GroupMediaEntity;
+import com.netcracker.controllers.forms.GroupCreateForm;
 import com.netcracker.repository.GroupRepository;
 import com.netcracker.service.GroupService;
+import com.netcracker.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +20,7 @@ import java.util.stream.Collectors;
 public class GroupServiceImplementation implements GroupService{
 
     @Autowired private GroupRepository groupRepository;
+    @Autowired private PersonService personService;
 
     @Override
     public Optional<GroupEntity> findById( Long id , GroupLazyFields... fields ){
@@ -45,7 +50,12 @@ public class GroupServiceImplementation implements GroupService{
     }
 
     @Override
-    public Long addGroup( GroupEntity groupEntity ){
+    public Long addGroup( GroupCreateForm groupCreateForm, Long userId ) throws IOException{
+        GroupEntity groupEntity = new GroupEntity( groupCreateForm.getName() , personService.findById( userId ).get() );
+        GroupMediaEntity groupMediaEntity = new GroupMediaEntity();
+        groupMediaEntity.setGroup(groupEntity);
+        groupMediaEntity.setImage(groupCreateForm.getImage().getBytes());
+        groupEntity.setMedia(groupMediaEntity);
         return groupRepository.saveAndFlush( groupEntity ).getId();
     }
 

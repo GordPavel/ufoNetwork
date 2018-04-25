@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @EqualsAndHashCode( of = "id" )
-@NoArgsConstructor( access = AccessLevel.PROTECTED )
+@NoArgsConstructor(  )
 public class GroupMediaEntity{
 
     @Id
