@@ -95,7 +95,7 @@
                 </div>
             </spring:bind>
 
-            <button class="btn btn-primary" onclick="show('none')" align="left"> Отмена</button>
+            <button class="btn btn-primary" onclick="show('none')" align="left" form=""> Отмена</button>
             <button type="submit" class="btn btn-primary" id="right"> Зарегистрироваться</button>
         </div>
     </form:form>
