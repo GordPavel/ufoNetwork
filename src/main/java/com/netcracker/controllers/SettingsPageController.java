@@ -24,7 +24,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping ("/persons")
+@RequestMapping
 public class SettingsPageController {
 
     @Autowired RaceRepository raceRepository;
@@ -34,7 +34,7 @@ public class SettingsPageController {
     @Autowired ChangeFormValidator changeFormValidator;
     @Autowired ChangePasswdFormValidator changePasswdFormValidator;
 
-    private Long userID;
+    private Long userId;
 
     @InitBinder("changeForm")
     protected void initChangeBinder( WebDataBinder binder ){ binder.setValidator( changeFormValidator ); }
@@ -48,7 +48,7 @@ public class SettingsPageController {
     @ModelAttribute("changePasswdForm")
     public ChangePasswdForm changePasswdForm () { return new ChangePasswdForm();}
 
-    @GetMapping( value = "/{id}/settings" )
+    @GetMapping( value = "persons/{id}/settings" )
     public String settingsPage( @PathVariable( value = "id" )   Long id ,
                                 @CookieValue( name = "userID" ) Long userId ,
                                 Model model ){
@@ -56,7 +56,7 @@ public class SettingsPageController {
         if( userId == null ) return "redirect:/";
         Optional<PersonEntity> person = personRepository.findById( id );
         if( person.isPresent() ){
-            userId = id;
+            this.userId = id;
             model.addAttribute( "person" , person.get() );
             model.addAttribute( "races" ,
                     raceService.getAll()
@@ -70,7 +70,7 @@ public class SettingsPageController {
         }
     }
 
-    @PostMapping( value = "/{id}/settings" )
+    @PostMapping( value = "persons/{id}/settings" )
     public String changeUser(@Validated
                              @ModelAttribute( "changeForm" )ChangeForm chForm ,
                              Model model ,
@@ -95,16 +95,17 @@ public class SettingsPageController {
 
     @PostMapping( value = "/pass" )
     public String changeUserPasswd(@Validated
-                                   @ModelAttribute( "changePasswdForm" )ChangePasswdForm chPassForm , Model model ,
+                                   @ModelAttribute( "changePasswdForm" )ChangePasswdForm chPassForm ,
+                                   Model model ,
                                    HttpServletResponse response ,
                                    BindingResult bindingResult){
         if( bindingResult.hasErrors() ) return "settingsPage";
 //        todo Отлов ошибок
 
-        PersonEntity person = personRepository.saveAndFlush( toChangePasswd( userID, chPassForm ) );
+        PersonEntity person = personRepository.saveAndFlush( toChangePasswd( this.userId, chPassForm ) );
         //       PersonEntity personEntity = personService.editPerson( toChangePerson( id, chForm ) );
         model.addAttribute("person", person);
-        return "redirect:/persons/" + userID ;
+        return "redirect:/persons/" + this.userId ;
 
     }
 
