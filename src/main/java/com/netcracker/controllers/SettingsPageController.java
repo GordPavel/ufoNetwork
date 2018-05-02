@@ -105,7 +105,7 @@ public class SettingsPageController {
         PersonEntity person = personRepository.saveAndFlush( toChangePasswd( this.userId, chPassForm ) );
         //       PersonEntity personEntity = personService.editPerson( toChangePerson( id, chForm ) );
         model.addAttribute("person", person);
-        return "redirect:/persons/" + this.userId ;
+        return "redirect:/persons/" + this.userId + "/settings" ;
 
     }
 
