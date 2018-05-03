@@ -21,8 +21,8 @@
 <body>
 <%@include file="/resources/templates/header.jsp" %>
 <div class="content">
-    <div onclick="show('none')" id="wrap"></div>
-    <c:url value="/groups/create" var="creationUrl"/>
+    <div onclick="show('none')" id="wrap" ></div>
+    <c:url value="/groups/create" var="creationUrl"  />
     <form:form method="post" action="${creationUrl}" modelAttribute="groupCreateForm"
                enctype="multipart/form-data">
         <div id="window">
@@ -31,7 +31,7 @@
 
             <label>Название</label>
             <spring:bind path="name">
-                <div>
+                <div class="form-group ${status.error ? 'has-error' : ''}">
                     <form:input class="form-control" path="name" placeholder="Имя"/><span></span>
                     <form:errors path="name" cssClass="error"/>
                 </div>
@@ -39,7 +39,7 @@
 
             <label>Фотография</label>
             <spring:bind path="image">
-                <div>
+                <div class="form-group ${status.error ? 'has-error' : ''}">
                     <form:input type="file" class="form-control" path="image"/><span></span>
                     <form:errors path="image" cssClass="error"/>
                 </div>

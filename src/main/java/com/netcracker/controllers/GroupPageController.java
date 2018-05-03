@@ -20,7 +20,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
@@ -247,6 +249,8 @@ public class GroupPageController{
             @ModelAttribute( "groupCreateForm" )
                     GroupCreateForm groupCreateForm , BindingResult errors , Model model ,
             HttpServletResponse response ,
+            HttpServletRequest request ,
+            RedirectAttributes attr ,
             @CookieValue( name = "userID", defaultValue = "" )
                     Long userId ) throws IOException{
 
@@ -257,7 +261,10 @@ public class GroupPageController{
         }
 
         if( errors.hasErrors() ){
-            return "personPage";
+            String referer = request.getHeader("Referer");
+            attr.addFlashAttribute("org.springframework.validation.BindingResult.groupCreateForm", errors);
+            attr.addFlashAttribute("groupCreateForm", groupCreateForm);
+            return "redirect:"+ referer;
         }
 
         Long groupId = groupService.addGroup(groupCreateForm,userId);

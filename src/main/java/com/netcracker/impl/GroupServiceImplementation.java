@@ -52,10 +52,12 @@ public class GroupServiceImplementation implements GroupService{
     @Override
     public Long addGroup( GroupCreateForm groupCreateForm, Long userId ) throws IOException{
         GroupEntity groupEntity = new GroupEntity( groupCreateForm.getName() , personService.findById( userId ).get() );
-        GroupMediaEntity groupMediaEntity = new GroupMediaEntity();
-        groupMediaEntity.setGroup(groupEntity);
-        groupMediaEntity.setImage(groupCreateForm.getImage().getBytes());
-        groupEntity.setMedia(groupMediaEntity);
+        if( groupCreateForm.getImage() != null ){
+            GroupMediaEntity media = new GroupMediaEntity();
+            media.setImage( groupCreateForm.getImage().getBytes() );
+            media.setGroup( groupEntity );
+            groupEntity.setMedia( media );
+        }
         return groupRepository.saveAndFlush( groupEntity ).getId();
     }
 

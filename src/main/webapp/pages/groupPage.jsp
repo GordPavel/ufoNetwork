@@ -141,7 +141,7 @@
 <body>
 <%@include file="/resources/templates/header.jsp" %>
 <div class="content">
-    <img src='<c:url value="/group-${group.id}/image"/>' width="32" height="32">
+    <img id=img1 src='<c:url value="/group-${group.id}/image"/>' >
     <%--<img src='<c:url value="/user-${person.id}/image"/>' width="32" height="32">--%>
     <div id="l1">
         <table>
