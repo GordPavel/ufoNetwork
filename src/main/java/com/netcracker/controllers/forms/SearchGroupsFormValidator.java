@@ -19,14 +19,14 @@ public class SearchGroupsFormValidator implements Validator {
     public void validate( Object o , Errors errors ){
 
         SearchGroupsForm form = ( SearchGroupsForm ) o;
-        Pattern p           = Pattern.compile( "[\\d\\s-_\\*\\?]+" );
+        Pattern p           = Pattern.compile( "[\\d\\w-_\\*\\?]*" );
 
-        if( p.matcher( form.name ).matches() ){
+        if( !p.matcher( form.name ).matches() ){
             errors.rejectValue("name", "", "Недопустимые символы в названии");
         }
 
-        if( p.matcher( form.ownerName ).matches() ){
-            errors.rejectValue("sex", "","Недопустимые символы в имени владельца");
+        if( !p.matcher( form.ownerName ).matches() ){
+            errors.rejectValue("ownerName", "","Недопустимые символы в имени владельца");
         }
 
 

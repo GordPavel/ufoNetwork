@@ -83,23 +83,27 @@ public class PersonServiceImplementation implements PersonService{
     }
 
     @Override
-    public List<PersonEntity> listWithSpecifications( String name , Long raceID , Integer ageFrom ,
-                                                      Integer ageTo , String sex ,
+    public List<PersonEntity> listWithSpecifications( String name , Long raceID , String ageFrom ,
+                                                      String ageTo , String sex ,
                                                       PersonLazyFields... fields ){
         List<PersonLazyFields> lazyFields = Arrays.asList( fields );
         return personRepository.findAll( ( root , criteriaQuery , criteriaBuilder ) -> {
             List<Predicate> predicates = new ArrayList<>();
             if( name != null ){
-                predicates.add( criteriaBuilder.like( root.get( "name" ) , name ) );
+                predicates.add( criteriaBuilder.like( root.get( "name" ) ,
+                        name.isEmpty() ? "%" : name.replaceAll("\\*","%")
+                                                   .replaceAll("\\?","_") ) );
             }
             if( raceID != null ){
                 predicates.add( criteriaBuilder.equal( root.get( "race" ).get( "id" ) , raceID ) );
             }
             predicates.add( criteriaBuilder.between( root.get( "age" ) ,
-                                                     ageFrom != null ? ageFrom : 0 ,
-                                                     ageTo != null ? ageTo : Integer.MAX_VALUE ) );
+                                                     ageFrom.isEmpty()  ? 0 : Integer.parseInt(ageFrom) ,
+                                                     ageTo.isEmpty()  ? Integer.MAX_VALUE : Integer.parseInt(ageTo)  ) );
             if( sex != null ){
-                predicates.add( criteriaBuilder.like( root.get( "sex" ) , sex ) );
+                predicates.add( criteriaBuilder.like( root.get( "sex" ) ,
+                        sex.isEmpty() ? "%" : sex.replaceAll("\\*","%")
+                                                 .replaceAll("\\?","_") )  );
             }
             return criteriaBuilder.and( predicates.toArray( new Predicate[]{} ) );
         } )

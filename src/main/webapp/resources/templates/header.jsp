@@ -23,7 +23,7 @@
     </div>
 </div>
 
-<c:url value="/srcgroups" var="srcgroupsUrl"/>
+<c:url value="/groups/search" var="srcgroupsUrl"/>
 <form:form method="post" action="${srcgroupsUrl}" modelAttribute="searchGroupsForm"
            enctype="multipart/form-data">
     <a href="#x" class="overlay" id="win1"></a>
@@ -60,7 +60,7 @@
 </div>-->
 
 
-<c:url value="/srcpersons" var="srcpersonsUrl"/>
+<c:url value="/persons/search" var="srcpersonsUrl"/>
 <form:form method="post" action="${srcpersonsUrl}" modelAttribute="searchPersonsForm"
            enctype="multipart/form-data">
     <a href="#x" class="overlay" id="win2"></a>

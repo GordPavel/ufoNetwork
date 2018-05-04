@@ -286,6 +286,35 @@ public class GroupPageController{
 
         return "redirect:/groups/"+groupId;
     }
+
+    @PostMapping( value = "/search" )
+    public String searchGroups (  @Validated
+                                  @ModelAttribute( "searchGroupsForm" ) SearchGroupsForm searchGroupsForm ,
+                                  BindingResult bindingResult ,
+                                  Model model ,
+                                  HttpServletResponse response ,
+                                  HttpServletRequest request,
+                                  RedirectAttributes attr){
+
+        if( bindingResult.hasErrors() ) {
+            String referer = request.getHeader("Referer");
+            attr.addFlashAttribute("org.springframework.validation.BindingResult.searchGroupsForm", bindingResult);
+            attr.addFlashAttribute("searchGroupsForm", searchGroupsForm);
+            return "redirect:"+referer;
+        }
+
+        model.addAttribute( "groups" , groupService.getBySearchParams(
+                searchGroupsForm.getName().isEmpty() ? "%" : searchGroupsForm.getName()
+                        .replaceAll("\\*","%")
+                        .replaceAll("\\?","_"),
+                searchGroupsForm.getOwnerName().isEmpty() ? "%" : searchGroupsForm.getOwnerName()
+                        .replaceAll("\\*","%")
+                        .replaceAll("\\?","_") ) );
+
+        model.addAttribute( "name" , searchGroupsForm.getName() );
+        model.addAttribute( "ownerName" , searchGroupsForm.getOwnerName() );
+        return "searchGroupPage";
+    }
 //
 //    //Group settings
 //

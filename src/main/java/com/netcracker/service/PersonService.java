@@ -51,8 +51,8 @@ public interface PersonService{
 
      @return - list of persons suitable for search parameters
      */
-    List<PersonEntity> listWithSpecifications( String name , Long raceID , Integer ageFrom ,
-                                               Integer ageTo , String sex ,
+    List<PersonEntity> listWithSpecifications( String name , Long raceID , String ageFrom ,
+                                               String ageTo , String sex ,
                                                PersonLazyFields... fields );
 
     /**

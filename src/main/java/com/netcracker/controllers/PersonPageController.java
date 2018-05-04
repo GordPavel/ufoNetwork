@@ -10,9 +10,14 @@ import com.netcracker.service.RaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
 @Controller
@@ -79,6 +84,39 @@ public class PersonPageController{
 //            todo: Нет пользователя
             return "redirect:/";
         }
+    }
+
+    @PostMapping( value = "/search" )
+    public String searchPersons (  @Validated
+                                   @ModelAttribute( "searchPersonsForm" ) SearchPersonsForm searchPersonsForm ,
+                                   BindingResult bindingResult ,
+                                   Model model ,
+                                   HttpServletResponse response ,
+                                   HttpServletRequest request ,
+                                   RedirectAttributes attr){
+        if( bindingResult.hasErrors() ) {
+            String referer = request.getHeader("Referer");
+            attr.addFlashAttribute("org.springframework.validation.BindingResult.searchPersonsForm", bindingResult);
+            attr.addFlashAttribute("searchPersonsForm", searchPersonsForm);
+            return "redirect:"+referer;
+        }
+
+        Long raceID = null;
+        if (!searchPersonsForm.getRace().isEmpty()) {
+            raceID = raceService.getByName(searchPersonsForm.getRace()).get().getId();
+        }
+        model.addAttribute( "persons" ,
+                personService.listWithSpecifications( searchPersonsForm.getName(),
+                        raceID ,
+                        searchPersonsForm.getAgeFrom() ,
+                        searchPersonsForm.getAgeTo() ,
+                        searchPersonsForm.getSex() ) );
+        model.addAttribute("name",searchPersonsForm.getName());
+        model.addAttribute("race",searchPersonsForm.getRace());
+        model.addAttribute("ageFrom",searchPersonsForm.getAgeFrom());
+        model.addAttribute("ageTo",searchPersonsForm.getAgeTo());
+        model.addAttribute("sex",searchPersonsForm.getSex());
+        return "searchUserPage";
     }
 
 //    /**

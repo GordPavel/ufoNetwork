@@ -15,23 +15,24 @@
     <div id="tableUS1">
         <table>
             <tr>
-                <td align='left'>Имя: ${}</td>
+                <td align='left'>Имя: ${name}</td>
             </tr>
             <tr>
-                <td align='left'>Раса:${}</td>
+                <td align='left'>Раса: ${race}</td>
             </tr>
             <tr>
-                <td align='left'>Возрастной диапазон:${}</td>
+                <td align='left'>Возрастной диапазон: <c:if test="${not empty ageFrom}"> от ${ageFrom} </c:if>
+                                                      <c:if test="${not empty ageTo}"> до ${ageTo} </c:if>
             </tr>
             <tr>
-                <td align='left'>Пол:${}</td>
+                <td align='left'>Пол: ${sex}</td>
             </tr>
         </table>
     <div id="tableUS2" >
         <label id="tg">Список пользователей</label>
         <div class="list-group" >
             <c:forEach items="${persons}" var="person">
-                <a href="<c:url value="/search/${person.id}"/>" class="list-group-item">${person.name}</a>
+                <a href="<c:url value="/persons/${person.id}"/>" class="list-group-item">${person.name}</a>
             </c:forEach>
         </div>
     </div>

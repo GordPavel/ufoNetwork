@@ -6,7 +6,7 @@
 <html>
 <head>
     <jsp:include page="/resources/templates/includes.jsp"/>
-    <title>Настройки</title>
+    <title>Результаты поиска</title>
 </head>
 <body>
 <%@include file="/resources/templates/header.jsp" %>
@@ -16,17 +16,17 @@
     <div id="tableGR1">
         <table>
             <tr>
-                <td align='left'>Создатель: ${name}</td>
+                <td align='left'>Создатель: ${ownerName}</td>
             </tr>
             <tr>
-                <td align='left'>Название:${ownerName}</td>
+                <td align='left'>Название:${name}</td>
             </tr>
         </table>
     <div id="tableGr2" >
         <label id="tg">Список групп</label>
         <div class="list-group" >
             <c:forEach items="${groups}" var="group">
-                <a href="<c:url value="/search/${group.id}"/>" class="list-group-item">${group.name}</a>
+                <a href="<c:url value="/groups/${group.id}"/>" class="list-group-item">${group.name}</a>
             </c:forEach>
         </div>
     </div>
