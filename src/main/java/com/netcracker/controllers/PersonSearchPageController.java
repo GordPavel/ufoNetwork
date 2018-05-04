@@ -27,10 +27,11 @@ public class PersonSearchPageController{
     @Autowired SearchPersonsFormValidator searchPersonsFormValidator;
 
     @InitBinder("searchPersonsForm")
-    protected void initChangeBinder( WebDataBinder binder ){ binder.setValidator( searchPersonsFormValidator ); }
+    protected void initSearchPersonBinder( WebDataBinder binder ){ binder.setValidator( searchPersonsFormValidator ); }
 
     @ModelAttribute("searchPersonsForm")
     public SearchPersonsForm searchPersonsForm () { return new SearchPersonsForm();}
+
 
 
   /*  /**

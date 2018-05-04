@@ -2,8 +2,7 @@ package com.netcracker.controllers;
 
 import com.netcracker.DAO.PersonEntity;
 import com.netcracker.DAO.PersonLazyFields;
-import com.netcracker.controllers.forms.GroupCreateForm;
-import com.netcracker.controllers.forms.GroupCreateValidator;
+import com.netcracker.controllers.forms.*;
 import com.netcracker.repository.GroupRepository;
 import com.netcracker.repository.PersonRepository;
 import com.netcracker.service.PersonService;
@@ -26,6 +25,23 @@ public class PersonPageController{
     @Autowired RaceService      raceService;
     @Autowired
     GroupCreateValidator groupCreateValidator;
+
+    @Autowired
+    SearchPersonsFormValidator searchPersonsFormValidator;
+    @Autowired
+    SearchGroupsFormValidator searchGroupsFormValidator;
+
+    @InitBinder("searchGroupsForm")
+    protected void initSearchGroupBinder( WebDataBinder binder ){ binder.setValidator( searchGroupsFormValidator ); }
+
+    @ModelAttribute("searchGroupsForm")
+    public SearchGroupsForm searchGroupsForm () { return new SearchGroupsForm();}
+
+    @InitBinder("searchPersonsForm")
+    protected void initSearchPersonBinder( WebDataBinder binder ){ binder.setValidator( searchPersonsFormValidator ); }
+
+    @ModelAttribute("searchPersonsForm")
+    public SearchPersonsForm searchPersonsForm () { return new SearchPersonsForm();}
 
     @InitBinder( "groupCreateForm" )
     protected void initGroupControlBinder( WebDataBinder binder ){

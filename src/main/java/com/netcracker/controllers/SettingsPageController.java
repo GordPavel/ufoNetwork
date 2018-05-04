@@ -3,10 +3,7 @@ package com.netcracker.controllers;
 
 import com.netcracker.DAO.PersonEntity;
 import com.netcracker.DAO.RaceEntity;
-import com.netcracker.controllers.forms.ChangeForm;
-import com.netcracker.controllers.forms.ChangeFormValidator;
-import com.netcracker.controllers.forms.ChangePasswdForm;
-import com.netcracker.controllers.forms.ChangePasswdFormValidator;
+import com.netcracker.controllers.forms.*;
 import com.netcracker.repository.PersonRepository;
 import com.netcracker.repository.RaceRepository;
 import com.netcracker.service.PersonService;
@@ -34,7 +31,25 @@ public class SettingsPageController {
     @Autowired ChangeFormValidator changeFormValidator;
     @Autowired ChangePasswdFormValidator changePasswdFormValidator;
 
+    @Autowired
+    SearchPersonsFormValidator searchPersonsFormValidator;
+    @Autowired
+    SearchGroupsFormValidator searchGroupsFormValidator;
+
     private Long userId;
+
+
+    @InitBinder("searchGroupsForm")
+    protected void initSearchGroupBinder( WebDataBinder binder ){ binder.setValidator( searchGroupsFormValidator ); }
+
+    @ModelAttribute("searchGroupsForm")
+    public SearchGroupsForm searchGroupsForm () { return new SearchGroupsForm();}
+
+    @InitBinder("searchPersonsForm")
+    protected void initSearchPersonBinder( WebDataBinder binder ){ binder.setValidator( searchPersonsFormValidator ); }
+
+    @ModelAttribute("searchPersonsForm")
+    public SearchPersonsForm searchPersonsForm () { return new SearchPersonsForm();}
 
     @InitBinder("changeForm")
     protected void initChangeBinder( WebDataBinder binder ){ binder.setValidator( changeFormValidator ); }

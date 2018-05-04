@@ -25,7 +25,7 @@ public class GroupSearchPageController{
     @Autowired SearchGroupsFormValidator searchGroupsFormValidator;
 
     @InitBinder("searchGroupsForm")
-    protected void initChangeBinder( WebDataBinder binder ){ binder.setValidator( searchGroupsFormValidator ); }
+    protected void initSearchGroupBinder( WebDataBinder binder ){ binder.setValidator( searchGroupsFormValidator ); }
 
     @ModelAttribute("searchGroupsForm")
     public SearchGroupsForm searchGroupsForm () { return new SearchGroupsForm();}

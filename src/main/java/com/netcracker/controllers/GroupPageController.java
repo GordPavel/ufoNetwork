@@ -3,10 +3,7 @@ package com.netcracker.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netcracker.DAO.*;
-import com.netcracker.controllers.forms.GroupCreateForm;
-import com.netcracker.controllers.forms.GroupCreateValidator;
-import com.netcracker.controllers.forms.LoginForm;
-import com.netcracker.controllers.forms.RegistrationForm;
+import com.netcracker.controllers.forms.*;
 import com.netcracker.repository.GroupRepository;
 import com.netcracker.repository.MessageRepository;
 import com.netcracker.repository.PersonRepository;
@@ -46,6 +43,23 @@ public class GroupPageController{
     @Autowired GroupRepository   groupRepository;
     @Autowired ObjectMapper      mapper;
     @Autowired GroupCreateValidator groupCreateValidator;
+
+    @Autowired
+    SearchPersonsFormValidator searchPersonsFormValidator;
+    @Autowired
+    SearchGroupsFormValidator searchGroupsFormValidator;
+
+    @InitBinder("searchGroupsForm")
+    protected void initSearchGroupBinder( WebDataBinder binder ){ binder.setValidator( searchGroupsFormValidator ); }
+
+    @ModelAttribute("searchGroupsForm")
+    public SearchGroupsForm searchGroupsForm () { return new SearchGroupsForm();}
+
+    @InitBinder("searchPersonsForm")
+    protected void initSearchPersonBinder( WebDataBinder binder ){ binder.setValidator( searchPersonsFormValidator ); }
+
+    @ModelAttribute("searchPersonsForm")
+    public SearchPersonsForm searchPersonsForm () { return new SearchPersonsForm();}
 
     @InitBinder( "groupCreateForm" )
     protected void initGroupCreateBinder( WebDataBinder binder ){

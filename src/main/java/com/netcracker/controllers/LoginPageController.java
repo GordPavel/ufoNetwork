@@ -2,10 +2,7 @@ package com.netcracker.controllers;
 
 import com.netcracker.DAO.PersonEntity;
 import com.netcracker.DAO.RaceEntity;
-import com.netcracker.controllers.forms.LoginForm;
-import com.netcracker.controllers.forms.LoginValidator;
-import com.netcracker.controllers.forms.RegistrationForm;
-import com.netcracker.controllers.forms.RegistrationValidator;
+import com.netcracker.controllers.forms.*;
 import com.netcracker.repository.PersonRepository;
 import com.netcracker.service.PersonService;
 import com.netcracker.service.RaceService;
@@ -35,6 +32,25 @@ public class LoginPageController{
     private final RaceService           raceService;
     private final RegistrationValidator registrationValidator;
     private final LoginValidator        loginValidator;
+
+
+    @Autowired
+    SearchPersonsFormValidator searchPersonsFormValidator;
+    @Autowired
+    SearchGroupsFormValidator searchGroupsFormValidator;
+
+    @InitBinder("searchGroupsForm")
+    protected void initSearchGroupBinder( WebDataBinder binder ){ binder.setValidator( searchGroupsFormValidator ); }
+
+    @ModelAttribute("searchGroupsForm")
+    public SearchGroupsForm searchGroupsForm () { return new SearchGroupsForm();}
+
+    @InitBinder("searchPersonsForm")
+    protected void initSearchPersonBinder( WebDataBinder binder ){ binder.setValidator( searchPersonsFormValidator ); }
+
+    @ModelAttribute("searchPersonsForm")
+    public SearchPersonsForm searchPersonsForm () { return new SearchPersonsForm();}
+
 
     @Autowired
     public LoginPageController( PersonService personService , PersonRepository personRepository ,
@@ -146,7 +162,7 @@ public class LoginPageController{
     @PostMapping( value = "/registration" )
     public String newUser(
             @Validated
-            @ModelAttribute( "registrationForm" )
+            @ModelAttribute(value = "registrationForm")
                     RegistrationForm registrationForm , BindingResult bindingResult , Model model ,
             HttpServletResponse response ) throws IOException{
         if( bindingResult.hasErrors() ){
