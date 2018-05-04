@@ -11,6 +11,9 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Component
 public class GroupCreateValidator  implements Validator {
 
@@ -35,12 +38,19 @@ public class GroupCreateValidator  implements Validator {
             errors.rejectValue( "name" ,
                     "" ,
                     "Такая группа уже существует существует" );
-            System.out.print("test");
         }
+
         if( form.image.isEmpty() ) form.setImage( null );
         else if( !form.image.getOriginalFilename().matches( "^.+\\.(jpg|jpeg|png)$" ) )
             errors.rejectValue( "image" ,
                     "" ,
                     "Можно загружать только в форматах jpg | jpeg | png" );
+        Pattern pattern = Pattern.compile( "[\\d\\w-_]*" );
+        if (!pattern.matcher( form.name ).matches()) {
+            errors.rejectValue( "name" ,
+                    "" ,
+                    "Название группы может состоять только из букв, цифр и символов - и _" );
+        }
+
     }
 }

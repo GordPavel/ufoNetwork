@@ -4,9 +4,13 @@ import com.netcracker.repository.PersonRepository;
 import com.netcracker.repository.RaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.NumberUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
+
+import java.util.regex.Pattern;
 
 @Component
 public class RegistrationValidator implements Validator{
@@ -47,5 +51,42 @@ public class RegistrationValidator implements Validator{
                                 "" ,
                                 "Можно загружать только в форматах jpg | jpeg | png" );
 
+        Pattern pattern = Pattern.compile( "[\\d\\w-_]*" );
+        if (!pattern.matcher( form.name ).matches()) {
+            errors.rejectValue( "name" ,
+                    "" ,
+                    "Имя может состоять только из букв, цифр и символов - и _" );
+        }
+
+        if (!pattern.matcher( form.sex ).matches()) {
+            errors.rejectValue( "sex" ,
+                    "" ,
+                    "Название пола может состоять только из букв, цифр и символов - и _" );
+        }
+
+        if (!pattern.matcher( form.race ).matches()) {
+            errors.rejectValue( "race" ,
+                    "" ,
+                    "Название расы может состоять только из букв, цифр и символов - и _" );
+        }
+
+        if (!pattern.matcher( form.login ).matches()) {
+            errors.rejectValue( "login" ,
+                    "" ,
+                    "Логин может состоять только из букв, цифр и символов - и _" );
+        }
+
+        Pattern numberPattern = Pattern.compile( "[\\d]*" );
+        if (!numberPattern.matcher( form.age ).matches()) {
+            errors.rejectValue( "age" ,
+                    "" ,
+                    "Возраст может быть только целым числом" );
+        }
+
+        if (personRepository.getByLogin(form.login).isPresent()) {
+            errors.rejectValue( "login" ,
+                    "" ,
+                    "Этот логин занят, выберите себе другой" );
+        }
     }
 }

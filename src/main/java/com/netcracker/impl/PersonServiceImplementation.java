@@ -71,7 +71,7 @@ public class PersonServiceImplementation implements PersonService{
         }
         PersonEntity entity =
                 new PersonEntity( form.getLogin() , form.getPass() , form.getName() , race );
-        entity.setAge( form.getAge() );
+        entity.setAge( Integer.parseInt(form.getAge()) );
         entity.setSex( form.getSex() );
         if( form.getImage() != null ){
             PersonMediaEntity media = new PersonMediaEntity();

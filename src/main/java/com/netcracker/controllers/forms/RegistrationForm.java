@@ -16,7 +16,7 @@ public class RegistrationForm{
     String        pass;
     String        passAccept;
     String        race;
-    Integer       age;
+    String       age;
     String        sex;
     MultipartFile image;
 }
