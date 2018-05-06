@@ -305,9 +305,11 @@ public class GroupPageController{
 
         model.addAttribute( "groups" , groupService.getBySearchParams(
                 searchGroupsForm.getName().isEmpty() ? "%" : searchGroupsForm.getName()
+                        .replaceAll("_","\\\\_")
                         .replaceAll("\\*","%")
                         .replaceAll("\\?","_"),
                 searchGroupsForm.getOwnerName().isEmpty() ? "%" : searchGroupsForm.getOwnerName()
+                        .replaceAll("_","\\\\_")
                         .replaceAll("\\*","%")
                         .replaceAll("\\?","_") ) );
 

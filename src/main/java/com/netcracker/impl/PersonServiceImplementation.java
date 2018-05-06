@@ -90,9 +90,11 @@ public class PersonServiceImplementation implements PersonService{
         return personRepository.findAll( ( root , criteriaQuery , criteriaBuilder ) -> {
             List<Predicate> predicates = new ArrayList<>();
             if( name != null ){
-                predicates.add( criteriaBuilder.like( root.get( "name" ) ,
-                        name.isEmpty() ? "%" : name.replaceAll("\\*","%")
-                                                   .replaceAll("\\?","_") ) );
+                predicates.add( criteriaBuilder.like( criteriaBuilder.upper( root.get( "name" ) ) ,
+                        name.isEmpty() ? "%" : name.replaceAll("_","\\\\_")
+                                                   .replaceAll("\\*","%")
+                                                   .replaceAll("\\?","_")
+                                                    .toUpperCase() ) );
             }
             if( raceID != null ){
                 predicates.add( criteriaBuilder.equal( root.get( "race" ).get( "id" ) , raceID ) );
@@ -101,9 +103,11 @@ public class PersonServiceImplementation implements PersonService{
                                                      ageFrom.isEmpty()  ? 0 : Integer.parseInt(ageFrom) ,
                                                      ageTo.isEmpty()  ? Integer.MAX_VALUE : Integer.parseInt(ageTo)  ) );
             if( sex != null ){
-                predicates.add( criteriaBuilder.like( root.get( "sex" ) ,
-                        sex.isEmpty() ? "%" : sex.replaceAll("\\*","%")
-                                                 .replaceAll("\\?","_") )  );
+                predicates.add( criteriaBuilder.like( criteriaBuilder.upper( root.get( "sex" ) ) ,
+                        sex.isEmpty() ? "%" : sex.replaceAll("_","\\\\_")
+                                                 .replaceAll("\\*","%")
+                                                 .replaceAll("\\?","_")
+                                                    .toUpperCase() )  );
             }
             return criteriaBuilder.and( predicates.toArray( new Predicate[]{} ) );
         } )

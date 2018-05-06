@@ -27,14 +27,15 @@ public interface GroupRepository
 
 //    todo правильнее все же использовать не имя пользователя, а логин
 //    И лучше смотреть в сторону findAll( Specifications )
-    @Query( "select ge from GroupEntity ge where ge.name like :name and ge.owner.name like :ownerName" )
+    @Query( "select ge from GroupEntity ge where UPPER(ge.name) like UPPER(:name)" +
+            " and UPPER(ge.owner.name) like UPPER(:ownerName)" )
     List<GroupEntity> getBySearchParams(
             @Param( "name" )
                     String name ,
             @Param( "ownerName" )
                     String ownerName );
 
-    @Query( "select ge from GroupEntity ge where ge.name like :name" )
+    @Query( "select ge from GroupEntity ge where UPPER(ge.name) like UPPER(:name)" )
     List<GroupEntity> getByName(
             @Param( "name" )
                     String name );
