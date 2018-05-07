@@ -67,7 +67,6 @@ public class SettingsPageController {
     public String settingsPage( @PathVariable( value = "id" )   Long id ,
                                 @CookieValue( name = "userID" ) Long userId ,
                                 Model model ){
-//        todo: пользователь не авторизовался
         if( userId == null ) return "redirect:/";
         Optional<PersonEntity> person = personRepository.findById( id );
         if( person.isPresent() ){
@@ -80,7 +79,6 @@ public class SettingsPageController {
                             .collect( Collectors.toList() ) );
             return "settingsPage";
         }else{
-//            todo:
             return "redirect:/";
         }
     }

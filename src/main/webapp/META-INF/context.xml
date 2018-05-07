@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context path="/">
     <!-- Specify a JDBC datasource -->
-    <!-- todo Прекратите менять настройки -->
     <Resource name="jdbc/mydatabase"
               auth="Container"
               type="javax.sql.DataSource"

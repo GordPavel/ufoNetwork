@@ -196,7 +196,6 @@ public class GroupPageController{
             }} );
         }
 
-//        todo Обработка ошибок
         GroupEntity  group  = groupService.findById( groupId , GroupLazyFields.USERS ).get();
         PersonEntity person = personRepository.findById( userId ).get();
         if( group.getUsers()
@@ -268,7 +267,6 @@ public class GroupPageController{
             @CookieValue( name = "userID", defaultValue = "" )
                     Long userId ) throws IOException{
 
-//        todo : Валидация данных
 
         if( userId == null ){
             return "redirect:/";

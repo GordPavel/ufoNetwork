@@ -147,9 +147,9 @@
         <table>
             <tr>
                 <th align='center'>${group.name}
-                    <c:if test="${group.owner.id.toString().equals(cookie['userID'].value)}">
-                        <a href="<c:url value="/groups/${group.id}/settings"/>">Настройки</a>
-                    </c:if>
+                    <%--<c:if test="${group.owner.id.toString().equals(cookie['userID'].value)}">--%>
+                        <%--<a href="<c:url value="/groups/${group.id}/settings"/>">Настройки</a>--%>
+                    <%--</c:if>--%>
                 </th>
             </tr> <!--ряд с ячейками заголовков-->
             <tr>

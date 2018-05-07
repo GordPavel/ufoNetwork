@@ -76,7 +76,6 @@
                 <td align='left'>Пол:${person.sex}</td>
             </tr>
             <tr>
-                <%--TODO: название рассы = ссылка на поиск по этой рассе--%>
                 <td align='left'>Раса:${person.race.name}</td>
             </tr>          <!--ряд с ячейками тела таблицы-->
             <tr>

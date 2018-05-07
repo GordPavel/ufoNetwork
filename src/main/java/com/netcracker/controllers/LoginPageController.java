@@ -173,7 +173,6 @@ public class LoginPageController{
                                            .collect( Collectors.toList() ) );
             return "loginPage";
         }
-//        todo Отлов ошибок
         Long id = personService.addPerson( registrationForm );
         response.addCookie( getCookie( id ) );
         return "redirect:/persons/" + id;

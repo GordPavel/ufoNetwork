@@ -112,13 +112,13 @@ public class PersonServiceImplementation implements PersonService{
             return criteriaBuilder.and( predicates.toArray( new Predicate[]{} ) );
         } )
                                .parallelStream()
+                               .filter(person -> {return !person.getDeleted();})
                                .peek( person -> loadFields( person , lazyFields ) )
                                .collect( Collectors.toList() );
     }
 
     @Override
     public void joinGroup( Long groupId , Long userId ){
-//        todo Обработка ошибок
         PersonEntity user  = findById( userId , PersonLazyFields.GROUPS ).get();
         GroupEntity  group = groupRepository.findById( groupId ).get();
         user.getGroups().add( group );
@@ -127,7 +127,6 @@ public class PersonServiceImplementation implements PersonService{
 
     @Override
     public void leaveGroup( Long groupId , Long userId ){
-//        todo Обработка ошибок
         PersonEntity user  = findById( userId , PersonLazyFields.GROUPS ).get();
         GroupEntity  group = groupRepository.findById( groupId ).get();
         user.getGroups().remove( group );

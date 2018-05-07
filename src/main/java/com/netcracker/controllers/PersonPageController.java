@@ -71,17 +71,17 @@ public class PersonPageController{
                     Long id ,
             @CookieValue( name = "userID" )
                     Long userId , Model model ){
-//        todo Не авторизованный пользователь
         if( userId == null ) return "redirect:/";
         Optional<PersonEntity> one = personService.findById( id , PersonLazyFields.GROUPS );
         if( one.isPresent() ){
+            if (one.get().getDeleted()){
+                return "redirect:/persons/"+userId;
+            }
             model.addAttribute( "person" , one.get() );
             if( id.equals( userId ) ){
-//            todo : Возможно доп возможности на своей странице
             }
             return "personPage";
         }else{
-//            todo: Нет пользователя
             return "redirect:/";
         }
     }

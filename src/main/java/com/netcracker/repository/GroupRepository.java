@@ -25,8 +25,6 @@ public interface GroupRepository
      query to select from db by name + owner name
      */
 
-//    todo правильнее все же использовать не имя пользователя, а логин
-//    И лучше смотреть в сторону findAll( Specifications )
     @Query( "select ge from GroupEntity ge where UPPER(ge.name) like UPPER(:name)" +
             " and UPPER(ge.owner.name) like UPPER(:ownerName)" )
     List<GroupEntity> getBySearchParams(
