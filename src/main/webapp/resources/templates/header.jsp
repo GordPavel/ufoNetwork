@@ -1,6 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="<c:url value="/resources/js/bootstrap.min.js"/>"></script>
+
+<spring:url value="/groups/search.json" var="groupFormJsonUrl" />
+<spring:url value="/persons/search.json" var="personFormJsonUrl" />
+
 
 <div class="header">
     <div id="mainmenu">
@@ -27,85 +32,76 @@
 
 <c:url value="/groups/search" var="srcgroupsUrl"/>
 <form:form method="post" action="${srcgroupsUrl}" modelAttribute="searchGroupsForm"
-           enctype="multipart/form-data">
+           enctype="multipart/form-data" id="groupSearchForm">
     <a href="#x" class="overlay" id="win1"></a>
     <div class="popup" >
         <label>Название</label>
         <spring:bind path="name">
-            <div>
+            <div class="group-validation" id="nameGroupValidation">
                 <form:input class="form-control" path="name" placeholder="Введите название"/><span></span>
-                <form:errors path="name"/>
+                <div class="error-message"><form:errors path="name"/></div>
             </div>
         </spring:bind>
 
         <label>Создатель</label>
         <spring:bind path="ownerName">
-            <div>
+            <div class="group-validation" id="ownerNameGroupValidation">
                 <form:input class="form-control" path="ownerName" placeholder="Укажите создателя группы"/><span></span>
-                <form:errors path="ownerName"/>
+                <div class="error-message"><form:errors path="ownerName"/></div>
             </div>
         </spring:bind>
         <button type="submit" class="btn" id="searchGroups"> Поиск </button>
         <a class="close" title="Закрыть" href="#close"></a>
     </div>
 </form:form>
-<!--<a href="#x" class="overlay" id="win1"></a>
-    <div class="popup" id="win3">
-    <p>Название:
-    <p></p><input name="name"></p>
-    <p>Создатель:
-    <p></p><input name="ownerName"></p>
-    <p>Категории:</p>
-    <p>Здесь может быть организован поиск по группам</p>
-    <button class="btn" onclick=""> Поиск</button>
-    <a class="close" title="Закрыть" href="#close"></a>
-</div>-->
 
 
 <c:url value="/persons/search" var="srcpersonsUrl"/>
 <form:form method="post" action="${srcpersonsUrl}" modelAttribute="searchPersonsForm"
-           enctype="multipart/form-data">
+           enctype="multipart/form-data" id="personSearchForm">
     <a href="#x" class="overlay" id="win2"></a>
     <div class="popup" >
       <label>Имя</label>
       <spring:bind path="name">
-          <div>
+          <div class="person-validation" id="namePersonValidation">
               <form:input class="form-control" path="name" placeholder="Введите имя"/><span></span>
-              <form:errors path="name"/>
+              <div class="error-message"><form:errors path="name"/></div>
           </div>
       </spring:bind>
 
       <label>Раса</label>
       <spring:bind path="race">
+          <div class="person-validation" id="racePersonValidation">
           <form:input path="race" list="races" placeholder="Укажите расу"/>
           <datalist id="races" >
               <c:forEach items="${races}" var="race">
                   <option value="${race}"></option>
               </c:forEach>
           </datalist>
-          <form:errors path="race" cssClass="error"/>
+          <div class="error-message"><form:errors path="race" cssClass="error"/></div>
+          </div>
       </spring:bind>
 
       <label>Возрастной диапазон</label>
       <spring:bind path="ageFrom">
-          <div>
+          <div class="person-validation" id="ageFromPersonValidation">
               <form:input class="form-control" path="ageFrom" placeholder="От"/><span></span>
-              <form:errors path="ageFrom"/>
+              <div class="error-message"><form:errors path="ageFrom"/></div>
           </div>
       </spring:bind>
 
       <spring:bind path="ageTo">
-          <div>
+          <div class="person-validation" id="ageToPersonValidation">
               <form:input class="form-control" path="ageTo" placeholder="До"/><span></span>
-              <form:errors path="ageTo"/>
+              <div class="error-message"><form:errors path="ageTo"/></div>
           </div>
       </spring:bind>
 
       <label>Пол</label>
       <spring:bind path="sex">
-          <div>
+          <div class="person-validation" id="sexPersonValidation">
               <form:input class="form-control" path="sex" placeholder="Укажите пол"/><span></span>
-              <form:errors path="sex"/>
+              <div class="error-message"><form:errors path="sex"/></div>
           </div>
       </spring:bind>
       <button type="submit" class="btn" id="searchPersons"> Поиск </button>
@@ -113,16 +109,69 @@
     </div>
 </form:form>
 
-<!--<a href="#x" class="overlay" id="win2"></a>
-<div class="popup" id="win4">
-    <p>Имя:
-    <p></p><input name="name"></p>
-    <p>Раса:
-    <p></p><input name="race"></p>
-    <p>Возраст:
-    <p></p><input name="age"></p>
-    <p>Пол:
-    <p></p><input name="sex"></p>
-    <button class="btn" onclick=""> Поиск</button>
-    <a class="close" title="Закрыть" href="#close"></a>
-</div>-->
+<script type="text/javascript">
+    function collectFormData(fields) {
+        var data = {};
+        for (var i = 0; i < fields.length; i++) {
+            var $item = $(fields[i]);
+            data[$item.attr('name')] = $item.val();
+        }
+        return data;
+    }
+
+    $(document).ready(function() {
+        var $formGroup = $('#groupSearchForm');
+        var $formPerson = $('#personSearchForm');
+        $formGroup.bind('submit', function(e) {
+            // Ajax validation
+            var $inputs = $formGroup.find('input');
+            var data = collectFormData($inputs);
+
+            $.post('${groupFormJsonUrl}', data, function(response) {
+                $formGroup.find('.group-validation').removeClass('error');
+                $formGroup.find('.error-message').empty();
+
+                if (response.status == 'FAIL') {
+                    for (var i = 0; i < response.errorMessageList.length; i++) {
+                        var item = response.errorMessageList[i];
+                        var $controlGroup = $('#' + item.fieldName + 'GroupValidation');
+                        $controlGroup.addClass('error');
+                        $controlGroup.find('.error-message').html(item.message);
+                    }
+                } else {
+                    $formGroup.unbind('submit');
+                    $formGroup.submit();
+                }
+            }, 'json');
+
+            e.preventDefault();
+            return false;
+        });
+        $formPerson.bind('submit', function(e) {
+            // Ajax validation
+            var $inputs = $formPerson.find('input');
+            var data = collectFormData($inputs);
+
+            $.post('${personFormJsonUrl}', data, function(response) {
+                $formPerson.find('.person-validation').removeClass('error');
+                $formPerson.find('.error-message').empty();
+
+                if (response.status == 'FAIL') {
+                    for (var i = 0; i < response.errorMessageList.length; i++) {
+                        var item = response.errorMessageList[i];
+                        var $controlPerson = $('#' + item.fieldName + 'PersonValidation');
+                        $controlPerson.addClass('error');
+                        $controlPerson.find('.error-message').html(item.message);
+                    }
+                } else {
+                    $formPerson.unbind('submit');
+                    $formPerson.submit();
+                }
+            }, 'json');
+
+            e.preventDefault();
+            return false;
+        });
+    });
+
+</script>

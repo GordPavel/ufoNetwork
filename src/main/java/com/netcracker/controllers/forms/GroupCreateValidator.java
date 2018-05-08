@@ -27,11 +27,12 @@ public class GroupCreateValidator  implements Validator {
 
     @Override
     public void validate( Object o , Errors errors ){
+        System.out.println("test0");
         ValidationUtils.rejectIfEmptyOrWhitespace( errors ,
                 "name" ,
                 "" ,
                 "Поле не может быть пустым" );
-        if( errors.hasErrors() ) return;
+
 
         GroupCreateForm form = ( GroupCreateForm ) o;
         if( !groupRepository.getByName( form.name ).isEmpty() ){
@@ -40,11 +41,15 @@ public class GroupCreateValidator  implements Validator {
                     "Такая группа уже существует существует" );
         }
 
+        if( errors.hasErrors() ) return;
+
+        System.out.println("test");
         if( form.image.isEmpty() ) form.setImage( null );
         else if( !form.image.getOriginalFilename().matches( "^.+\\.(jpg|jpeg|png)$" ) )
             errors.rejectValue( "image" ,
                     "" ,
                     "Можно загружать только в форматах jpg | jpeg | png" );
+        System.out.println("test2");
         Pattern pattern = Pattern.compile( "[\\d\\w-_]*" );
         if (!pattern.matcher( form.name ).matches()) {
             errors.rejectValue( "name" ,

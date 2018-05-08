@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -286,20 +287,8 @@ public class GroupPageController{
     }
 
     @PostMapping( value = "/search" )
-    public String searchGroups (  @Validated
-                                  @ModelAttribute( "searchGroupsForm" ) SearchGroupsForm searchGroupsForm ,
-                                  BindingResult bindingResult ,
-                                  Model model ,
-                                  HttpServletResponse response ,
-                                  HttpServletRequest request,
-                                  RedirectAttributes attr){
-
-        if( bindingResult.hasErrors() ) {
-            String referer = request.getHeader("Referer");
-            attr.addFlashAttribute("org.springframework.validation.BindingResult.searchGroupsForm", bindingResult);
-            attr.addFlashAttribute("searchGroupsForm", searchGroupsForm);
-            return "redirect:"+referer;
-        }
+    public String searchGroups (  @ModelAttribute( "searchGroupsForm" ) SearchGroupsForm searchGroupsForm ,
+                                  Model model ){
 
         model.addAttribute( "groups" , groupService.getBySearchParams(
                 searchGroupsForm.getName().isEmpty() ? "%" : searchGroupsForm.getName()
@@ -315,56 +304,26 @@ public class GroupPageController{
         model.addAttribute( "ownerName" , searchGroupsForm.getOwnerName() );
         return "searchGroupPage";
     }
-//
-//    //Group settings
-//
-//    /**
-//     open settings page
-//
-//     @param id    - group ID, path
-//     @param model - model to store params
-//
-//     @return - group settings page
-//     */
-//    @GetMapping( value = "/{id}/settings" )
-//    public String openSettings(
-//            @PathVariable( value = "id" )
-//                    Long id ,
-//            @CookieValue( name = "userID" )
-//                    Long userId , Model model ){
-//        if( ( userId == null ) || ( groupService.getById( id ).getOwner().getId() != userId ) ){
-//            return "redirect:/";
-//        }
-//        model.addAttribute( "group" , groupService.getById( id ) );
-//        return "groupSettingsPage";
-//    }
-//
-//    /**
-//     update settings of group
-//
-//     @param newName - new name of group
-//     @param id      - group ID, path
-//     @param model   - model to store params
-//
-//     @return - group settings page
-//     */
-//    @PostMapping( value = "/{id}/settings", params = "newName" )
-//    public String updateGroup(
-//            @RequestParam( value = "newName", defaultValue = "" )
-//                    String newName ,
-//            @PathVariable( value = "id" )
-//                    Long id ,
-//            @CookieValue( name = "userID", defaultValue = "" )
-//                    Long userId , Model model ){
-//
-//        if( ( userId == null ) || ( groupService.getById( id ).getOwner().getId() != userId ) ){
-//            return "redirect:/";
-//        }
-//
-//        GroupEntity toEdit = groupService.getById( id );
-//        toEdit.setName( newName );
-//        model.addAttribute( "group" , groupService.editGroup( toEdit ) );
-//        return "groupSettingsPage";
-//    }
+
+    @PostMapping(value = "/search.json")
+    public @ResponseBody
+    ValidationResponse validateGroupSearch(@Validated
+                                           @ModelAttribute( "searchGroupsForm" ) SearchGroupsForm searchGroupsForm ,
+                                           BindingResult bindingResult ,
+                                           Model model){
+        ValidationResponse res = new ValidationResponse();
+        if( bindingResult.hasErrors() ) {
+            res.setStatus("FAIL");
+            List<FieldError> allErrors = bindingResult.getFieldErrors();
+            List<ErrorMessage> errorMesages = new ArrayList<ErrorMessage>();
+            for (FieldError objectError : allErrors) {
+                errorMesages.add(new ErrorMessage(objectError.getField(), objectError.getDefaultMessage()));
+            }
+            res.setErrorMessageList(errorMesages);
+        } else {
+            res.setStatus("SUCCESS");
+        }
+        return res;
+    }
 
 }

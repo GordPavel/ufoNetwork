@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -87,19 +90,8 @@ public class PersonPageController{
     }
 
     @PostMapping( value = "/search" )
-    public String searchPersons (  @Validated
-                                   @ModelAttribute( "searchPersonsForm" ) SearchPersonsForm searchPersonsForm ,
-                                   BindingResult bindingResult ,
-                                   Model model ,
-                                   HttpServletResponse response ,
-                                   HttpServletRequest request ,
-                                   RedirectAttributes attr){
-        if( bindingResult.hasErrors() ) {
-            String referer = request.getHeader("Referer");
-            attr.addFlashAttribute("org.springframework.validation.BindingResult.searchPersonsForm", bindingResult);
-            attr.addFlashAttribute("searchPersonsForm", searchPersonsForm);
-            return "redirect:"+referer;
-        }
+    public String searchPersons (  @ModelAttribute( "searchPersonsForm" ) SearchPersonsForm searchPersonsForm ,
+                                   Model model ){
 
         Long raceID = null;
         if (!searchPersonsForm.getRace().isEmpty()) {
@@ -119,113 +111,25 @@ public class PersonPageController{
         return "searchUserPage";
     }
 
-//    /**
-//     open settings page
-//
-//     @param id    - user ID, path variable
-//     @param model - model to store params
-//
-//     @return settings page
-//     */
-//    @GetMapping( value = "/{id}/settings" )
-//    public String settingsPage(
-//            @PathVariable( value = "id" )
-//                    Long id ,
-//            @CookieValue( name = "userID" )
-//                    Long userId , Model model ){
-//        if( !id.equals( userId ) ) return "forward:/";
-//        model.addAttribute( "person" , personService.getById( id ) );
-//        return "personSettingsPage";
-//    }
-//
-//    /**
-//     page to change password
-//
-//     @return change password page
-//     */
-//    @GetMapping( value = "/{id}/settings/pass" )
-//    public String openPassPage(
-//            @PathVariable( value = "id" )
-//                    Long id ,
-//            @CookieValue( name = "userID" )
-//                    Long userId ){
-//        if( !id.equals( userId ) ) return "forward:/";
-//        return "personSettingsPassPage";
-//    }
-//
-//    /**
-//     update user`s params
-//
-//     @param login - new login
-//     @param name  - new name
-//     @param race  - new race
-//     @param age   - new age
-//     @param id    - user`s ID, path variable
-//     @param model - model to store params
-//
-//     @return setting`s page
-//     */
-//    @PostMapping( value = "/{id}/settings" )
-//    public String updatePerson(
-//            @RequestParam( value = "login", defaultValue = "" )
-//                    String login ,
-//            @RequestParam( value = "name", defaultValue = "" )
-//                    String name ,
-//            @RequestParam( value = "raceId", defaultValue = "" )
-//                    String race ,
-//            @RequestParam( value = "age" )
-//                    Integer age ,
-//            @PathVariable( value = "id" )
-//                    Long id ,
-//            @CookieValue( name = "userID", defaultValue = "" )
-//                    Long userId , Model model ){
-//
-//        if( !id.equals( userId ) ) return "redirect:/";
-//        PersonEntity toEdit = personService.getById( id );
-//
-//        if( !login.isEmpty() ){
-//            toEdit.setLogin( login );
-//        }
-//        if( !name.isEmpty() ){
-//            toEdit.setName( name );
-//        }
-//        if( !race.isEmpty() ){
-//            toEdit.setRace( raceService.getByName( race ) );
-//        }
-//        if( age != null ){
-//            toEdit.setAge( age );
-//        }
-//
-//        model.addAttribute( "person" , personService.editPerson( toEdit ) );
-//        return "personSettingsPage";
-//    }
-//
-//    /**
-//     Updating password
-//
-//     @param password    - old password
-//     @param newPassword - new password
-//     @param id          - user`s id, path variable
-//     */
-//    @PostMapping( value = "/{id}/settings/pass" )
-//    public String updatePersonPass(
-//            @RequestParam( value = "password", defaultValue = "" )
-//                    String password ,
-//            @RequestParam( value = "newPassword", defaultValue = "" )
-//                    String newPassword ,
-//            @PathVariable( value = "id" )
-//                    Long id ,
-//            @CookieValue( name = "userID", defaultValue = "" )
-//                    Long userId , Model model ){
-//
-//        if( !id.equals( userId ) ) return "redirect:/";
-//        PersonEntity toEdit = personService.getById( id );
-//
-//        if( toEdit.getPass().equals( password ) ){
-//            toEdit.setPass( newPassword );
-//        }
-//
-//        model.addAttribute( "person" , personService.editPerson( toEdit ) );
-//        return "personSettingsPage";
-//    }
+    @PostMapping( value = "/search.json" )
+    public @ResponseBody
+    ValidationResponse validPersonSearch (  @Validated
+                                   @ModelAttribute( "searchPersonsForm" ) SearchPersonsForm searchPersonsForm ,
+                                   BindingResult bindingResult ,
+                                   Model model ){
+        ValidationResponse res = new ValidationResponse();
+        if( bindingResult.hasErrors() ) {
+            res.setStatus("FAIL");
+            List<FieldError> allErrors = bindingResult.getFieldErrors();
+            List<ErrorMessage> errorMesages = new ArrayList<ErrorMessage>();
+            for (FieldError objectError : allErrors) {
+                errorMesages.add(new ErrorMessage(objectError.getField(), objectError.getDefaultMessage()));
+            }
+            res.setErrorMessageList(errorMesages);
+        } else {
+            res.setStatus("SUCCESS");
+        }
+        return res;
+    }
+
 }
