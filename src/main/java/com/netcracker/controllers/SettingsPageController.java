@@ -12,11 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -119,6 +122,27 @@ public class SettingsPageController {
         //       PersonEntity personEntity = personService.editPerson( toChangePerson( id, chForm ) );
         model.addAttribute("person", person);
         return "redirect:/persons/" + this.userId + "/settings" ;
+
+    }
+
+    @PostMapping( value = "/pass.json" )
+    public@ResponseBody
+    ValidationResponse changeUserPasswdValidation(@Validated
+                                   @ModelAttribute( "changePasswdForm" )ChangePasswdForm chPassForm ,
+                                   BindingResult bindingResult){
+        ValidationResponse res = new ValidationResponse();
+        if( bindingResult.hasErrors() ) {
+            res.setStatus("FAIL");
+            List<FieldError> allErrors = bindingResult.getFieldErrors();
+            List<ErrorMessage> errorMesages = new ArrayList<ErrorMessage>();
+            for (FieldError objectError : allErrors) {
+                errorMesages.add(new ErrorMessage(objectError.getField(), objectError.getDefaultMessage()));
+            }
+            res.setErrorMessageList(errorMesages);
+        } else {
+            res.setStatus("SUCCESS");
+        }
+        return res;
 
     }
 

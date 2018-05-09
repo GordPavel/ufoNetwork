@@ -13,10 +13,11 @@
             <img id="icon1" src='<c:url value="/resources/images/favicon.ico"/>' width='30'
                  height='30'
                  align='left'>
-            <li class="dropdown"><a href="<c:url value="/persons/${person.id}"/>" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span>
+            <li class="dropdown"><a href="<c:url value="/persons/${cookie['userID'].value}"/>" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span>
                 Мой профиль <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                      <li><a href= "<c:url value="/persons/${person.id}/settings"/>">Настройки</a></li>
+                     <li><a href= "<c:url value="/persons/${cookie['userID'].value}"/>">Страница</a></li>
+                     <li><a href= "<c:url value="/persons/${cookie['userID'].value}/settings"/>">Настройки</a></li>
                 </ul>
             </li>
             <li class="dropdown"><a href="#" data-toggle="dropdown"><span class="glyphicon glyphicon-search"></span>

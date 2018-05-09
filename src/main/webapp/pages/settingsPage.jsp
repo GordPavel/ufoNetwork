@@ -3,6 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE HTML>
+<spring:url value="/pass.json" var="passFormJsonUrl" />
 <html>
 <head>
     <jsp:include page="/resources/templates/includes.jsp"/>
@@ -21,7 +22,7 @@
 
 <c:url value="/pass" var="passUrl"/>
 <form:form method="post" action="${passUrl}" modelAttribute="changePasswdForm"
-           enctype="multipart/form-data">
+           enctype="multipart/form-data" id="passForm">
     <div id="window">
         <!-- Крестик-->
         <span class="close" onclick="show('none')">X</span>
@@ -29,28 +30,34 @@
         <label>Старый пароль</label>
         <spring:bind path="oldPasswd">
             <div>
-                <form:input class="form-control" type="password" path="oldPasswd"/><span></span>
-                <form:errors path="oldPasswd"/>
+                <div class="pass-validation" id="oldPasswdValidation">
+                    <form:input class="form-control" type="password" path="oldPasswd"/><span></span>
+                    <div class="error-message"><form:errors path="oldPasswd"/></div>
+                </div>
             </div>
         </spring:bind>
 
         <label>Новый пароль</label>
         <spring:bind path="newPasswd">
             <div>
-                <form:input class="form-control" type="password" path="newPasswd"/><span></span>
-                <form:errors path="newPasswd"/>
+                <div class="pass-validation" id="newPasswdValidation">
+                    <form:input class="form-control" type="password" path="newPasswd"/><span></span>
+                    <div class="error-message"><form:errors path="newPasswd"/></div>
+                </div>
             </div>
         </spring:bind>
 
         <label>Подтверждение пароля</label>
         <spring:bind path="acceptPasswd">
             <div>
-                <form:input class="form-control" type="password" path="acceptPasswd"/><span></span>
-                <form:errors path="acceptPasswd"/>
+                <div class="pass-validation" id="acceptPasswdValidation">
+                    <form:input class="form-control" type="password" path="acceptPasswd"/><span></span>
+                    <div class="error-message"><form:errors path="acceptPasswd"/></div>
+                </div>
             </div>
         </spring:bind>
         <button type="submit" class="btn" id="savePasswd" align="right" > Сохранить </button>
-        <button class="btn btn-primary" onclick="show('none')" align="left" > Отмена</button>
+        <button class="btn btn-primary" onclick="show('none')" align="left" form=""> Отмена</button>
     </div>
 </form:form>
 
@@ -109,6 +116,45 @@
 <%@include file="/resources/templates/footer.jsp" %>
 </body>
 
-
-
 </html>
+
+<script type="text/javascript">
+    function collectFormData(fields) {
+        var data = {};
+        for (var i = 0; i < fields.length; i++) {
+            var $item = $(fields[i]);
+            data[$item.attr('name')] = $item.val();
+        }
+        return data;
+    }
+
+    $(document).ready(function() {
+        var $formPass = $('#passForm');
+        $formPass.bind('submit', function(e) {
+            // Ajax validation
+            var $inputs = $formPass.find('input');
+            var data = collectFormData($inputs);
+
+            $.post('${passFormJsonUrl}', data, function(response) {
+                $formPass.find('.pass-validation').removeClass('error');
+                $formPass.find('.error-message').empty();
+
+                if (response.status == 'FAIL') {
+                    for (var i = 0; i < response.errorMessageList.length; i++) {
+                        var item = response.errorMessageList[i];
+                        var $controlGroup = $('#' + item.fieldName + 'Validation');
+                        $controlGroup.addClass('error');
+                        $controlGroup.find('.error-message').html(item.message);
+                    }
+                } else {
+                    $formPass.unbind('submit');
+                    $formPass.submit();
+                }
+            }, 'json');
+
+            e.preventDefault();
+            return false;
+        });
+    });
+
+</script>
