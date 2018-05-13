@@ -35,23 +35,26 @@
 <form:form method="post" action="${srcgroupsUrl}" modelAttribute="searchGroupsForm"
            enctype="multipart/form-data" id="groupSearchForm">
     <a href="#x" class="overlay" id="win1"></a>
-    <div class="popup" >
+    <div class="popup"  id="searchGroups">
+        <div id="name">
         <label>Название</label>
+        </div>
         <spring:bind path="name">
             <div class="group-validation" id="nameGroupValidation">
                 <form:input class="form-control" path="name" placeholder="Введите название"/><span></span>
                 <div class="error-message"><form:errors path="name"/></div>
             </div>
         </spring:bind>
-
+        <div id="owner">
         <label>Создатель</label>
+        </div>
         <spring:bind path="ownerName">
             <div class="group-validation" id="ownerNameGroupValidation">
                 <form:input class="form-control" path="ownerName" placeholder="Укажите создателя группы"/><span></span>
                 <div class="error-message"><form:errors path="ownerName"/></div>
             </div>
         </spring:bind>
-        <button type="submit" class="btn" id="searchGroups"> Поиск </button>
+        <button type="submit" class="btn" id="searchGroupsBt"> Поиск </button>
         <a class="close" title="Закрыть" href="#close"></a>
     </div>
 </form:form>
@@ -61,8 +64,10 @@
 <form:form method="post" action="${srcpersonsUrl}" modelAttribute="searchPersonsForm"
            enctype="multipart/form-data" id="personSearchForm">
     <a href="#x" class="overlay" id="win2"></a>
-    <div class="popup" >
-      <label>Имя</label>
+    <div class="popup" id="searchUsers" >
+        <div id="shLogin">
+         <label>Имя</label>
+        </div>
       <spring:bind path="name">
           <div class="person-validation" id="namePersonValidation">
               <form:input class="form-control" path="name" placeholder="Введите имя"/><span></span>
@@ -70,7 +75,9 @@
           </div>
       </spring:bind>
 
+    <div id="shRace">
       <label>Раса</label>
+    </div>
       <spring:bind path="race">
           <div class="person-validation" id="racePersonValidation">
           <form:input path="race" list="races" placeholder="Укажите расу"/>
@@ -82,8 +89,9 @@
           <div class="error-message"><form:errors path="race" cssClass="error"/></div>
           </div>
       </spring:bind>
-
-      <label>Возрастной диапазон</label>
+    <div id="shAge">
+    <label>Возрастной диапазон</label>
+    </div>
       <spring:bind path="ageFrom">
           <div class="person-validation" id="ageFromPersonValidation">
               <form:input class="form-control" path="ageFrom" placeholder="От"/><span></span>
@@ -97,15 +105,16 @@
               <div class="error-message"><form:errors path="ageTo"/></div>
           </div>
       </spring:bind>
-
-      <label>Пол</label>
+    <div id="shSex">
+    <label>Пол</label>
+    </div>
       <spring:bind path="sex">
           <div class="person-validation" id="sexPersonValidation">
               <form:input class="form-control" path="sex" placeholder="Укажите пол"/><span></span>
               <div class="error-message"><form:errors path="sex"/></div>
           </div>
       </spring:bind>
-      <button type="submit" class="btn" id="searchPersons"> Поиск </button>
+      <button type="submit" class="btn" id="searchUsersBt"> Поиск </button>
       <a class="close" title="Закрыть" href="#close"></a>
     </div>
 </form:form>

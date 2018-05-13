@@ -23,7 +23,7 @@
 <c:url value="/pass" var="passUrl"/>
 <form:form method="post" action="${passUrl}" modelAttribute="changePasswdForm"
            enctype="multipart/form-data" id="passForm">
-    <div id="window">
+    <div id="window" height="500px">
         <!-- Крестик-->
         <span class="close" onclick="show('none')">X</span>
 
@@ -57,55 +57,66 @@
             </div>
         </spring:bind>
         <button type="submit" class="btn" id="savePasswd" align="right" > Сохранить </button>
-        <button class="btn btn-primary" onclick="show('none')" align="left" form=""> Отмена</button>
+        <button class="btn btn-primary" id="cancelPass" onclick="show('none')" align="left"  > Отмена</button>
     </div>
 </form:form>
 
+<div id="language">
 <label>Здесь может быть изменение языка</label>
-<div></div>
-
+</div>
+<div id="passButton">
 <button type="submit" class="btn" id="changePass" onclick="show('block')" align="center"> Изменить пароль </button>
-
+</div>
 <form:form method="post" modelAttribute="changeForm">
-
+    <div id="chLoginLb">
     <label>Логин</label>
+    </div>
     <spring:bind path="login">
-        <div>
+        <div id="chLoginIn">
             <form:input class="form-control" path="login" value="${person.login}"/><span></span>
             <form:errors path="login"/>
         </div>
     </spring:bind>
 
+    <div id="chNameLb">
     <label>Имя</label>
+    </div>
     <spring:bind path="name">
-        <div>
+        <div id="chNameIn">
             <form:input class="form-control" path="name" value="${person.name}"/><span></span>
             <form:errors path="name"/>
         </div>
     </spring:bind>
 
+    <div id="chRaceLb">
     <label>Раса</label>
+    </div>
     <spring:bind path="race">
+        <div id="racesIn">
         <form:input path="race" list="races" value="${person.race.name}"/>
-            <datalist id="races" >
+            <datalist id="racesIn" >
                 <c:forEach items="${races}" var="race">
                     <option value="${race}"></option>
                 </c:forEach>
             </datalist>
         <form:errors path="race" cssClass="error"/>
+        </div>
     </spring:bind>
 
+    <div id="chAgeLb">
     <label>Возраст</label>
+    </div>
     <spring:bind path="age">
-        <div>
+        <div id="chAgeIn">
             <form:input class="form-control" path="age" value="${person.age}"/><span></span>
             <form:errors path="age"/>
         </div>
     </spring:bind>
-
+    <div id="chSexLb">
     <label>Пол</label>
+    </div>
     <spring:bind path="sex">
-        <div>
+        <div id="chSexIn">
             <form:input class="form-control" path="sex" value="${person.sex}"/><span></span>
             <form:errors path="sex"/>
         </div>

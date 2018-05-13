@@ -89,7 +89,7 @@
             <tr>
                 <td align="left">
                     <c:if test="${person.id.toString().equals(cookie['userID'].value)}">
-                        <button class="btn" onclick="show('block')" align="center"> Создать группу</button>
+                        <button class="btn" onclick="show('block')" align="center" id="createGroup"> Создать группу</button>
                     </c:if>
                 </td>
             </tr>

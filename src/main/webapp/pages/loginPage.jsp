@@ -15,7 +15,9 @@
     </script>
 </head>
 <body>
+
 <%@include file="/resources/templates/header.jsp" %>
+
 <div class="content">
     <div onclick="show('none')" id="wrap"></div>
 
@@ -99,11 +101,12 @@
             <button type="submit" class="btn btn-primary" id="right"> Зарегистрироваться</button>
         </div>
     </form:form>
+    <div>
     <form:form method="post" modelAttribute="loginForm">
         <spring:bind path="login">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <label class="col-sm-2 control-label">Логин</label>
-                <div class="col-sm-10">
+                <label class="col-sm-2 control-label" id="loginLb">Логин</label>
+                <div class="col-sm-10"  id="loginIn">
                     <form:input path="login" class="form-control"
                                 id="name" placeholder="Логин"/>
                     <form:errors path="login" class="control-label"/>
@@ -111,19 +114,22 @@
             </div>
         </spring:bind>
         <spring:bind path="pass">
-            <div class="form-group ${status.error ? 'has-error' : ''}">
-                <label class="col-sm-2 control-label">Пароль</label>
-                <div class="col-sm-10">
+            <div class="form-group ${status.error ? 'has-error' : ''}"  align="centre"  >
+                <label class="col-sm-2 control-label" id="passLb">Пароль</label>
+                <div class="col-sm-10" id="passIn">
                     <form:password path="pass" class="form-control"
-                                   id="name" placeholder="Логин"/>
+                                   id="name" placeholder="Пароль"/>
                     <form:errors path="pass" class="control-label"/>
                 </div>
             </div>
         </spring:bind>
-        <button type="submit" class="btn" id="enter"> Войти</button>
+        <button type="submit" class="btn" id="enter"  > Войти</button>
     </form:form>
-    <button class="btn" id="register" onclick="show('block')" align="center"> Зарегистрироваться</button>
 </div>
+    <button class="btn" id="register" onclick="show('block')" > Зарегистрироваться</button>
+</div>
+
 <%@include file="/resources/templates/footer.jsp" %>
+
 </body>
 </html>

@@ -11,7 +11,9 @@
 <body>
 <%@include file="/resources/templates/header.jsp" %>
 <div class="content">
+    <div id="cryteriaUS">
     <label>Критерии поиска</label>
+    </div>
     <div id="tableUS1">
         <table>
             <tr>
@@ -29,7 +31,9 @@
             </tr>
         </table>
     <div id="tableUS2" >
-        <label id="tg">Список пользователей</label>
+        <div id="listUS">
+        <label>Список пользователей</label>
+        </div>
         <div class="list-group" >
             <c:forEach items="${persons}" var="person">
                 <a href="<c:url value="/persons/${person.id}"/>" class="list-group-item">${person.name}</a>
@@ -37,7 +41,8 @@
         </div>
     </div>
 
-    <a href="${pageContext.request.contextPath}/" title="Back">Вернуться</a>
+    <a href="${pageContext.request.contextPath}/" title="Back" id="back">Вернуться</a>
+</div>
 </div>
 <%@include file="/resources/templates/footer.jsp" %>
 </body>

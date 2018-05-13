@@ -161,11 +161,11 @@
     <div id="l3">
         <c:choose>
             <c:when test="${isMember}">
-                <button onclick="leaveGroup()">Покинуть группу</button>
+                <button type="submit" class="btn" onclick="leaveGroup()" id="leaveGroup">Покинуть группу</button>
                 <br/>
             </c:when>
             <c:otherwise>
-                <button onclick="joinGroup()">Вступить в группу</button>
+                <button type="submit" class="btn" onclick="joinGroup()" id="joinGroup">Вступить в группу</button>
                 <br/>
             </c:otherwise>
         </c:choose>
