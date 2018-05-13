@@ -159,7 +159,7 @@ public class LoginPageController{
 
      @return registered user`s page
      */
-    @PostMapping( value = "/registration" )
+   /* @PostMapping( value = "/registration" )
     public String newUser(
             @Validated
             @ModelAttribute(value = "registrationForm")
@@ -167,15 +167,15 @@ public class LoginPageController{
             HttpServletResponse response ) throws IOException{
         if( bindingResult.hasErrors() ){
             model.addAttribute( "races" ,
-                                raceService.getAll()
-                                           .parallelStream()
-                                           .map( RaceEntity::getName )
-                                           .collect( Collectors.toList() ) );
+                    raceService.getAll()
+                            .parallelStream()
+                            .map( RaceEntity::getName )
+                            .collect( Collectors.toList() ) );
             return "loginPage";
         }
         Long id = personService.addPerson( registrationForm );
         response.addCookie( getCookie( id ) );
         return "redirect:/persons/" + id;
-    }
+    }*/
 
 }

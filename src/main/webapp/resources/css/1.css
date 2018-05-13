@@ -832,3 +832,159 @@ font-size:16px;
     width:350px;
 }
 
+#loginRegLb{
+    position:absolute;
+    top:10%;
+    left:30%;
+}
+#loginRegIn{
+    position:absolute;
+    top:14%;
+    left:23.5%;
+    width:200px;
+    height:20px;
+}
+
+#nameRegLb{
+    position:absolute;
+    top:23%;
+    left:30%;
+
+}
+
+#nameRegIn{
+    position:absolute;
+    top:27%;
+    left:30%;
+    width:200px;
+}
+
+#raceRegLb{
+    position:absolute;
+    top:36%;
+    left:30%;
+}
+
+#racesReg{
+    position:absolute;
+    top:40%;
+    left:30%;
+    width:200px;
+}
+
+#ageRegLb{
+    position:absolute;
+    top:48%;
+    left:30%;
+}
+
+#ageRegIn{
+    position:absolute;
+    top:52%;
+    left:30%;
+    width:200px;
+}
+
+#sexRegLb{
+    position:absolute;
+    top:23%;
+    left:60%;
+}
+
+#sexRegIn{
+    position:absolute;
+    top:27%;
+    left:60%;
+    width:200px;
+}
+
+#passRegLb{
+    position:absolute;
+    top:36%;
+    left:60%;
+}
+#passRegIn{
+    position:absolute;
+    top:40%;
+    left:60%;
+    width:200px;
+}
+
+#passAcRegLb{
+    position:absolute;
+    top:48%;
+    left:60%;
+}
+
+#passAcRegIn{
+    position:absolute;
+    top:52%;
+    left:60%;
+    width:200px;
+}
+
+#photoReg{
+    position:absolute;
+    top:10%;
+    left:60%;
+}
+
+#photoRegIn{
+    position:absolute;
+    top:14%;
+    left:60%;
+    width:200px;
+}
+
+#reg{
+    position:absolute;
+    top:80%;
+    left:45%;
+    width:200px;
+}
+
+#cancelReg{
+    position:absolute;
+    top:14%;
+    left:10%;
+    width:100px;
+}
+
+#nameGroup{
+    position:absolute;
+    top:20%;
+    left:40%;
+}
+
+#nameGroupCreateValidation{
+    position:absolute;
+    top:25%;
+    left:40%;
+    width:250px;
+}
+
+#photoGroup{
+    position:absolute;
+    top:35%;
+    left:40%;
+}
+
+#imageGroupCreateValidation{
+    position:absolute;
+    top:40%;
+    left:40%;
+    width:250px;
+}
+
+#right{
+    position:absolute;
+    top:60%;
+    left:45%;
+}
+
+#cancelGroup{
+
+    position:absolute;
+    top:25%;
+    left:15%;
+}

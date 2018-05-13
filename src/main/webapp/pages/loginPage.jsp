@@ -126,7 +126,7 @@
         <button type="submit" class="btn" id="enter"  > Войти</button>
     </form:form>
 </div>
-    <button class="btn" id="register" onclick="show('block')" > Зарегистрироваться</button>
+    <button class="btn" id="register"> <a href="registration">Зарегистрироваться</a></button>
 </div>
 
 <%@include file="/resources/templates/footer.jsp" %>

@@ -247,7 +247,7 @@ public class GroupPageController{
             return "redirect:/";
         }
 
-        return "redirect:/persons/"+userId;
+        return "createGroupPage";
     }
 //
     /**
