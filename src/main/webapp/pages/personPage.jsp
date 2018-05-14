@@ -60,14 +60,16 @@
     <div id="img3">
         <img src='<c:url value="/user-${person.id}/image"/>' style="width:100px;height:100px;">
     </div>
-
-    <div id="table1" >
+    <div id="table1" border="1" width="99%">
         <label id="t1">Список групп</label>
-        <div class="list-group" >
+        <div class="list-group" style="overflow-y:auto; width: 180px; max-height: 200px;" >
+            <div border="1" width="99%">
             <c:forEach items="${person.groups}" var="group">
                 <a href="<c:url value="/groups/${group.id}"/>" class="list-group-item">${group.name}</a>
             </c:forEach>
         </div>
+        </div>
+
     </div>
     <div id="name7">
         <p>Имя: ${person.name}</p>
