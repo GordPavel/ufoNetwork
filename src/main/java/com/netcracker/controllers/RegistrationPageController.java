@@ -71,7 +71,7 @@ public class RegistrationPageController {
         return id;
     }
 
-    @PostMapping( value = "/registration" )
+    @PostMapping
     public String newUser(
             @Validated
             @ModelAttribute(value = "registrationForm")

@@ -109,12 +109,12 @@
             </div>
         </spring:bind>
 
-
         <button type="submit" class="btn btn-primary" id="reg"> Зарегистрироваться</button>
-    </div>
     </form:form>
+</div>
 <a href="javascript:history.back()" title="Отмена"><button class="btn btn-primary"  align="left" id="cancelReg">Отмена</button></a>
-    <%@include file="/resources/templates/footer.jsp" %>
+
+<%@include file="/resources/templates/footer.jsp" %>
 </body>
 
 </html>

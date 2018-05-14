@@ -550,14 +550,14 @@ font-size:16px;
     position: absolute;
     right:50%;
     left:40%;
-    top:43%;
+    top:46%;
 }
 
 #passIn{
     position: absolute;
     right:50%;
     left:40%;
-    top:47%;
+    top:50%;
     width:300px;
 }
 
@@ -816,7 +816,7 @@ font-size:16px;
 #tableGr2{
     position:absolute;
     top:-200%;
-    left:330%;
+    left:450%;
     width:300px;
     font-family:'Bookman Old Style ÃƒÆ’Ã‚ÂÃƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬ËœÃƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬ËœÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã¢â‚¬ËœÃƒâ€šÃ‚ÂÃƒÆ’Ã‚ÂÃƒâ€šÃ‚Â¸ÃƒÆ’Ã‚ÂÃƒâ€šÃ‚Â²', 'Bookman Old Style';
     font-style:italic;
