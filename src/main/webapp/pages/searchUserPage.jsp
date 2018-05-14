@@ -34,10 +34,12 @@
         <div id="listUS">
         <label>Список пользователей</label>
         </div>
-        <div class="list-group" >
+        <div class="list-group" style="overflow-y:auto; width: 300px; max-height: 500px;" >
+            <div border="1" width="99%">
             <c:forEach items="${persons}" var="person">
                 <a href="<c:url value="/persons/${person.id}"/>" class="list-group-item">${person.name}</a>
             </c:forEach>
+            </div>
         </div>
     </div>
 

@@ -69,7 +69,6 @@
             </c:forEach>
         </div>
         </div>
-
     </div>
     <div id="name7">
         <p>Имя: ${person.name}</p>

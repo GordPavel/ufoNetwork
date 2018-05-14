@@ -28,10 +28,12 @@
         <div id="listGR">
         <label>Список групп</label>
         </div>
-        <div class="list-group" >
+        <div class="list-group" style="overflow-y:auto; width: 300px; max-height: 500px;" >
+            <div border="1" width="99%">
             <c:forEach items="${groups}" var="group">
                 <a href="<c:url value="/groups/${group.id}"/>" class="list-group-item">${group.name}</a>
             </c:forEach>
+            </div>
         </div>
     </div>
 
