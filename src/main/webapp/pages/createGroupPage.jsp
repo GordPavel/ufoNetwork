@@ -51,11 +51,10 @@
             </div>
         </spring:bind>
 
-        <button class="btn btn-primary" onclick="show('none')" align="left"  id="cancelGroup"> Отмена</button>
         <button type="submit" class="btn btn-primary" id="right"> Создать</button>
     </div>
     </form:form>
-
+<a href="javascript:history.back()" title="Отмена"><button class="btn btn-primary"  align="left"  id="cancelGroup">Отмена</button></a>
 <%@include file="/resources/templates/footer.jsp" %>
 </body>
 </html>
