@@ -196,7 +196,6 @@ public class GroupPageController{
                 put( "error" , "home" );
             }} );
         }
-
         GroupEntity  group  = groupService.findById( groupId , GroupLazyFields.USERS ).get();
         PersonEntity person = personRepository.findById( userId ).get();
         if( group.getUsers()
@@ -236,6 +235,28 @@ public class GroupPageController{
                  .noneMatch( Predicate.isEqual( userId ) ) ) return "fail";
         personService.leaveGroup( groupId , userId );
         return userId.toString();
+    }
+
+    @PostMapping( value = "/joinfew" )
+    public String joinFew(Model model ,
+                          HttpServletResponse response ,
+                          HttpServletRequest request ,
+                          @CookieValue( name = "userID", defaultValue = "" )
+                                      Long userId) {
+        System.out.println("test");
+        String[] answers = request.getParameterValues("checkboxs");
+        if (answers!=null) {
+            for (String test : answers) {
+                GroupEntity group = groupService.findById(Long.valueOf(test), GroupLazyFields.USERS).get();
+                if (!group.getUsers()
+                        .parallelStream()
+                        .map(PersonEntity::getId)
+                        .anyMatch(Predicate.isEqual(userId))) {
+                    personService.joinGroup(Long.valueOf(test), userId);
+                }
+            }
+        }
+        return "redirect: /persons/"+userId;
     }
 
     @GetMapping( value = "/create" )
@@ -290,7 +311,7 @@ public class GroupPageController{
     public String searchGroups (  @ModelAttribute( "searchGroupsForm" ) SearchGroupsForm searchGroupsForm ,
                                   Model model ){
 
-        model.addAttribute( "groups" , groupService.getBySearchParams(
+        List<GroupEntity> groups = groupService.getBySearchParams(
                 searchGroupsForm.getName().isEmpty() ? "%" : searchGroupsForm.getName()
                         .replaceAll("_","\\\\_")
                         .replaceAll("\\*","%")
@@ -298,7 +319,11 @@ public class GroupPageController{
                 searchGroupsForm.getOwnerName().isEmpty() ? "%" : searchGroupsForm.getOwnerName()
                         .replaceAll("_","\\\\_")
                         .replaceAll("\\*","%")
-                        .replaceAll("\\?","_") ) );
+                        .replaceAll("\\?","_") );
+        for (GroupEntity group : groups){
+            group.setUsers( groupRepository.getUsersById( group.getId() ));
+        }
+        model.addAttribute( "groups" , groups );
 
         model.addAttribute( "name" , searchGroupsForm.getName() );
         model.addAttribute( "ownerName" , searchGroupsForm.getOwnerName() );

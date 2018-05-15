@@ -17,17 +17,17 @@
     <div id="tableUS1">
         <table>
             <tr>
-                <td align='left'>Имя: ${name}</td>
+                <td align='left'>Имя: ${not empty name ? name:"<i>Не задано</i>"}</td>
             </tr>
             <tr>
-                <td align='left'>Раса: ${race}</td>
+                <td align='left'>Раса: ${not empty race ? race:"<i>Не задано</i>"}</td>
             </tr>
             <tr>
-                <td align='left'>Возрастной диапазон: <c:if test="${not empty ageFrom}"> от ${ageFrom} </c:if>
-                                                      <c:if test="${not empty ageTo}"> до ${ageTo} </c:if>
+                <td align='left'>Возрастной диапазон: ${not empty ageFrom ? "от ":"от <i>Не задано</i>"} ${ageFrom}
+                                                      ${not empty ageTo ? " до":" до <i>Не задано</i>"} ${ageTo}
             </tr>
             <tr>
-                <td align='left'>Пол: ${sex}</td>
+                <td align='left'>Пол: ${not empty sex ? sex:"<i>Не задано</i>"}</td>
             </tr>
         </table>
     <div id="tableUS2" >
@@ -43,7 +43,7 @@
         </div>
     </div>
 
-    <a href="${pageContext.request.contextPath}/" title="Back" id="back">Вернуться</a>
+    <a href="javascript:history.back()" title="Back" id="back">Вернуться</a>
 </div>
 </div>
 <%@include file="/resources/templates/footer.jsp" %>
