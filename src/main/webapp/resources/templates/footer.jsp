@@ -3,6 +3,6 @@
 <div class="footer">
     <div id="rectangle"></div>
     <label id="t1">SpaceNet © 2018</label>
-    <label id="t2">О проекте |</label>
-    <label id="t3">О разработчиках</label>
+    <label id="t2">About project |</label>
+    <label id="t3">About team</label>
 </div>

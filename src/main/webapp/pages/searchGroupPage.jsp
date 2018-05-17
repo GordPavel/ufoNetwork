@@ -6,35 +6,35 @@
 <html>
 <head>
     <jsp:include page="/resources/templates/includes.jsp"/>
-    <title>Результаты поиска</title>
+    <title>Search result</title>
 </head>
 <body>
 <%@include file="/resources/templates/header.jsp" %>
 
 <div class="content">
     <div id="cryteriaGR">
-    <label>Критерии поиска</label>
+    <label>Search criteria</label>
     </div>
     <div id="tableGR1">
         <table>
             <tr>
-                <td align='left'>Создатель: ${ownerName}</td>
+                <td align='left'>Owner: ${not empty ownerName ? ownerName:"<i>Not specified</i>"}</td>
             </tr>
             <tr>
-                <td align='left'>Название:${name}</td>
+                <td align='left'>Name: ${not empty name ? name:"<i>Not specified</i>"}</td>
             </tr>
             <tr>
                 <td>
                     <c:url value="/groups/joinfew" var="joinUrl"/>
                     <form:form method="post" action="${joinUrl}" id="joinFewForm">
-                        <input type = "submit" value = "Вступить в выбранные" />
+                        <input type = "submit" value = "Join selected" />
                     </form:form>
                 </td>
             </tr>
         </table>
     <div id="tableGr2" >
         <div id="listGR">
-        <label>Список групп</label>
+        <label>Group List</label>
         </div>
         <div class="list-group" style="overflow-y:auto; width: 300px; max-height: 500px;" >
             <div border="1" width="99%">
@@ -45,13 +45,13 @@
                         <c:set var="contains" value="true" />
                     </c:if>
                 </c:forEach>
-                <a href="<c:url value="/groups/${group.id}"/>" class="list-group-item"><input type="checkbox" form="joinFewForm" name="checkboxs" value="${group.id}" ${contains == 'true' ? 'hidden="true" >  <font size="-5"><i>(Участник)</i></font>' : ' >'} ${group.name}</a>
+                <a href="<c:url value="/groups/${group.id}"/>" class="list-group-item"><input type="checkbox" form="joinFewForm" name="checkboxs" value="${group.id}" ${contains == 'true' ? 'hidden="true" >  <font size="-5"><i>(Member)</i></font>' : ' >'} ${group.name}</a>
             </c:forEach>
             </div>
         </div>
     </div>
 
-    <a href="javascript:history.back()" title="Back" id="back">Вернуться</a>
+    <a href="javascript:history.back()" title="Back" id="back">Back</a>
 </div>
 </div>
 <%--<script>--%>

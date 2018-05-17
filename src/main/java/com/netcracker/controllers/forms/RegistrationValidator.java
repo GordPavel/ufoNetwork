@@ -28,65 +28,65 @@ public class RegistrationValidator implements Validator{
         ValidationUtils.rejectIfEmptyOrWhitespace( errors ,
                                                    "login" ,
                                                    "" ,
-                                                   "Поле не может быть пустым" );
+                                                   "Can`t be empty" );
         ValidationUtils.rejectIfEmptyOrWhitespace( errors ,
                                                    "pass" ,
                                                    "" ,
-                                                   "Поле не может быть пустым" );
+                                                   "Can`t be empty" );
         ValidationUtils.rejectIfEmptyOrWhitespace( errors ,
                                                    "passAccept" ,
                                                    "" ,
-                                                   "Поле не может быть пустым" );
+                                                   "Can`t be empty" );
         ValidationUtils.rejectIfEmptyOrWhitespace( errors ,
                                                    "race" ,
                                                    "" ,
-                                                   "Поле не может быть пустым" );
+                                                   "Can`t be empty" );
         if( errors.hasErrors() ) return;
         RegistrationForm form = ( RegistrationForm ) o;
         if( !form.pass.equals( form.passAccept ) )
-            errors.rejectValue( "passAccept" , "" , "Пароли должны совпадать" );
+            errors.rejectValue( "passAccept" , "" , "Password and confirm must be same" );
         if( form.image.isEmpty() ) form.setImage( null );
         else if( !form.image.getOriginalFilename().matches( "^.+\\.(jpg|jpeg|png)$" ) )
             errors.rejectValue( "image" ,
                                 "" ,
-                                "Можно загружать только в форматах jpg | jpeg | png" );
+                                "You can use only jpg | jpeg | png" );
 
         Pattern pattern = Pattern.compile( "[\\d\\w-_]*" );
         if (!pattern.matcher( form.name ).matches()) {
             errors.rejectValue( "name" ,
                     "" ,
-                    "Имя может состоять только из букв, цифр и символов - и _" );
+                    "You must use only letters, numbers, - and _" );
         }
 
         if (!pattern.matcher( form.sex ).matches()) {
             errors.rejectValue( "sex" ,
                     "" ,
-                    "Название пола может состоять только из букв, цифр и символов - и _" );
+                    "You must use only letters, numbers, - and _" );
         }
 
         if (!pattern.matcher( form.race ).matches()) {
             errors.rejectValue( "race" ,
                     "" ,
-                    "Название расы может состоять только из букв, цифр и символов - и _" );
+                    "You must use only letters, numbers, - and _" );
         }
 
         if (!pattern.matcher( form.login ).matches()) {
             errors.rejectValue( "login" ,
                     "" ,
-                    "Логин может состоять только из букв, цифр и символов - и _" );
+                    "You must use only letters, numbers, - and _" );
         }
 
         Pattern numberPattern = Pattern.compile( "[\\d]*" );
         if (!numberPattern.matcher( form.age ).matches()) {
             errors.rejectValue( "age" ,
                     "" ,
-                    "Возраст может быть только целым числом" );
+                    "You must use only integer" );
         }
 
         if (personRepository.getByLogin(form.login).isPresent()) {
             errors.rejectValue( "login" ,
                     "" ,
-                    "Этот логин занят, выберите себе другой" );
+                    "Login already used, choose another" );
         }
     }
 }

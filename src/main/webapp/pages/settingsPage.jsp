@@ -7,7 +7,7 @@
 <html>
 <head>
     <jsp:include page="/resources/templates/includes.jsp"/>
-    <title>Настройки</title>
+    <title>Settings</title>
     <script type="text/javascript">
         function show(state) {
             document.getElementById('window').style.display = state;
@@ -27,7 +27,7 @@
         <!-- Крестик-->
         <span class="close" onclick="show('none')">X</span>
 
-        <label>Старый пароль</label>
+        <label>Old password</label>
         <spring:bind path="oldPasswd">
             <div>
                 <div class="pass-validation" id="oldPasswdValidation">
@@ -37,7 +37,7 @@
             </div>
         </spring:bind>
 
-        <label>Новый пароль</label>
+        <label>New password</label>
         <spring:bind path="newPasswd">
             <div>
                 <div class="pass-validation" id="newPasswdValidation">
@@ -47,7 +47,7 @@
             </div>
         </spring:bind>
 
-        <label>Подтверждение пароля</label>
+        <label>Confirm</label>
         <spring:bind path="acceptPasswd">
             <div>
                 <div class="pass-validation" id="acceptPasswdValidation">
@@ -56,20 +56,17 @@
                 </div>
             </div>
         </spring:bind>
-        <button type="submit" class="btn" id="savePasswd" align="right" > Сохранить </button>
-        <button class="btn btn-primary" id="cancelPass" onclick="show('none')" align="left"  > Отмена</button>
+        <button type="submit" class="btn" id="savePasswd" align="right" > Save </button>
+        <button class="btn btn-primary" id="cancelPass" onclick="show('none')" align="left"  > Cancel</button>
     </div>
 </form:form>
 
-<div id="language">
-<label>Здесь может быть изменение языка</label>
-</div>
 <div id="passButton">
-<button type="submit" class="btn" id="changePass" onclick="show('block')" align="center"> Изменить пароль </button>
+<button type="submit" class="btn" id="changePass" onclick="show('block')" align="center"> Change password </button>
 </div>
 <form:form method="post" modelAttribute="changeForm">
     <div id="chLoginLb">
-    <label>Логин</label>
+    <label>Login</label>
     </div>
     <spring:bind path="login">
         <div id="chLoginIn">
@@ -79,7 +76,7 @@
     </spring:bind>
 
     <div id="chNameLb">
-    <label>Имя</label>
+    <label>Name</label>
     </div>
     <spring:bind path="name">
         <div id="chNameIn">
@@ -89,7 +86,7 @@
     </spring:bind>
 
     <div id="chRaceLb">
-    <label>Раса</label>
+    <label>Race</label>
     </div>
     <spring:bind path="race">
         <div id="racesIn">
@@ -104,7 +101,7 @@
     </spring:bind>
 
     <div id="chAgeLb">
-    <label>Возраст</label>
+    <label>Age</label>
     </div>
     <spring:bind path="age">
         <div id="chAgeIn">
@@ -113,7 +110,7 @@
         </div>
     </spring:bind>
     <div id="chSexLb">
-    <label>Пол</label>
+    <label>Sex</label>
     </div>
     <spring:bind path="sex">
         <div id="chSexIn">
@@ -121,7 +118,7 @@
             <form:errors path="sex"/>
         </div>
     </spring:bind>
-    <button type="submit" class="btn" id="saveChanges"> Сохранить изменения </button>
+    <button type="submit" class="btn" id="saveChanges"> Save </button>
 </form:form>
 </div>
 <%@include file="/resources/templates/footer.jsp" %>

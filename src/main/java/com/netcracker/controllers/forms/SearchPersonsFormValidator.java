@@ -26,11 +26,11 @@ public class SearchPersonsFormValidator implements Validator {
         Pattern p           = Pattern.compile( "[\\d\\w-_\\*\\?]*" );
 
         if( !p.matcher( form.name ).matches() ){
-            errors.rejectValue("name", "", "Недопустимые символы в имени");
+            errors.rejectValue("name", "", "You must use only letters, numbers, spaces, *, ? - and _");
         }
 
         if( !p.matcher( form.sex ).matches() ){
-            errors.rejectValue("sex", "","Недопустимые символы");
+            errors.rejectValue("sex", "","You must use only letters, numbers, spaces, *, ? - and _");
         }
 
         Pattern pNumber       = Pattern.compile( "[\\d]*" );
@@ -38,20 +38,20 @@ public class SearchPersonsFormValidator implements Validator {
 
             if( (form.ageFrom.isEmpty() ? 0 : Integer.parseInt(form.ageFrom))
                     > (form.ageTo.isEmpty() ? Integer.MAX_VALUE :Integer.parseInt(form.ageTo ) ) ){
-                errors.rejectValue("ageFrom", "", "Недопустимый диапазон возраста");
+                errors.rejectValue("ageFrom", "", "Unacepptable ages");
             }
         } else {
-            errors.rejectValue("ageFrom", "", "Можно использовать только положительные цифры");
+            errors.rejectValue("ageFrom", "", "You must use only integers");
         }
 
         if (!form.race.isEmpty()) {
             if (!raceService.getByName(form.race).isPresent()) {
-                errors.rejectValue("race", "", "Такой расы нет!");
+                errors.rejectValue("race", "", "There is no such race!");
             }
         }
         if ( form.name.isEmpty() && form.ageFrom.isEmpty() && form.ageTo.isEmpty()
                 && form.race.isEmpty() && form.sex.isEmpty() )
-            errors.rejectValue("sex", "", "Введите хотя бы один критерий поиска");
+            errors.rejectValue("name", "", "Insert atleast one creteria");
 
 
     }

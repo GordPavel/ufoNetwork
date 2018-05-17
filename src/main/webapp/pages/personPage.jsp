@@ -7,6 +7,7 @@
 <spring:url value="/groups/create.json" var="groupCreateFormJsonUrl" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="<c:url value="/resources/js/bootstrap.min.js"/>"></script>
+<%--@elvariable id="person" type="com.netcracker.DAO.PersonEntity"--%>
 
 <script type="text/javascript">
     function show(state) {
@@ -16,10 +17,9 @@
 </script>
 <head>
     <jsp:include page="/resources/templates/includes.jsp"/>
-    <title> Профиль пользователя</title>
+    <title> ${person.name} page</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="<c:url value="/resources/js/bootstrap.min.js"/>"></script>
-    <%--@elvariable id="person" type="com.netcracker.DAO.PersonEntity"--%>
 </head>
 
 <body>
@@ -33,17 +33,17 @@
             <!-- Крестик-->
             <span class="close" onclick="show('none')">X</span>
 
-            <label>Название</label>
+            <label>Name</label>
             <spring:bind path="name">
             <div class="group-create-validation" id="nameGroupCreateValidation">
                 <div class="form-group ${status.error ? 'has-error' : ''}">
-                    <form:input class="form-control" path="name" placeholder="Имя"/><span></span>
+                    <form:input class="form-control" path="name" placeholder="Name"/><span></span>
                     <div class="error-message"><form:errors path="name" cssClass="error"/></div>
                 </div>
             </div>
             </spring:bind>
 
-            <label>Фотография</label>
+            <label>Picture</label>
             <spring:bind path="image">
             <div class="group-create-validation" id="imageGroupCreateValidation">
                 <div class="form-group ${status.error ? 'has-error' : ''}">
@@ -53,15 +53,15 @@
             </div>
             </spring:bind>
 
-            <button class="btn btn-primary" onclick="show('none')" align="left"  form=""> Отмена</button>
-            <button type="submit" class="btn btn-primary" id="right"> Создать</button>
+            <button class="btn btn-primary" onclick="show('none')" align="left"  form=""> Cancel</button>
+            <button type="submit" class="btn btn-primary" id="right"> Create</button>
         </div>
     </form:form>
     <div id="img3">
         <img src='<c:url value="/user-${person.id}/image"/>' style="width:100px;height:100px;">
     </div>
     <div id="table1" border="1" width="99%">
-        <label id="t1">Список групп</label>
+        <label id="t1">Group list</label>
         <div class="list-group" style="overflow-y:auto; width: 180px; max-height: 200px;" >
             <div border="1" width="99%">
             <c:forEach items="${person.groups}" var="group">
@@ -76,21 +76,21 @@
     <div id="table2">
         <table>
             <tr>
-                <th align='center'>Личные данные</th>
+                <th align='center'>Person information</th>
             </tr> <!--ряд с ячейками заголовков-->
             <tr>
-                <td align='left'>Возраст: ${person.age}</td>
+                <td align='left'>Age: ${person.age}</td>
             </tr>
             <tr>
-                <td align='left'>Пол:${person.sex}</td>
+                <td align='left'>Sex:${person.sex}</td>
             </tr>
             <tr>
-                <td align='left'>Раса:${person.race.name}</td>
+                <td align='left'>Race:${person.race.name}</td>
             </tr>          <!--ряд с ячейками тела таблицы-->
             <tr>
                 <td align="left">
                     <c:if test="${person.id.toString().equals(cookie['userID'].value)}">
-                        <a href="/groups/create"> <button class="btn"  id="createGroup">Создать группу</button></a>
+                        <a href="/groups/create"> <button class="btn"  id="createGroup">Create group</button></a>
                     </c:if>
                 </td>
             </tr>

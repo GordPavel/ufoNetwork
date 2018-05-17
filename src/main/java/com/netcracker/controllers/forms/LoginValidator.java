@@ -24,11 +24,11 @@ public class LoginValidator implements Validator{
         ValidationUtils.rejectIfEmptyOrWhitespace( errors ,
                                                    "login" ,
                                                    "" ,
-                                                   "Поле не может быть пустым" );
+                                                   "Can`t be empty" );
         ValidationUtils.rejectIfEmptyOrWhitespace( errors ,
                                                    "pass" ,
                                                    "" ,
-                                                   "Поле не может быть пустым" );
+                                                   "Can`t be empty" );
         if( errors.hasErrors() ) return;
 
         LoginForm form = ( LoginForm ) o;
@@ -41,7 +41,7 @@ public class LoginValidator implements Validator{
         if( !personRepository.findOne( login.and( password ) ).isPresent() ){
             errors.rejectValue( "login" ,
                                 "" ,
-                                "Пользователя с таким логином или паролем не существует" );
+                                "Such user or password doesn`t exist" );
             errors.rejectValue( "pass" , "" , "" );
         }
     }

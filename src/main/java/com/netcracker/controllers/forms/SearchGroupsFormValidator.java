@@ -19,19 +19,19 @@ public class SearchGroupsFormValidator implements Validator {
     public void validate( Object o , Errors errors ){
 
         SearchGroupsForm form = ( SearchGroupsForm ) o;
-        Pattern p           = Pattern.compile( "[\\d\\w-_\\*\\?]*" );
+        Pattern p           = Pattern.compile( "[\\d\\w\\s-_\\*\\?]*" );
 
         if( !p.matcher( form.name ).matches() ){
-            errors.rejectValue("name", "", "Недопустимые символы в названии");
+            errors.rejectValue("name", "", "You must use only letters, numbers, spaces, *, ? - and _");
         }
 
         if( !p.matcher( form.ownerName ).matches() ){
-            errors.rejectValue("ownerName", "","Недопустимые символы в имени владельца");
+            errors.rejectValue("ownerName", "","You must use only letters, numbers, spaces, *, ? - and _");
         }
 
 
         if ( form.name.isEmpty() && form.ownerName.isEmpty() )
-            errors.rejectValue("name", "", "Введите хотя бы один критерий поиска");
+            errors.rejectValue("name", "", "Insert atleast one creteria");
 
 
     }

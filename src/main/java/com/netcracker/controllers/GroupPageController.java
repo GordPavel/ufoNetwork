@@ -122,7 +122,7 @@ public class GroupPageController{
         return mapper.writeValueAsString( groupRepository.getMessagesById( groupId )
                                                          .parallelStream()
                                                          .sorted( Comparator.comparing(
-                                                                 MessageEntity::getDateOfSubmition ) )
+                                                                 MessageEntity::getId ) )
                                                          .map( this::messageToJsonMap )
                                                          .collect( Collectors.toList() ) );
     }

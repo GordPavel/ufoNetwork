@@ -30,14 +30,14 @@ public class GroupCreateValidator  implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace( errors ,
                 "name" ,
                 "" ,
-                "Поле не может быть пустым" );
+                "Can`t be empty" );
 
 
         GroupCreateForm form = ( GroupCreateForm ) o;
         if( !groupRepository.getByName( form.name ).isEmpty() ){
             errors.rejectValue( "name" ,
                     "" ,
-                    "Такая группа уже существует существует" );
+                    "This group already exist" );
         }
 
         if( errors.hasErrors() ) return;
@@ -46,12 +46,12 @@ public class GroupCreateValidator  implements Validator {
         else if( !form.image.getOriginalFilename().matches( "^.+\\.(jpg|jpeg|png)$" ) )
             errors.rejectValue( "image" ,
                     "" ,
-                    "Можно загружать только в форматах jpg | jpeg | png" );
-        Pattern pattern = Pattern.compile( "[\\d\\w-_]*" );
+                    "You can only use jpg | jpeg | png" );
+        Pattern pattern = Pattern.compile( "[\\d\\w\\s-_]*" );
         if (!pattern.matcher( form.name ).matches()) {
             errors.rejectValue( "name" ,
                     "" ,
-                    "Название группы может состоять только из букв, цифр и символов - и _" );
+                    "You must use only letters, numbers, spaces, - and _" );
         }
 
     }

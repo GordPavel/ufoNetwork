@@ -24,22 +24,22 @@ public class ChangePasswdFormValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace( errors,
                 "oldPasswd",
                 "",
-                "Введите свой старый пароль!");
+                "Inser your old password!");
         ValidationUtils.rejectIfEmptyOrWhitespace( errors,
                 "newPasswd",
                 "",
-                "Введите новый пароль!");
+                "Inser your new password!");
         ValidationUtils.rejectIfEmptyOrWhitespace( errors,
                 "acceptPasswd",
                 "",
-                "Подтвердите пароль");
+                "Confirm password");
 
         if( errors.hasErrors() ) return;
 
         ChangePasswdForm form = (ChangePasswdForm)( o );
 
         if ( !form.newPasswd.equals( form.acceptPasswd ))
-            errors.rejectValue( "acceptPasswd" , "Пароль для потверждения не совпадает с новым паролем" );
+            errors.rejectValue( "acceptPasswd" , "Password and confirm not same" );
 
 
     }

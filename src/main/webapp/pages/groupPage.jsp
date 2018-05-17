@@ -6,10 +6,10 @@
 <html>
 <head>
     <jsp:include page="/resources/templates/includes.jsp"/>
-    <title>Страница группы</title>
+    <%--@elvariable id="group" type="com.netcracker.DAO.GroupEntity"--%>
+    <title>${group.name}</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="<c:url value="/resources/js/bootstrap.min.js"/>"></script>
-    <%--@elvariable id="group" type="com.netcracker.DAO.GroupEntity"--%>
     <script>
         function generateMessage(id, text, date, writerId, writerName, writerDeleted) {
 
@@ -32,7 +32,7 @@
 
         function ajaxAllMessagesOfGroup() {
             var errorHandler = function () {
-                alert('Сообщения не может быть получены')
+                alert('Can`t receive messages')
             };
             $.ajax({
                 url: "${pageContext.request.contextPath}/groups/${group.id}/messages",
@@ -53,7 +53,7 @@
 
         function sendMessage() {
             var errorHandler = function () {
-                alert('Сообщение не может быть отправлено')
+                alert('Can`t send message')
             };
             $.ajax({
                 url: "${pageContext.request.contextPath}/groups/${group.id}/message",
@@ -75,7 +75,7 @@
 
         function deleteMessage(messageId) {
             var errorHandler = function () {
-                alert('Сообщение не может быть удалено')
+                alert('Can`t delete message')
             };
             $.ajax({
                 url: "${pageContext.request.contextPath}/groups/${group.id}/message-".concat(messageId.toString()),
@@ -100,7 +100,7 @@
 
         function joinGroup() {
             function errorHandler() {
-                alert("Нельзя вступить в группу");
+                alert("Can`t join group");
             }
 
             $.post("${pageContext.request.contextPath}/groups/${group.id}/join").success(function (response) {
@@ -110,14 +110,15 @@
                     window.location.href = "${pageContext.request.contextPath}";
                 else {
                     $('#members').append(generateUsersHref(response.id, response.name, response.race, response.age));
-                    $('#l3').html("<button onclick=\"leaveGroup()\">Покинуть группу</button><br/>");
+                    $('#l3').html("<button onclick=\"leaveGroup()\">Leave group</button><br/>");
+                    $('#sendButton').html("<input type=\"submit\" class=\"btn\" id=\"send\" value=\"Send\"/>");
                 }
             }).error(errorHandler);
         }
 
         function leaveGroup() {
             function errorHandler() {
-                alert("Нельзя покинуть группу");
+                alert("Can`t leave group");
             }
 
             $.post("${pageContext.request.contextPath}/groups/${group.id}/leave").success(function (response) {
@@ -127,14 +128,15 @@
                     window.location.href = "${pageContext.request.contextPath}";
                 else {
                     $('#member-'.concat(response)).remove();
-                    $('#l3').html("<button onclick=\"joinGroup()\">Вступить в группу</button><br/>");
+                    $('#l3').html("<button onclick=\"joinGroup()\">Join group</button><br/>");
+                    $('#sendButton').html("<input type=\"submit\" class=\"btn\" id=\"send\" disabled=\"true\" value=\"Join group first\"/>");
                 }
             }).error(errorHandler);
         }
 
         $(document).ready(function () {
             $('#send').click(sendMessage);
-            setInterval(ajaxAllMessagesOfGroup, 500);
+            setInterval(ajaxAllMessagesOfGroup, 2500);
         });
     </script>
 </head>
@@ -153,7 +155,7 @@
                 </th>
             </tr> <!--ряд с ячейками заголовков-->
             <tr>
-                <td align='left'>Владелец: <a href="<c:url value="/persons/${group.owner.id}"/>">${group.owner.name}</a>
+                <td align='left'>Owner: <a href="<c:url value="/persons/${group.owner.id}"/>">${group.owner.name}</a>
                 </td>
             </tr>
         </table>
@@ -161,17 +163,17 @@
     <div id="l3">
         <c:choose>
             <c:when test="${isMember}">
-                <button type="submit" class="btn" onclick="leaveGroup()" id="leaveGroup">Покинуть группу</button>
+                <button type="submit" class="btn" onclick="leaveGroup()" id="leaveGroup">Leave group</button>
                 <br/>
             </c:when>
             <c:otherwise>
-                <button type="submit" class="btn" onclick="joinGroup()" id="joinGroup">Вступить в группу</button>
+                <button type="submit" class="btn" onclick="joinGroup()" id="joinGroup">Join group</button>
                 <br/>
             </c:otherwise>
         </c:choose>
     </div>
     <div id="l2" style="overflow:auto; width: 30%; max-height: 20%;">
-        <label>Список участников</label>
+        <label>Members</label>
         <div class="list-group" id="members">
             <c:forEach items="${group.users}" var="user">
                 <c:if test="${!user.deleted}">
@@ -195,7 +197,7 @@
                     </c:choose>
                     <c:if test="${message.writer.id.toString().equals(cookie[\"userID\"].value)||group.owner.id.toString().equals(cookie[\"userID\"].value)}">
                         <button class="btn btn-primary deleteMessage" onclick="deleteMessage(${message.id})"
-                                value="Удалить"></button>
+                                value="Delete"></button>
                     </c:if>
                     </br>${message.text}
                 </div>
@@ -203,14 +205,16 @@
         </div>
     </div>
     <textarea name="message" id="textarea2" style="resize: none;"></textarea>
-    <c:choose>
-        <c:when test="${isMember}">
-            <input type="submit" class="btn" id="send" value="Отправить"/>
-        </c:when>
-        <c:otherwise>
-            <input type="submit" class="btn" id="send" disabled="true" value="Вступите в группу"/>
-        </c:otherwise>
-    </c:choose>
+    <div id="sendButton">
+        <c:choose>
+            <c:when test="${isMember}">
+                <input type="submit" class="btn" id="send" value="Send"/>
+            </c:when>
+            <c:otherwise>
+                <input type="submit" class="btn" id="send" disabled="true" value="Join group first"/>
+            </c:otherwise>
+        </c:choose>
+    </div>
 </div>
 <%@include file="/resources/templates/footer.jsp" %>
 </body>

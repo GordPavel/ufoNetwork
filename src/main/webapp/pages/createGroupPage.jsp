@@ -16,7 +16,7 @@
 </script>
 <head>
     <jsp:include page="/resources/templates/includes.jsp"/>
-    <title> Профиль пользователя</title>
+    <title> Create group</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="<c:url value="/resources/js/bootstrap.min.js"/>"></script>
     <%--@elvariable id="person" type="com.netcracker.DAO.PersonEntity"--%>
@@ -29,18 +29,18 @@
                enctype="multipart/form-data" id="groupCreateForm">
 
         <div id="nameGroup">
-        <label>Название</label>
+        <label>Name</label>
         </div>
         <spring:bind path="name">
             <div class="group-create-validation" id="nameGroupCreateValidation">
                 <div class="form-group ${status.error ? 'has-error' : ''}">
-                    <form:input class="form-control" path="name" placeholder="Имя"/><span></span>
+                    <form:input class="form-control" path="name" placeholder="Name"/><span></span>
                     <div class="error-message"><form:errors path="name" cssClass="error"/></div>
                 </div>
             </div>
         </spring:bind>
         <div id="photoGroup">
-        <label>Фотография</label>
+        <label>Picture</label>
         </div>
         <spring:bind path="image">
             <div class="group-create-validation" id="imageGroupCreateValidation">
@@ -51,10 +51,10 @@
             </div>
         </spring:bind>
 
-        <button type="submit" class="btn btn-primary" id="right"> Создать</button>
+        <button type="submit" class="btn btn-primary" id="right"> Create</button>
     </div>
     </form:form>
-<a href="javascript:history.back()" title="Отмена"><button class="btn btn-primary"  align="left"  id="cancelGroup">Отмена</button></a>
+<a href="javascript:history.back()" title="Отмена"><button class="btn btn-primary"  align="left"  id="cancelGroup">Cancel</button></a>
 <%@include file="/resources/templates/footer.jsp" %>
 </body>
 </html>
