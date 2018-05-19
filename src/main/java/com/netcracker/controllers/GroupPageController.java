@@ -196,6 +196,7 @@ public class GroupPageController{
                 put( "error" , "home" );
             }} );
         }
+        System.out.println("test");
         GroupEntity  group  = groupService.findById( groupId , GroupLazyFields.USERS ).get();
         PersonEntity person = personRepository.findById( userId ).get();
         if( group.getUsers()

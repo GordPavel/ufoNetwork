@@ -98,6 +98,14 @@
                 + id + "\">" + name + " (" + race + "," + age + ")</a><br/>";
         }
 
+        function generateMemberList(){
+            var list="";
+            <c:forEach items="${group.users}" var="user">
+            list=list+generateUsersHref("${user.id}", "${user.name}", "${user.race.name}", "${user.age}");
+            </c:forEach>
+            return list;
+        }
+
         function joinGroup() {
             function errorHandler() {
                 alert("Can`t join group");
@@ -109,7 +117,17 @@
                 else if (response === "home")
                     window.location.href = "${pageContext.request.contextPath}";
                 else {
-                    $('#members').append(generateUsersHref(response.id, response.name, response.race, response.age));
+                    var contains = false;
+                    <c:forEach items="${group.users}" var="user">
+                    if ("${user.id}" == response.id) {
+                        contains=true;
+                    }
+                    </c:forEach>
+                    $('#members').html("");
+                    $('#members').append(generateMemberList());
+                    if (!contains) {
+                        $('#members').append(generateUsersHref(response.id, response.name, response.race, response.age));
+                    }
                     $('#l3').html("<button onclick=\"leaveGroup()\">Leave group</button><br/>");
                     $('#sendButton').html("<input type=\"submit\" class=\"btn\" id=\"send\" value=\"Send\"/>");
                 }
