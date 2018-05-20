@@ -30,7 +30,10 @@
         </ul>
     </div>
 </div>
-
+<c:url value="/logout" var="logoutURL" />
+<form:form method="get" action="${logoutURL}"  enctype="multipart/form-data" id="exit">
+    <button class="btn"  id="exit"> Exit </button>
+</form:form>
 <c:url value="/groups/search" var="srcgroupsUrl"/>
 <form:form method="post" action="${srcgroupsUrl}" modelAttribute="searchGroupsForm"
            enctype="multipart/form-data" id="groupSearchForm">

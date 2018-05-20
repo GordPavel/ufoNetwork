@@ -17,6 +17,7 @@
     </div>
     <div id="tableGR1">
         <table>
+
             <tr>
                 <td align='left'>Owner: ${not empty ownerName ? ownerName:"<i>Not specified</i>"}</td>
             </tr>
@@ -24,6 +25,7 @@
                 <td align='left'>Name: ${not empty name ? name:"<i>Not specified</i>"}</td>
             </tr>
             <tr>
+                <div></div>
                 <td>
                     <c:url value="/groups/joinfew" var="joinUrl"/>
                     <form:form method="post" action="${joinUrl}" id="joinFewForm">
@@ -32,11 +34,12 @@
                 </td>
             </tr>
         </table>
+    </div>
     <div id="tableGr2" >
         <div id="listGR">
         <label>Group List</label>
         </div>
-        <div class="list-group" style="overflow-y:auto; width: 300px; max-height: 500px;" >
+        <div class="list-group" style="overflow-y:auto; width: 400px; max-height: 500px;" >
             <div border="1" width="99%">
             <c:forEach items="${groups}" var="group">
                 <c:set var="contains" value="false" />
@@ -53,7 +56,7 @@
 
     <a href="javascript:history.back()" title="Back" id="back">Back</a>
 </div>
-</div>
+
 <%--<script>--%>
     <%--var join=[];--%>
     <%--var leave=[];--%>

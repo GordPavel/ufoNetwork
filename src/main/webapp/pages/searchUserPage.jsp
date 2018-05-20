@@ -30,11 +30,12 @@
                 <td align='left'>Sex: ${not empty sex ? sex:"<i>Not specified</i>"}</td>
             </tr>
         </table>
+    </div>
     <div id="tableUS2" >
         <div id="listUS">
         <label>Users</label>
         </div>
-        <div class="list-group" style="overflow-y:auto; width: 300px; max-height: 500px;" >
+        <div class="list-group" style="overflow-y:auto; width: 400px; max-height: 500px;" >
             <div border="1" width="99%">
             <c:forEach items="${persons}" var="person">
                 <a href="<c:url value="/persons/${person.id}"/>" class="list-group-item">${person.name}</a>
@@ -43,9 +44,9 @@
         </div>
     </div>
 
-    <a href="javascript:history.back()" title="Back" id="back">Back</a>
+    <a href="javascript:history.back()" title="Back" id="back2">Back</a>
 </div>
-</div>
+
 <%@include file="/resources/templates/footer.jsp" %>
 </body>
 </html>

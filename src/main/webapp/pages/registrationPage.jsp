@@ -7,12 +7,6 @@
 <head>
     <jsp:include page="/resources/templates/includes.jsp"/>
     <title> Registration</title>
-    <script type="text/javascript">
-        function show(state) {
-            document.getElementById('window').style.display = state;
-            document.getElementById('wrap').style.display = state;
-        }
-    </script>
 </head>
 <body>
 
@@ -24,15 +18,7 @@
     <form:form method="post" action="${registrationUrl}" modelAttribute="registrationForm"
                enctype="multipart/form-data">
 
-        <div id="loginRegLb">
-        <label>Login</label>
-        </div>
-        <spring:bind path="login">
-            <div id="loginRegIn">
-                <form:input class="form-control" path="login" placeholder="Login"/><span></span>
-                <form:errors path="login" cssClass="error"/>
-            </div>
-        </spring:bind>
+
 
         <div id="nameRegLb">
         <label>Name</label>
@@ -106,6 +92,16 @@
             <div  id="photoRegIn">
                 <form:input type="file" class="form-control" path="image"/><span></span>
                 <form:errors path="image" cssClass="error"/>
+            </div>
+        </spring:bind>
+
+        <div id="loginRegLb">
+            <label>Login</label>
+        </div>
+        <spring:bind path="login">
+            <div id="loginRegIn">
+                <form:input class="form-control" path="login" placeholder="Login"/><span></span>
+                <form:errors path="login" cssClass="error"/>
             </div>
         </spring:bind>
 
