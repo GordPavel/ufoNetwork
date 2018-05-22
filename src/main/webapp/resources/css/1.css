@@ -192,16 +192,14 @@ font-size:16px;
 }
 
 #rectangle {
-	
-width: 100%;
-height: 35px;
+    height: 35px;
 background:-webkit-linear-gradient(270deg, rgba(188, 188, 188, 1) 0%, rgba(188, 188, 188, 1) 0%, rgba(193, 207, 197, 1) 77%, rgba(228, 228, 228, 1) 100%, rgba(228, 228, 228, 1) 100%);
 background:-moz-linear-gradient(180deg, rgba(188, 188, 188, 1) 0%, rgba(188, 188, 188, 1) 0%, rgba(193, 207, 197, 1) 77%, rgba(228, 228, 228, 1) 100%, rgba(228, 228, 228, 1) 100%);
 background:linear-gradient(180deg, rgba(188, 188, 188, 1) 0%, rgba(188, 188, 188, 1) 0%, rgba(193, 207, 197, 1) 77%, rgba(228, 228, 228, 1) 100%, rgba(228, 228, 228, 1) 100%);
 border:none;
 }
 .header{
-
+    height: 40px;
 }
 .content {
 height: calc(100vh - 35px);
@@ -210,7 +208,7 @@ font-weight:300;
 
 }
 .footer {
-height: 35px;
+height:35px;
 font-family:'Bookman Old Style Курсив', 'Bookman Old Style';
 font-weight:300;
 font-size:14px;	
@@ -237,8 +235,7 @@ top:5px;
 }
 
 #rectangle1{
-width: 100%;
-height: 40px;
+
 background:-webkit-linear-gradient(270deg, rgba(0, 255, 204, 1) 0%, rgba(0, 255, 204, 1) 0%, rgba(0, 0, 204, 1) 0%, rgba(228, 228, 228, 1) 39%, rgba(45, 45, 208, 1) 97%, rgba(51, 153, 255, 1) 100%, rgba(228, 228, 228, 1) 100%, rgba(228, 228, 228, 1) 100%);
 background:-moz-linear-gradient(180deg, rgba(0, 255, 204, 1) 0%, rgba(0, 255, 204, 1) 0%, rgba(0, 0, 204, 1) 0%, rgba(228, 228, 228, 1) 39%, rgba(45, 45, 208, 1) 97%, rgba(51, 153, 255, 1) 100%, rgba(228, 228, 228, 1) 100%, rgba(228, 228, 228, 1) 100%);
 background:linear-gradient(180deg, rgba(0, 255, 204, 1) 0%, rgba(0, 255, 204, 1) 0%, rgba(0, 0, 204, 1) 0%, rgba(228, 228, 228, 1) 39%, rgba(45, 45, 208, 1) 97%, rgba(51, 153, 255, 1) 100%, rgba(228, 228, 228, 1) 100%, rgba(228, 228, 228, 1) 100%);
@@ -249,27 +246,12 @@ position:relative;
 left:-60px;
 top:5px;
 }
- 
-#login{
-position:absolute;
-left:40%;
-top:20%;
-}
- 
-
 
 #register{
 position:absolute;
 left:41.5%;
 top:80%;
 font-family:'Bookman Old Style Курсив', 'Bookman Old Style';
-}
-
-#login{
-font-family:'Bookman Old Style Курсив', 'Bookman Old Style';
-font-style:oblique;
-font-weight:300;
-font-size:18px;	
 }
 
 #window{
@@ -295,7 +277,7 @@ top:80%;
     left:35%;
     top:13%;
     font-size:20px;
-    font-style:italic,bold;
+    font-style:italic;
 }
 
 #l2{
@@ -592,7 +574,7 @@ font-size:16px;
 #chLoginIn{
     position:absolute;
     width:250px;
-    left:32.5%;
+    left:40%;
     right:60%;
     top:35%;
 }
@@ -849,37 +831,38 @@ font-size:16px;
     top:10%;
     left:30%;
 }
+
 #loginRegIn{
     position:absolute;
     top:14%;
-    left:24%;
+    left:30%;
     width:200px;
     height:20px;
 }
 
 #nameRegLb{
     position:absolute;
-    top:23%;
+    top:25%;
     left:30%;
 
 }
 
 #nameRegIn{
     position:absolute;
-    top:27%;
+    top:29%;
     left:30%;
     width:200px;
 }
 
 #raceRegLb{
     position:absolute;
-    top:36%;
+    top:38%;
     left:30%;
 }
 
 #racesReg{
     position:absolute;
-    top:40%;
+    top:43%;
     left:30%;
     width:200px;
 }
@@ -899,25 +882,25 @@ font-size:16px;
 
 #sexRegLb{
     position:absolute;
-    top:23%;
+    top:25%;
     left:60%;
 }
 
 #sexRegIn{
     position:absolute;
-    top:27%;
+    top:29%;
     left:60%;
     width:200px;
 }
 
 #passRegLb{
     position:absolute;
-    top:36%;
+    top:38%;
     left:60%;
 }
 #passRegIn{
     position:absolute;
-    top:40%;
+    top:42%;
     left:60%;
     width:200px;
 }
@@ -1008,3 +991,4 @@ font-size:16px;
     height:35px;
     font-family:'Bookman Old Style ÃÅ¡Ã‘Æ’Ã‘â‚¬Ã‘ÂÃÂ¸ÃÂ²', 'Bookman Old Style';
 }
+

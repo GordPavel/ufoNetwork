@@ -12,21 +12,22 @@
     <label id="t2" style="color: black">About project |</label>
     <label id="t3"><a href="#win6" style="color: black">About team</a></label>
     <a href="#x" class="overlay" id="win6"></a>
-    <div class="popup"  id="aboutTeam">
+    <div class="popup" id="aboutTeam">
 
         <label>About team:</label>
         <p>
             <em>
                 <div>
-                Arseniy Sobolev
+                    Pavel Gordeev
                 </div>
                 <div>
-                Nina Ukhanova
+                    Arseniy Sobolev
+                </div>
+                <div>
+                    Nina Ukhanova
                 </div>
             </em>
         </p>
         <a class="close" title="Close" href="#close"></a>
     </div>
-
-
 </div>
