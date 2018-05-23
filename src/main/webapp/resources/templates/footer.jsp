@@ -6,8 +6,7 @@
         document.getElementById('wrap').style.display = state;
     }
 </script>
-<div class="footer">
-    <div id="rectangle"></div>
+<div id="footer">
     <label id="t1" style="color: black">SpaceNet © 2018</label>
     <label id="t2" style="color: black">About project |</label>
     <label id="t3"><a href="#win6" style="color: black">About team</a></label>

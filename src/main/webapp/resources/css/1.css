@@ -202,31 +202,35 @@ border:none;
     height: 40px;
 }
 .content {
-height: calc(100vh - 35px);
+height: calc(100vh - 75px);
 font-family:'Bookman Old Style Курсив', 'Bookman Old Style';
 font-weight:300;
 
 }
-.footer {
+#footer {
 height:35px;
 font-family:'Bookman Old Style Курсив', 'Bookman Old Style';
 font-weight:300;
-font-size:14px;	
+font-size:14px;
+    background:-webkit-linear-gradient(270deg, rgba(188, 188, 188, 1) 0%, rgba(188, 188, 188, 1) 0%, rgba(193, 207, 197, 1) 77%, rgba(228, 228, 228, 1) 100%, rgba(228, 228, 228, 1) 100%);
+    background:-moz-linear-gradient(180deg, rgba(188, 188, 188, 1) 0%, rgba(188, 188, 188, 1) 0%, rgba(193, 207, 197, 1) 77%, rgba(228, 228, 228, 1) 100%, rgba(228, 228, 228, 1) 100%);
+    background:linear-gradient(180deg, rgba(188, 188, 188, 1) 0%, rgba(188, 188, 188, 1) 0%, rgba(193, 207, 197, 1) 77%, rgba(228, 228, 228, 1) 100%, rgba(228, 228, 228, 1) 100%);
+    border:none;
 }
 #t1{
-position:relative;
-left:35px;
-top:-27px;
+    position:relative;
+    left:10px;
+    top:7px;
 }
 #t2{
-position:relative;
-left:700px;
-top:-27px;
+    position:relative;
+    left:700px;
+    top:7px;
 }
 #t3{
-position:relative;
-left:705px;
-top:-27px;
+    position:relative;
+    left:705px;
+    top:7px;
 }
 #icon{
 position:relative;
