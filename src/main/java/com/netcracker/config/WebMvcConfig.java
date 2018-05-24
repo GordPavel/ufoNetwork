@@ -81,7 +81,6 @@ public class WebMvcConfig extends WebMvcConfigurationSupport{
         registry.addResourceHandler( "/resources/**" ).addResourceLocations( "/resources/" );
     }
 
-    //    Сам хз, но без этого не работает
     @Override
     @Bean
     public HandlerMapping resourceHandlerMapping(){

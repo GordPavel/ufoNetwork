@@ -41,6 +41,18 @@ public class RegistrationValidator implements Validator{
                                                    "race" ,
                                                    "" ,
                                                    "Can`t be empty" );
+        ValidationUtils.rejectIfEmptyOrWhitespace( errors ,
+                "name" ,
+                "" ,
+                "Can`t be empty" );
+        ValidationUtils.rejectIfEmptyOrWhitespace( errors ,
+                "age" ,
+                "" ,
+                "Can`t be empty" );
+        ValidationUtils.rejectIfEmptyOrWhitespace( errors ,
+                "sex" ,
+                "" ,
+                "Can`t be empty" );
         if( errors.hasErrors() ) return;
         RegistrationForm form = ( RegistrationForm ) o;
         if( !form.pass.equals( form.passAccept ) )

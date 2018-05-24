@@ -89,9 +89,9 @@ public class SettingsPageController {
     @PostMapping( value = "persons/{id}/settings" )
     public String changeUser(@Validated
                              @ModelAttribute( "changeForm" )ChangeForm chForm ,
+                             BindingResult bindingResult,
                              Model model ,
                              HttpServletResponse response ,
-                             BindingResult bindingResult,
                              @PathVariable(value = "id") Long id ){
         if( bindingResult.hasErrors() ) return "settingsPage";
 //        todo Отлов ошибок

@@ -108,7 +108,7 @@ public class LoginPageController{
      */
     @GetMapping( value = "/logout" )
     public String logout( HttpServletResponse response ){
-        response.addCookie( getCookie( null ) );
+        response.addCookie( new Cookie("userID",null) );
         return "redirect:/";
     }
 
