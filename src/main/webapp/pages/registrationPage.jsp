@@ -18,8 +18,6 @@
     <form:form method="post" action="${registrationUrl}" modelAttribute="registrationForm"
                enctype="multipart/form-data">
 
-
-
         <div id="nameRegLb">
         <label>Name</label>
         </div>
@@ -108,7 +106,7 @@
         <button type="submit" class="btn btn-primary" id="reg"> Registrate</button>
     </form:form>
 </div>
-<a href="javascript:history.back()" title="Отмена"><button class="btn btn-primary"  align="left" id="cancelReg">Cancel</button></a>
+<a href="/" title="Отмена"><button class="btn btn-primary"  align="left" id="cancelReg">Cancel</button></a>
 
 <%@include file="/resources/templates/footer.jsp" %>
 </body>
