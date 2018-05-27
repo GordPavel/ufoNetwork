@@ -857,20 +857,18 @@ font-size:16px;
     left:30%;
     width:200px;
 }
-
 #raceRegLb{
     position:absolute;
-    top:38%;
+    top:41%;
     left:30%;
 }
 
 #racesReg{
     position:absolute;
-    top:43%;
+    top:46%;
     left:30%;
     width:200px;
 }
-
 #ageRegLb{
     position:absolute;
     top:54%;
@@ -897,16 +895,17 @@ font-size:16px;
     width:200px;
 }
 
-#passRegLb{
-    position:absolute;
-    top:38%;
-    left:60%;
-}
 #passRegIn{
     position:absolute;
-    top:42%;
+    top:45%;
     left:60%;
     width:200px;
+}
+
+#passAcRegLb{
+    position:absolute;
+    top:54%;
+    left:60%;
 }
 
 #passAcRegLb{
@@ -996,3 +995,6 @@ font-size:16px;
     font-family:'Bookman Old Style ÃÅ¡Ã‘Æ’Ã‘â‚¬Ã‘ÂÃÂ¸ÃÂ²', 'Bookman Old Style';
 }
 
+#members{
+    width:150px;
+}

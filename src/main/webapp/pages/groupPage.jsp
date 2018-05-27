@@ -190,12 +190,12 @@
             </c:otherwise>
         </c:choose>
     </div>
-    <div id="l2" style="overflow:auto; width: 30%; max-height: 20%;">
+    <div id="l2" style="overflow:auto; width: 20%; max-height: 20%;">
         <label>Members</label>
-        <div class="list-group" id="members">
+        <div class="list-group" id="members" width="100px";>
             <c:forEach items="${group.users}" var="user">
                 <c:if test="${!user.deleted}">
-                    <a id="member-${user.id}"
+                    <a id="member-${user.id}" width="100px"
                        href="<c:url value="/persons/${user.id}"/>">${user.name}(${user.race.name},${user.age})</a><br/>
                 </c:if>
             </c:forEach>

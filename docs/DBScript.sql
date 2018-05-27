@@ -122,12 +122,9 @@ CREATE INDEX idx_person_group_group
 CREATE INDEX idx_person_group_person
   ON ufonetwork.person_group (person);
 
-INSERT INTO ufonetwork.category (id, name) VALUES (4, 'Природа');
-INSERT INTO ufonetwork.category (id, name) VALUES (5, 'Погода');
-INSERT INTO ufonetwork.category (id, name) VALUES (6, 'Путешествия');
 
-INSERT INTO ufonetwork.race (name, id) VALUES ('Marsianin', 2);
-INSERT INTO ufonetwork.race (name, id) VALUES ('Human', 3);
+
+
 
 GRANT SELECT ON ALL TABLES IN SCHEMA ufonetwork TO nina;
 GRANT USAGE ON ALL SEQUENCES IN SCHEMA ufonetwork TO nina;
