@@ -214,7 +214,7 @@
                         </c:otherwise>
                     </c:choose>
                     <c:if test="${message.writer.id.toString().equals(cookie[\"userID\"].value)||group.owner.id.toString().equals(cookie[\"userID\"].value)}">
-                        <button class="btn btn-medium" onclick="deleteMessage(${message.id})"  style="background: #2a6496; color: white"  > Delete</button>
+                        <button class="btn btn-medium" onclick="deleteMessage(${message.id})"  style="background:#2a6496; color:white"  > Delete</button>
                     </c:if>
                     </br>${message.text}
                 </div>
