@@ -16,7 +16,7 @@
                 return "<div id=\"message-" + id + "\">\n" +
                     "                    <b> " + generateMessageSign(writerId, writerName, writerDeleted) + date + "</b>:\n" +
                     ((parseInt(writerId) === ${cookie.userID.value} || ${group.owner.id} === ${cookie.userID.value}) ?
-                        "                        <button class=\"btn btn-primary deleteMessage\" onclick=\"deleteMessage(" + id + ")\" value=\"Удалить\"></button>" : "") +
+                        "                        <button class=\"btn btn-medium\" onclick=\"deleteMessage(" + id + ")\" style=\"background: #2a6496; color: white\">Delete</button>" : "") +
 
                     "                    <br>" + text + "\n" +
                     "                </div>";
@@ -214,8 +214,7 @@
                         </c:otherwise>
                     </c:choose>
                     <c:if test="${message.writer.id.toString().equals(cookie[\"userID\"].value)||group.owner.id.toString().equals(cookie[\"userID\"].value)}">
-                        <button class="btn btn-primary deleteMessage" onclick="deleteMessage(${message.id})"
-                                value="Delete"></button>
+                        <button class="btn btn-medium" onclick="deleteMessage(${message.id})"  style="background: #2a6496; color: white"  > Delete</button>
                     </c:if>
                     </br>${message.text}
                 </div>
