@@ -15,7 +15,7 @@
         <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
         <hibernate.version>5.2.15.Final</hibernate.version>
         <postgresql.version>9.4.1212.jre7</postgresql.version>
-        <spring-data.version>2.0.5.RELEASE</spring-data.version>
+        <spring-data.version>2.1.0.RELEASE</spring-data.version>
         <spring.version>5.0.4.RELEASE</spring.version>
     </properties>
 
